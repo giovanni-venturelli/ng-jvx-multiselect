@@ -10,6 +10,12 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
+    "paths": {
+      "ng-jvx-multiselect": [
+        "dist/ng-jvx-multiselect/ng-jvx-multiselect",
+        "dist/ng-jvx-multiselect"
+      ]
+    },
     "target": "es2015",
     "module": "es2020",
     "lib": [
