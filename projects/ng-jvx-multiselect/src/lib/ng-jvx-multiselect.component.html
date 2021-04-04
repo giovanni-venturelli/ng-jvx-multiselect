@@ -1,3 +1,28 @@
 <div>
- <button mat-raised-button>test!</button>
+  <button mat-button [matMenuTriggerFor]="menuRef">
+    Trigger
+  </button>
+
+  <mat-menu #menuRef="matMenu" class="jvx-multiselect-panel">
+    <ng-content></ng-content>
+      <ng-jvx-option *ngFor="let option of options">
+        <!--        <ng-container [ngTemplateOutlet]="optionsTemplate" [ngTemplateOutletContext]="{$implicit: option}"></ng-container>-->
+        <ng-container [ngTemplateOutlet]="optionsTemplate? optionsTemplate.template : defaultTemplate"
+                      [ngTemplateOutletContext]="{$implicit: option}"></ng-container>
+      </ng-jvx-option>
+  </mat-menu>
+
+  <ng-content select="[options-template]"></ng-content>
+</div>
+
+<ng-template #defaultTemplate let-option>
+  {{option.text}}
+</ng-template>
+<div class="mat-select-test">
+  <mat-form-field appearance="legacy">
+    <mat-label>Select</mat-label>
+    <mat-select>
+      <mat-option *ngFor="let option of options" [value]="option.value">{{option.text}}</mat-option>
+    </mat-select>
+  </mat-form-field>
 </div>

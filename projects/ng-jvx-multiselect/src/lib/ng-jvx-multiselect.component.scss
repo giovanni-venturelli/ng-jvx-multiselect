@@ -1,0 +1,13 @@
+
+  .mat-select-test {
+    width: 250px;
+  }
+
+  ::ng-deep {
+  .jvx-multiselect-panel {
+      .mat-menu-content {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+      }
+    }
+  }
