@@ -332,12 +332,14 @@
 </div>
 
 <div class="content" role="main">
-  <ng-jvx-multiselect [options]="[{value: 1, text: 'opzione 1'}, {value: 2, text: 'opzione 2'}]">
+  <div style="width: 250px">
+  <ng-jvx-multiselect [multi]="true" [options]="[{value: 1, text: 'opzione 1'}, {value: 2, text: 'opzione 2'}]">
 <!--    <div *ngJvxOptionsTemplate="let option">-->
 <!--      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>-->
 <!--    </div>-->
   </ng-jvx-multiselect>
-
+  </div>
+  <mat-icon>home</mat-icon>
   <!--  &lt;!&ndash; Highlight Card &ndash;&gt;-->
   <!--  <div class="card highlight-card card-small">-->
 

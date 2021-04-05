@@ -7,6 +7,7 @@ import {CommonModule} from '@angular/common';
 import { NgJvxOptionComponent } from './ng-jvx-option/ng-jvx-option.component';
 import {MatMenuModule} from '@angular/material/menu';
 import { NgJvxOptionsTemplateDirective } from './directives/ng-jvx-options-template.directive';
+import {MatIconModule} from '@angular/material/icon';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { NgJvxOptionsTemplateDirective } from './directives/ng-jvx-options-templ
     MatOptionModule,
     MatSelectModule,
     MatMenuModule,
-    CommonModule
+    CommonModule,
+    MatIconModule
   ],
   exports: [NgJvxMultiselectComponent, NgJvxOptionComponent, NgJvxOptionsTemplateDirective]
 })

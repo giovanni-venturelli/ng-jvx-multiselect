@@ -1,13 +1,27 @@
+.ng-jvx-multiselect {
+  width: 100%;
 
-  .mat-select-test {
-    width: 250px;
-  }
+  .ng-jvx-multiselect-value-container {
+    width: 100%;
+    display: flex;
 
-  ::ng-deep {
-  .jvx-multiselect-panel {
-      .mat-menu-content {
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-      }
+    .ng-jvx-multiselect-value {
+      flex: 1 1 100%;
     }
   }
+}
+
+.mat-select-test {
+  width: 250px;
+}
+
+::ng-deep {
+  .jvx-multiselect-panel {
+    min-width: 100%;
+
+    .mat-menu-content {
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+  }
+}

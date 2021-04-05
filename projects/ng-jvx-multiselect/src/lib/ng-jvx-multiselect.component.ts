@@ -11,6 +11,7 @@ export class NgJvxMultiselectComponent implements OnInit, AfterViewChecked {
   @ContentChild(NgJvxOptionsTemplateDirective) optionsTemplate: NgJvxOptionsTemplateDirective | null = null;
   // @ContentChild(TemplateRef) optionsTemplate: TemplateRef<any> | null = null;
   @Input() options: any[] = [];
+  @Input() multi = false;
 
   constructor() {
   }

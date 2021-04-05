@@ -1,8 +1,15 @@
-<div>
-  <button mat-button [matMenuTriggerFor]="menuRef">
-    Trigger
-  </button>
-
+<div class="ng-jvx-multiselect">
+<div class="ng-jvx-multiselect-value-container"  [matMenuTriggerFor]="menuRef" #valueContainer>
+  <div class="ng-jvx-multiselect-value multi-value-container" *ngIf="multi">
+    multi
+  </div>
+  <div class="ng-jvx-multiselect-value single-value-container" *ngIf="!multi">
+    single
+  </div>
+  <div class="ng-jvx-multiselect-arrow">
+    <mat-icon>expand_more</mat-icon>
+  </div>
+</div>
   <mat-menu #menuRef="matMenu" class="jvx-multiselect-panel">
     <ng-content></ng-content>
       <ng-jvx-option *ngFor="let option of options">

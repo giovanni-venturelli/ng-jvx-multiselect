@@ -5,17 +5,19 @@ import {AppComponent} from './app.component';
 import {NgJvxMultiselectModule} from 'ng-jvx-multiselect';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CommonModule} from '@angular/common';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
-  imports: [
-    BrowserModule,
-    NgJvxMultiselectModule,
-    BrowserAnimationsModule,
-    CommonModule
-  ],
+    imports: [
+        BrowserModule,
+        NgJvxMultiselectModule,
+        BrowserAnimationsModule,
+        CommonModule,
+        MatIconModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
