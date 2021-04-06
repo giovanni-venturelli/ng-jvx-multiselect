@@ -25,4 +25,7 @@ export class NgJvxOptionComponent implements OnInit, DoCheck {
     }
   }
 
+  deselect(): void{
+    this.listOption.selected = false;
+  }
 }

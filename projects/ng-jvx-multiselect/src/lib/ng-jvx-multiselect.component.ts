@@ -82,7 +82,7 @@ export class NgJvxMultiselectComponent implements OnInit, AfterViewChecked, OnCh
 
 
   private propagateChange = (_: any) => {
-  };
+  }
 
   // this is the initial value set to the component
   public writeValue(obj: any[]): void {
@@ -116,8 +116,13 @@ export class NgJvxMultiselectComponent implements OnInit, AfterViewChecked, OnCh
 
   deselect(val: any): void {
     this.value.splice(this.value.findIndex(v => v[this.itemValue] === val[this.itemValue]), 1);
-    this.valueChange.emit(this.value);
-    console.log(this.optionComp);
 
+    this.optionComp.toArray().forEach((opt) => {
+        if (opt.value === val[this.itemValue]) {
+          opt.deselect();
+        }
+      }
+    );
+    this.valueChange.emit(this.value);
   }
 }
