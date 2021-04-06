@@ -6,18 +6,22 @@ import {NgJvxMultiselectModule} from 'ng-jvx-multiselect';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CommonModule} from '@angular/common';
 import {MatIconModule} from '@angular/material/icon';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
-    imports: [
-        BrowserModule,
-        NgJvxMultiselectModule,
-        BrowserAnimationsModule,
-        CommonModule,
-        MatIconModule
-    ],
+  imports: [
+    BrowserModule,
+    NgJvxMultiselectModule,
+    BrowserAnimationsModule,
+    CommonModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatSelectModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

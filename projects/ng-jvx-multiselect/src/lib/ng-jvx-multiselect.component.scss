@@ -1,12 +1,27 @@
+@import '~@angular/material/list/list-theme';
+
 .ng-jvx-multiselect {
   width: 100%;
 
   .ng-jvx-multiselect-value-container {
     width: 100%;
     display: flex;
+    cursor: pointer;
 
     .ng-jvx-multiselect-value {
       flex: 1 1 100%;
+    }
+    .ng-jvx-multiselect-arrow{
+      mat-icon {
+        transition: transform 0.3s ease-in-out;
+      }
+    }
+    &.is-open{
+      .ng-jvx-multiselect-arrow{
+        mat-icon {
+          transform: rotate(180deg);
+        }
+      }
     }
   }
 }
@@ -22,6 +37,16 @@
     .mat-menu-content {
       padding-top: 0 !important;
       padding-bottom: 0 !important;
+
+      .mat-selection-list {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        mat-list-option[aria-selected="true"],mat-list-option[aria-selected="false"]{
+          mat-pseudo-checkbox{
+            display: none
+          }
+        }
+      }
     }
   }
 }

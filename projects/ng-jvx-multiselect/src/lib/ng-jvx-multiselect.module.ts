@@ -8,17 +8,22 @@ import { NgJvxOptionComponent } from './ng-jvx-option/ng-jvx-option.component';
 import {MatMenuModule} from '@angular/material/menu';
 import { NgJvxOptionsTemplateDirective } from './directives/ng-jvx-options-template.directive';
 import {MatIconModule} from '@angular/material/icon';
+import { NgJvxPanelComponent } from './ng-jvx-panel/ng-jvx-panel.component';
+import {MatListModule} from '@angular/material/list';
+import {ReactiveFormsModule} from '@angular/forms';
 
 
 @NgModule({
-  declarations: [NgJvxMultiselectComponent, NgJvxOptionComponent, NgJvxOptionsTemplateDirective],
+  declarations: [NgJvxMultiselectComponent, NgJvxOptionComponent, NgJvxOptionsTemplateDirective, NgJvxPanelComponent],
   imports: [
     MatButtonModule,
     MatOptionModule,
     MatSelectModule,
     MatMenuModule,
     CommonModule,
-    MatIconModule
+    MatIconModule,
+    MatListModule,
+    ReactiveFormsModule
   ],
   exports: [NgJvxMultiselectComponent, NgJvxOptionComponent, NgJvxOptionsTemplateDirective]
 })
