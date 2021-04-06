@@ -13,6 +13,7 @@ import {MatListModule} from '@angular/material/list';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatChipsModule} from '@angular/material/chips';
 import {HttpClientModule} from '@angular/common/http';
+import {NgScrollbarModule} from 'ngx-scrollbar';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import {HttpClientModule} from '@angular/common/http';
     MatListModule,
     MatChipsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgScrollbarModule
   ],
   exports: [NgJvxMultiselectComponent, NgJvxOptionComponent, NgJvxOptionsTemplateDirective]
 })

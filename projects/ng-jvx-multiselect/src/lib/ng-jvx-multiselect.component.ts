@@ -2,7 +2,7 @@ import {
   AfterViewChecked,
   Component,
   ContentChild,
-  ElementRef, EventEmitter, forwardRef,
+  ElementRef, EventEmitter, forwardRef, HostListener,
   Input,
   OnChanges,
   OnInit, Output, QueryList,
@@ -54,6 +54,7 @@ export class NgJvxMultiselectComponent implements OnInit, AfterViewChecked, OnCh
   public asyncOptions: any = [];
   public selectableOptions = [];
   public currentPage = 0;
+  private pageSize = 15;
 
   constructor(private formBuilder: FormBuilder, private service: NgJvxMultiselectService) {
     this.form = this.formBuilder.group({
@@ -151,20 +152,26 @@ export class NgJvxMultiselectComponent implements OnInit, AfterViewChecked, OnCh
     }
   }
 
-  getList(): void{
-    this.currentPage++;
+  private getList(): void{
     this.isLoading = true;
     this.service.getList({
       url: this.url,
       requestType: this.requestType,
       data: {},
-      currentPage: 1,
+      currentPage: ++this.currentPage,
       ignorePagination: this.ignorePagination,
-      requestHeaders: this.requestHeaders
+      requestHeaders: this.requestHeaders,
+      pageSize: this.pageSize
     }).subscribe((val) => {
       this.selectableOptions.push(...val);
       this.isLoading = false;
       this.trigger.openMenu();
     });
+  }
+
+  @HostListener('scroll', ['$event'])
+  onScroll(e: Event): void {
+    console.log('scrolling');
+    console.log(e);
   }
 }

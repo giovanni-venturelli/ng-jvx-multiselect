@@ -1,22 +1,27 @@
 <div class="ng-jvx-multiselect" #jvxMultiselect>
   <div [matMenuTriggerFor]="menuRef" (onMenuOpen)="onMenuOpen()" (onMenuClose)="onMenuClose()"
        #trigger="matMenuTrigger">
-    <mat-menu #menuRef="matMenu" class="jvx-multiselect-panel" [formGroup]="form">
-      <div class="menu-list-container">
-        <mat-selection-list #selection [multiple]="multi" [(ngModel)]="selectionValue"
-                            [ngStyle]="{'width.px': jvxMultiselect.offsetWidth, 'min-width.px': 112}"
-                            (click)="onCLickOnMenu($event)"
-                            (selectionChange)="onChange($event)"
-                            formControlName="selectionValue">
-          <ng-content></ng-content>
+    <mat-menu #menuRef="matMenu" class="jvx-multiselect-panel" [formGroup]="form" (scroll)="onScroll($event)">
+      <div class="menu-list-container" (scroll)="onScroll($event)" [ngStyle]="{'width.px': jvxMultiselect.offsetWidth}">
+        <ng-scrollbar style="width: 100%"
+          [autoHeightDisabled]="false">
+          <div #selectionContainer>
+          <mat-selection-list #selection [multiple]="multi" [(ngModel)]="selectionValue"
+                              [ngStyle]="{'width.px': jvxMultiselect.offsetWidth, 'min-width.px': 112}"
+                              (click)="onCLickOnMenu($event)"
+                              (selectionChange)="onChange($event)"
+                              formControlName="selectionValue">
+            <ng-content></ng-content>
 
-          <ng-jvx-option *ngFor="let option of selectableOptions" [value]="option[itemValue]">
-            <!--        <ng-container [ngTemplateOutlet]="optionsTemplate" [ngTemplateOutletContext]="{$implicit: option}"></ng-container>-->
-            <ng-container [ngTemplateOutlet]="optionsTemplate? optionsTemplate.template : defaultTemplate"
-                          [ngTemplateOutletContext]="{$implicit: option}"></ng-container>
-          </ng-jvx-option>
+            <ng-jvx-option *ngFor="let option of selectableOptions" [value]="option[itemValue]">
+              <!--        <ng-container [ngTemplateOutlet]="optionsTemplate" [ngTemplateOutletContext]="{$implicit: option}"></ng-container>-->
+              <ng-container [ngTemplateOutlet]="optionsTemplate? optionsTemplate.template : defaultTemplate"
+                            [ngTemplateOutletContext]="{$implicit: option}"></ng-container>
+            </ng-jvx-option>
 
-        </mat-selection-list>
+          </mat-selection-list>
+          </div>
+        </ng-scrollbar>
       </div>
 
     </mat-menu>
