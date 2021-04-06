@@ -5,14 +5,15 @@ import {
   ElementRef, EventEmitter, forwardRef,
   Input,
   OnChanges,
-  OnInit, Output,
+  OnInit, Output, QueryList,
   SimpleChanges,
   TemplateRef,
-  ViewChild
+  ViewChild, ViewChildren
 } from '@angular/core';
 import {NgJvxOptionsTemplateDirective} from './directives/ng-jvx-options-template.directive';
 import {FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MatSelectionListChange} from '@angular/material/list';
+import {NgJvxOptionComponent} from './ng-jvx-option/ng-jvx-option.component';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -29,6 +30,8 @@ import {MatSelectionListChange} from '@angular/material/list';
 export class NgJvxMultiselectComponent implements OnInit, AfterViewChecked, OnChanges {
   @ViewChild('jvxMultiselect', {static: true}) jvxMultiselect: ElementRef;
   @ContentChild(NgJvxOptionsTemplateDirective) optionsTemplate: NgJvxOptionsTemplateDirective | null = null;
+  // @ContentChild(NgJvxOptionComponent) optionComp: NgJvxOptionComponent;
+  @ViewChildren(NgJvxOptionComponent) optionComp: QueryList<NgJvxOptionComponent>;
   // @ContentChild(TemplateRef) optionsTemplate: TemplateRef<any> | null = null;
   @Input() options: any[] = [];
   @Input() multi = false;
@@ -109,5 +112,12 @@ export class NgJvxMultiselectComponent implements OnInit, AfterViewChecked, OnCh
 
   onMenuClose(): void {
     this.isOpen = false;
+  }
+
+  deselect(val: any): void {
+    this.value.splice(this.value.findIndex(v => v[this.itemValue] === val[this.itemValue]), 1);
+    this.valueChange.emit(this.value);
+    console.log(this.optionComp);
+
   }
 }

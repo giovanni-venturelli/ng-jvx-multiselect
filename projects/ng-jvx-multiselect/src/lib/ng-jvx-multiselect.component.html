@@ -1,7 +1,15 @@
 <div class="ng-jvx-multiselect" #jvxMultiselect>
-  <div [ngClass]="{'ng-jvx-multiselect-value-container': true, 'is-open': isOpen}" [matMenuTriggerFor]="menuRef" #valueContainer (onMenuOpen)="onMenuOpen()" (onMenuClose)="onMenuClose()">
+  <div [ngClass]="{'ng-jvx-multiselect-value-container': true, 'is-open': isOpen}" [matMenuTriggerFor]="menuRef"
+       #valueContainer (onMenuOpen)="onMenuOpen()" (onMenuClose)="onMenuClose()">
     <div class="ng-jvx-multiselect-value multi-value-container" *ngIf="multi">
-      multi
+
+      <mat-chip-list #chipList>
+        <mat-chip [color]="'primary'" *ngFor="let val of value" [selectable]="false"
+                  [removable]="true" (removed)="deselect(val)">
+          {{val[itemText]}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
     </div>
     <div class="ng-jvx-multiselect-value single-value-container" *ngIf="!multi">
       <span *ngFor="let val of value">{{val[itemText]}}</span>
@@ -10,7 +18,7 @@
       <mat-icon>expand_more</mat-icon>
     </div>
   </div>
-  <mat-menu #menuRef="matMenu" class="jvx-multiselect-panel" [formGroup]="form" >
+  <mat-menu #menuRef="matMenu" class="jvx-multiselect-panel" [formGroup]="form">
 
     <mat-selection-list #selection [multiple]="multi" [(ngModel)]="selectionValue"
                         [ngStyle]="{'width.px': jvxMultiselect.offsetWidth, 'min-width.px': 112}"

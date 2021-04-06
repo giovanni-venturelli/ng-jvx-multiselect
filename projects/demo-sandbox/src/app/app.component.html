@@ -333,7 +333,7 @@
 
 <div class="content" role="main">
   <div style="width: 250px">
-  <ng-jvx-multiselect [multi]="false" [value]="[{value: 1, text: 'opzione 1'}]" [options]="[{value: 1, text: 'opzione 1'}, {value: 2, text: 'opzione 2'}]">
+  <ng-jvx-multiselect [multi]="false" [value]="[{value: 1, text: 'opzione 1'}]" [options]="[{value: 1, text: 'opzione 1'}, {value: 2, text: 'opzione 2'}, {value: 3, text: 'opzione 3'}]">
 <!--    <div *ngJvxOptionsTemplate="let option">-->
 <!--      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>-->
 <!--    </div>-->
@@ -344,12 +344,12 @@
     <mat-form-field appearance="legacy">
       <mat-label>Select</mat-label>
       <mat-select>
-        <mat-option *ngFor="let option of [{value: 1, text: 'opzione 1'}, {value: 2, text: 'opzione 2'}]" [value]="option.value">{{option.text}}</mat-option>
+        <mat-option *ngFor="let option of [{value: 1, text: 'opzione 1'}, {value: 2, text: 'opzione 2'}, {value: 3, text: 'opzione 3'}]" [value]="option.value">{{option.text}}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
-  <div>
-  <ng-jvx-multiselect [multi]="true" [value]="[{value: 1, text: 'opzione 1'}]" [options]="[{value: 1, text: 'opzione 1'}, {value: 2, text: 'opzione 2'}]">
+  <div style="width: 250px;">
+  <ng-jvx-multiselect [multi]="true" [value]="[{value: 1, text: 'opzione 1'}]" [options]="[{value: 1, text: 'opzione 1'}, {value: 2, text: 'opzione 2'}, {value: 3, text: 'opzione 3'}]">
 <!--    <div *ngJvxOptionsTemplate="let option">-->
 <!--      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>-->
 <!--    </div>-->
