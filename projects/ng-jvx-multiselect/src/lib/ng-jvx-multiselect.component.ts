@@ -1,10 +1,10 @@
 import {
-  AfterViewChecked,
+  AfterViewChecked, AfterViewInit,
   Component,
   ContentChild,
   ElementRef, EventEmitter, forwardRef, HostListener,
   Input,
-  OnChanges,
+  OnChanges, OnDestroy,
   OnInit, Output, QueryList,
   SimpleChanges,
   TemplateRef,
@@ -17,6 +17,9 @@ import {NgJvxOptionComponent} from './ng-jvx-option/ng-jvx-option.component';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {NgJvxMultiselectService} from './ng-jvx-multiselect.service';
 import {HttpHeaders} from '@angular/common/http';
+import {NgScrollbar} from 'ngx-scrollbar';
+import {takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -30,9 +33,11 @@ import {HttpHeaders} from '@angular/common/http';
       multi: true,
     }]
 })
-export class NgJvxMultiselectComponent implements OnInit, AfterViewChecked, OnChanges {
+export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
   @ViewChild('jvxMultiselect', {static: true}) jvxMultiselect: ElementRef;
+  @ViewChild('selectionContainer', {static: true}) selectionContainer: ElementRef;
   @ViewChild('trigger', {static: true}) trigger: MatMenuTrigger;
+  @ViewChild('scrollbar', {static: false}) scrollbar: NgScrollbar;
 
   @ContentChild(NgJvxOptionsTemplateDirective) optionsTemplate: NgJvxOptionsTemplateDirective | null = null;
   // @ContentChild(NgJvxOptionComponent) optionComp: NgJvxOptionComponent;
@@ -55,6 +60,8 @@ export class NgJvxMultiselectComponent implements OnInit, AfterViewChecked, OnCh
   public selectableOptions = [];
   public currentPage = 0;
   private pageSize = 15;
+  private unsubscribe = new Subject<void>();
+  private unsubscribe$ = this.unsubscribe.asObservable();
 
   constructor(private formBuilder: FormBuilder, private service: NgJvxMultiselectService) {
     this.form = this.formBuilder.group({
@@ -68,7 +75,17 @@ export class NgJvxMultiselectComponent implements OnInit, AfterViewChecked, OnCh
     this.selectableOptions = [...this.options];
   }
 
-  ngAfterViewChecked(): void {
+  ngOnDestroy(): void {
+    this.unsubscribe.next();
+  }
+
+  ngAfterViewInit(): void {
+    if (this.scrollbar) {
+      this.scrollbar.scrolled.pipe(takeUntil(this.unsubscribe$)).subscribe((e: any) => {
+        this.onScrolled(e);
+
+      });
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -152,7 +169,7 @@ export class NgJvxMultiselectComponent implements OnInit, AfterViewChecked, OnCh
     }
   }
 
-  private getList(): void{
+  private getList(): void {
     this.isLoading = true;
     this.service.getList({
       url: this.url,
@@ -173,5 +190,14 @@ export class NgJvxMultiselectComponent implements OnInit, AfterViewChecked, OnCh
   onScroll(e: Event): void {
     console.log('scrolling');
     console.log(e);
+  }
+
+  onScrolled(e: any): void {
+    console.log(e);
+    if (e.target.scrollTop + 300 === this.selectionContainer.nativeElement.offsetHeight) {
+      console.log('bottom');
+      this.getList();
+
+    }
   }
 }
