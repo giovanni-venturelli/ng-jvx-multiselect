@@ -194,10 +194,9 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   onScrolled(e: any): void {
     console.log(e);
-    if (e.target.scrollTop + 300 === this.selectionContainer.nativeElement.offsetHeight) {
+    if (e.target.scrollTop + 300 === this.selectionContainer.nativeElement.offsetHeight && !this.isLoading) {
       console.log('bottom');
       this.getList();
-
     }
   }
 }

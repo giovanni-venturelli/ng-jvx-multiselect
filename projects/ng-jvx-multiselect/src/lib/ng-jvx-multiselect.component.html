@@ -6,8 +6,9 @@
            [ngStyle]="{'overflow-y': 'hidden', 'width.px': jvxMultiselect.offsetWidth, 'height': selectionContainer.offsetHeight>300? '300px': 'auto'}">
         <ng-scrollbar style="width: 100%"
                       smoothScroll
-                      [compact]="true"
-                      [disabled]="isLoading"
+                      [visibility]="'hover'"
+                      [appearance]="'compact'"
+                      [sensorDisabled]="isLoading"
                       [autoHeightDisabled]="false" #scrollbar>
           <div #selectionContainer>
             <mat-selection-list #selection [multiple]="multi" [(ngModel)]="selectionValue"
