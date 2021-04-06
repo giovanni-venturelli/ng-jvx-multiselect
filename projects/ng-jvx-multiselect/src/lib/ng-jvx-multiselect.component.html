@@ -1,12 +1,38 @@
 <div class="ng-jvx-multiselect" #jvxMultiselect>
-  <div [ngClass]="{'ng-jvx-multiselect-value-container': true, 'is-open': isOpen}" [matMenuTriggerFor]="menuRef"
-       #valueContainer (onMenuOpen)="onMenuOpen()" (onMenuClose)="onMenuClose()">
-    <div class="ng-jvx-multiselect-value multi-value-container" *ngIf="multi">
+  <div [matMenuTriggerFor]="menuRef" (onMenuOpen)="onMenuOpen()" (onMenuClose)="onMenuClose()"
+       #trigger="matMenuTrigger">
+    <mat-menu #menuRef="matMenu" class="jvx-multiselect-panel" [formGroup]="form">
+      <div class="menu-list-container">
+        <mat-selection-list #selection [multiple]="multi" [(ngModel)]="selectionValue"
+                            [ngStyle]="{'width.px': jvxMultiselect.offsetWidth, 'min-width.px': 112}"
+                            (click)="onCLickOnMenu($event)"
+                            (selectionChange)="onChange($event)"
+                            formControlName="selectionValue">
+          <ng-content></ng-content>
+
+          <ng-jvx-option *ngFor="let option of selectableOptions" [value]="option[itemValue]">
+            <!--        <ng-container [ngTemplateOutlet]="optionsTemplate" [ngTemplateOutletContext]="{$implicit: option}"></ng-container>-->
+            <ng-container [ngTemplateOutlet]="optionsTemplate? optionsTemplate.template : defaultTemplate"
+                          [ngTemplateOutletContext]="{$implicit: option}"></ng-container>
+          </ng-jvx-option>
+
+        </mat-selection-list>
+      </div>
+
+    </mat-menu>
+  </div>
+  <div [ngClass]="{'ng-jvx-multiselect-value-container': true, 'is-open': isOpen}"
+       (click)="clickOnMenuTrigger($event)"
+       #valueContainer>
+    <div class="ng-jvx-multiselect-value multi-value-container" *ngIf="multi" #multiContainer>
 
       <mat-chip-list #chipList>
         <mat-chip [color]="'primary'" *ngFor="let val of value" [selectable]="false"
+                  class="ng-jvx-multiselect-chip"
                   [removable]="true" (removed)="deselect(val)">
-          {{val[itemText]}}
+          <span class="chip-content"
+                [ngStyle]="{'max-width': multiContainer.offsetWidth - 50 +'px'}">{{val[itemText]}}</span>
+
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
       </mat-chip-list>
@@ -15,31 +41,22 @@
       <span *ngFor="let val of value">{{val[itemText]}}</span>
     </div>
     <div class="ng-jvx-multiselect-arrow">
-      <mat-icon>expand_more</mat-icon>
+      <mat-icon *ngIf="!isLoading">expand_more</mat-icon>
+      <div *ngIf="isLoading" class="lds-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
   </div>
-  <mat-menu #menuRef="matMenu" class="jvx-multiselect-panel" [formGroup]="form">
-
-    <mat-selection-list #selection [multiple]="multi" [(ngModel)]="selectionValue"
-                        [ngStyle]="{'width.px': jvxMultiselect.offsetWidth, 'min-width.px': 112}"
-                        (click)="onCLickOnMenu($event)"
-                        (selectionChange)="onChange($event)"
-                        formControlName="selectionValue">
-      <ng-content></ng-content>
-      <ng-jvx-option *ngFor="let option of options" [value]="option[itemValue]">
-        <!--        <ng-container [ngTemplateOutlet]="optionsTemplate" [ngTemplateOutletContext]="{$implicit: option}"></ng-container>-->
-        <ng-container [ngTemplateOutlet]="optionsTemplate? optionsTemplate.template : defaultTemplate"
-                      [ngTemplateOutletContext]="{$implicit: option}"></ng-container>
-      </ng-jvx-option>
-
-    </mat-selection-list>
-
-
-  </mat-menu>
-
   <ng-content select="[options-template]"></ng-content>
 </div>
 
 <ng-template #defaultTemplate let-option>
-  {{option.text}}
+  <div style="max-width: 100%;
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;">{{option[itemText]}}
+  </div>
 </ng-template>

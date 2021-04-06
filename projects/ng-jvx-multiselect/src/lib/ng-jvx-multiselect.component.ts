@@ -14,6 +14,9 @@ import {NgJvxOptionsTemplateDirective} from './directives/ng-jvx-options-templat
 import {FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MatSelectionListChange} from '@angular/material/list';
 import {NgJvxOptionComponent} from './ng-jvx-option/ng-jvx-option.component';
+import {MatMenuTrigger} from '@angular/material/menu';
+import {NgJvxMultiselectService} from './ng-jvx-multiselect.service';
+import {HttpHeaders} from '@angular/common/http';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -29,20 +32,30 @@ import {NgJvxOptionComponent} from './ng-jvx-option/ng-jvx-option.component';
 })
 export class NgJvxMultiselectComponent implements OnInit, AfterViewChecked, OnChanges {
   @ViewChild('jvxMultiselect', {static: true}) jvxMultiselect: ElementRef;
+  @ViewChild('trigger', {static: true}) trigger: MatMenuTrigger;
+
   @ContentChild(NgJvxOptionsTemplateDirective) optionsTemplate: NgJvxOptionsTemplateDirective | null = null;
   // @ContentChild(NgJvxOptionComponent) optionComp: NgJvxOptionComponent;
   @ViewChildren(NgJvxOptionComponent) optionComp: QueryList<NgJvxOptionComponent>;
   // @ContentChild(TemplateRef) optionsTemplate: TemplateRef<any> | null = null;
   @Input() options: any[] = [];
   @Input() multi = false;
+  @Input() url = '';
+  @Input() requestType: 'get' | 'post' = 'get';
   @Input() itemValue = 'value';
   @Input() itemText = 'text';
   @Input() value: any[] = [];
+  @Input() ignorePagination = false;
+  @Input() requestHeaders: HttpHeaders = new HttpHeaders();
   @Output() valueChange: EventEmitter<any[]> = new EventEmitter<any[]>();
   public form: FormGroup;
   public isOpen = false;
+  public isLoading = false;
+  public asyncOptions: any = [];
+  public selectableOptions = [];
+  public currentPage = 0;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private service: NgJvxMultiselectService) {
     this.form = this.formBuilder.group({
       selectionValue: new FormControl(this.selectionValue)
     });
@@ -51,6 +64,7 @@ export class NgJvxMultiselectComponent implements OnInit, AfterViewChecked, OnCh
   ngOnInit(): void {
     console.log(innerWidth);
     console.log(this.jvxMultiselect.nativeElement.offsetWidth);
+    this.selectableOptions = [...this.options];
   }
 
   ngAfterViewChecked(): void {
@@ -58,7 +72,7 @@ export class NgJvxMultiselectComponent implements OnInit, AfterViewChecked, OnCh
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.options) {
-      console.log(changes.options.currentValue);
+      this.selectableOptions = [...this.options];
     }
   }
 
@@ -82,7 +96,7 @@ export class NgJvxMultiselectComponent implements OnInit, AfterViewChecked, OnCh
 
 
   private propagateChange = (_: any) => {
-  }
+  };
 
   // this is the initial value set to the component
   public writeValue(obj: any[]): void {
@@ -101,7 +115,7 @@ export class NgJvxMultiselectComponent implements OnInit, AfterViewChecked, OnCh
 
   onChange(e: MatSelectionListChange): void {
     const vals = e.source.selectedOptions.selected.map(o => o.value);
-    this.value = [...this.options.filter(o => vals.includes(o[this.itemValue]))];
+    this.value = [...this.selectableOptions.filter(o => vals.includes(o[this.itemValue]))];
     this.valueChange.emit(this.value);
     this.propagateChange(this.value);
   }
@@ -112,6 +126,7 @@ export class NgJvxMultiselectComponent implements OnInit, AfterViewChecked, OnCh
 
   onMenuClose(): void {
     this.isOpen = false;
+    this.currentPage = 0;
   }
 
   deselect(val: any): void {
@@ -124,5 +139,32 @@ export class NgJvxMultiselectComponent implements OnInit, AfterViewChecked, OnCh
       }
     );
     this.valueChange.emit(this.value);
+  }
+
+  clickOnMenuTrigger(e: MouseEvent): void {
+    if (this.url.length > 0) {
+      e.preventDefault();
+      this.selectableOptions.length = 0;
+      this.getList();
+    } else {
+      this.trigger.openMenu();
+    }
+  }
+
+  getList(): void{
+    this.currentPage++;
+    this.isLoading = true;
+    this.service.getList({
+      url: this.url,
+      requestType: this.requestType,
+      data: {},
+      currentPage: 1,
+      ignorePagination: this.ignorePagination,
+      requestHeaders: this.requestHeaders
+    }).subscribe((val) => {
+      this.selectableOptions.push(...val);
+      this.isLoading = false;
+      this.trigger.openMenu();
+    });
   }
 }

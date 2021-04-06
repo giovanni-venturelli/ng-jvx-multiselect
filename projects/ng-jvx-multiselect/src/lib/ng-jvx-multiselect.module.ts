@@ -12,6 +12,7 @@ import { NgJvxPanelComponent } from './ng-jvx-panel/ng-jvx-panel.component';
 import {MatListModule} from '@angular/material/list';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatChipsModule} from '@angular/material/chips';
+import {HttpClientModule} from '@angular/common/http';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import {MatChipsModule} from '@angular/material/chips';
     MatIconModule,
     MatListModule,
     MatChipsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   exports: [NgJvxMultiselectComponent, NgJvxOptionComponent, NgJvxOptionsTemplateDirective]
 })
