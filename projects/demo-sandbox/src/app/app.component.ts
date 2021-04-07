@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 import {HttpHeaders} from '@angular/common/http';
 import {window} from 'rxjs/operators';
-import {NgJvxOptionMapper} from '../../../../dist/ng-jvx-multiselect/lib/interfaces/ng-jvx-option-mapper';
-import {of} from 'rxjs';
+import {NgJvxOptionMapper} from 'ng-jvx-multiselect';
+import {Observable, of} from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -20,13 +20,13 @@ export class AppComponent {
       'Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Visitatori-API-Token'
     );
   public mapper = {
-    mapOption(source: any): any {
+    mapOption(source: any): Observable<{value: number, text: string}> {
       return of({
         value: source.id,
         text: source.title
       });
     }
-  } as NgJvxOptionMapper;
+  } as NgJvxOptionMapper<{value: number, text: string}>;
 
   getUrl(): string {
     return 'http://vm-web2016/Visitatori.Next.Api/api/utenti';

@@ -1,5 +1,5 @@
 import {Observable, Subject} from 'rxjs';
 
-export interface NgJvxOptionMapper {
-  mapOption(source: any): Observable<any>;
+export interface NgJvxOptionMapper<T> {
+  mapOption(source: any): Observable<T>;
 }
