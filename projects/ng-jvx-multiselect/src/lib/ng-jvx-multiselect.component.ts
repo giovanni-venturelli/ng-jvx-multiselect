@@ -1,13 +1,12 @@
 import {
-  AfterViewChecked, AfterViewInit,
+  AfterViewInit,
   Component,
   ContentChild,
-  ElementRef, EventEmitter, forwardRef, HostListener,
+  ElementRef, EventEmitter, forwardRef,
   Input,
   OnChanges, OnDestroy,
   OnInit, Output, QueryList,
   SimpleChanges,
-  TemplateRef,
   ViewChild, ViewChildren
 } from '@angular/core';
 import {NgJvxOptionsTemplateDirective} from './directives/ng-jvx-options-template.directive';
@@ -18,8 +17,9 @@ import {MatMenuTrigger} from '@angular/material/menu';
 import {NgJvxMultiselectService} from './ng-jvx-multiselect.service';
 import {HttpHeaders} from '@angular/common/http';
 import {NgScrollbar} from 'ngx-scrollbar';
-import {takeUntil} from 'rxjs/operators';
-import {Subject} from 'rxjs';
+import {concatAll, map, switchMap, takeUntil} from 'rxjs/operators';
+import {forkJoin, from, Observable, of, Subject} from 'rxjs';
+import {NgJvxOptionMapper} from './interfaces/ng-jvx-option-mapper';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -51,13 +51,33 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @Input() itemText = 'text';
   @Input() value: any[] = [];
   @Input() ignorePagination = false;
+  @Input() clearable = false;
+  @Input() closeOnClick = true;
+  @Input() disabled = false;
+  @Input() hasErrors = false;
+  @Input() searchInput = false;
+  @Input() searchLabel = 'search';
+  @Input() listProp = '';
+  @Input() totalRowsProp = '';
+  @Input() mapper: NgJvxOptionMapper = {
+    mapOption(source: any): Observable<any> {
+      return of(source);
+    }
+  };
   @Input() requestHeaders: HttpHeaders = new HttpHeaders();
   @Output() valueChange: EventEmitter<any[]> = new EventEmitter<any[]>();
+  @Output() open: EventEmitter<void> = new EventEmitter<void>();
+  @Output() opened: EventEmitter<void> = new EventEmitter<void>();
+  @Output() close: EventEmitter<void> = new EventEmitter<void>();
+  @Output() closed: EventEmitter<void> = new EventEmitter<void>();
+  @Output() scrollEnd: EventEmitter<void> = new EventEmitter<void>();
+
   public form: FormGroup;
   public isOpen = false;
   public isLoading = false;
   public asyncOptions: any = [];
   public selectableOptions = [];
+  public searchValue = '';
   public currentPage = 0;
   private pageSize = 15;
   private unsubscribe = new Subject<void>();
@@ -83,7 +103,6 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     if (this.scrollbar) {
       this.scrollbar.scrolled.pipe(takeUntil(this.unsubscribe$)).subscribe((e: any) => {
         this.onScrolled(e);
-
       });
     }
   }
@@ -106,7 +125,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   onCLickOnMenu(e: MouseEvent): void {
-    if (this.multi) {
+    if (this.multi || this.closeOnClick === false) {
       e.stopPropagation();
     }
 
@@ -140,11 +159,12 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   onMenuOpen(): void {
     this.isOpen = true;
+    this.open.emit();
   }
 
   onMenuClose(): void {
     this.isOpen = false;
-    this.currentPage = 0;
+    this.close.emit();
   }
 
   deselect(val: any): void {
@@ -160,12 +180,14 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   clickOnMenuTrigger(e: MouseEvent): void {
-    if (this.url.length > 0) {
-      e.preventDefault();
-      this.selectableOptions.length = 0;
-      this.getList();
-    } else {
-      this.trigger.openMenu();
+    if (!this.disabled) {
+      if (this.url.length > 0) {
+        e.preventDefault();
+        this.selectableOptions.length = 0;
+        this.getList();
+      } else {
+        this.trigger.openMenu();
+      }
     }
   }
 
@@ -180,23 +202,44 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       requestHeaders: this.requestHeaders,
       pageSize: this.pageSize
     }).subscribe((val) => {
-      this.selectableOptions.push(...val);
-      this.isLoading = false;
-      this.trigger.openMenu();
+      const newOptions = [];
+
+      for (const opt of val) {
+        const newOption = this.mapper.mapOption(opt);
+        newOptions.push(newOption);
+      }
+      from(newOptions).pipe(concatAll())
+        .subscribe((finVal: any) => {
+        this.selectableOptions.push(finVal);
+        this.isLoading = false;
+        this.trigger.openMenu();
+      });
     });
   }
 
-  @HostListener('scroll', ['$event'])
-  onScroll(e: Event): void {
-    console.log('scrolling');
-    console.log(e);
-  }
-
   onScrolled(e: any): void {
-    console.log(e);
-    if (e.target.scrollTop + 300 === this.selectionContainer.nativeElement.offsetHeight && !this.isLoading) {
-      console.log('bottom');
+    if (e.target.scrollTop + 220 + ((this.searchInput ? 0 : 1) * 40) === this.selectionContainer.nativeElement.offsetHeight && !this.isLoading) {
+      this.scrollEnd.emit();
       this.getList();
     }
+  }
+
+  onMenuOpened(): void {
+    this.opened.emit();
+  }
+
+  onMenuClosed(): void {
+    this.currentPage = 0;
+    this.searchValue = '';
+    this.closed.emit();
+    console.log('menu closed');
+  }
+
+  onSearchInputClick(e: MouseEvent): void {
+    e.stopPropagation();
+  }
+
+  onSearchValueChange(e: any): void {
+    console.log(e.target?.value);
   }
 }

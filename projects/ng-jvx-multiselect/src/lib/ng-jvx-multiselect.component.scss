@@ -31,9 +31,11 @@
 
     .ng-jvx-multiselect-arrow {
       width: 28px;
+
       mat-icon {
         transition: transform 0.3s ease-in-out;
       }
+
       @keyframes lds-ring {
         0% {
           transform: rotate(0deg);
@@ -43,11 +45,12 @@
         }
       }
 
-      .lds-ring{
+      .lds-ring {
         display: inline-block;
         position: relative;
         width: 24px;
         height: 24px;
+
         div {
           box-sizing: border-box;
           display: block;
@@ -59,6 +62,7 @@
           border-radius: 50%;
           animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
           border-color: green transparent transparent transparent;
+
           &:nth-child(1) {
             animation-delay: -0.45s;
           }
@@ -81,6 +85,33 @@
         }
       }
     }
+
+  }
+
+  &.disabled {
+    pointer-events: none;
+
+    .ng-jvx-multiselect-arrow {
+      mat-icon {
+        opacity: 0.3;
+      }
+    }
+  }
+
+  &.has-errors {
+    color: red;
+
+    .ng-jvx-multiselect-value {
+      &.single-value-container {
+        color: red;
+      }
+    }
+
+    .ng-jvx-multiselect-arrow {
+      mat-icon {
+        color: red;
+      }
+    }
   }
 }
 
@@ -90,6 +121,8 @@
 
 .menu-list-container {
   max-height: 300px;
+  display: flex;
+  flex-direction: column;
 }
 
 ::ng-deep {
@@ -99,6 +132,27 @@
     .mat-menu-content {
       padding-top: 0 !important;
       padding-bottom: 0 !important;
+
+      .search-input-container {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        padding: 10px;
+
+        input {
+          width: 100%;
+          outline: none;
+          border: none;
+
+          &:focus {
+            outline: none;
+          }
+
+          &:active {
+            outline: none
+          }
+        }
+      }
 
       .mat-selection-list {
         padding-top: 0 !important;

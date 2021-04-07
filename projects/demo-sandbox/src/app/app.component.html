@@ -349,7 +349,7 @@
     </mat-form-field>
   </div>
   <div style="width: 250px;">
-  <ng-jvx-multiselect url="https://jsonplaceholder.typicode.com/posts" [requestHeaders]="requestHeaders" [multi]="true" [itemValue]="'id'" [itemText]="'title'" [value]="[{id: 1, title: 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit'}]">
+  <ng-jvx-multiselect [searchInput]="true" url="https://jsonplaceholder.typicode.com/posts" [requestHeaders]="requestHeaders" [multi]="true" [mapper]="mapper" [value]="[{value: 1, text: 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit'}]">
 <!--    <div *ngJvxOptionsTemplate="let option">-->
 <!--      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>-->
 <!--    </div>-->

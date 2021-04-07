@@ -10,7 +10,7 @@ import { NgJvxOptionsTemplateDirective } from './directives/ng-jvx-options-templ
 import {MatIconModule} from '@angular/material/icon';
 import { NgJvxPanelComponent } from './ng-jvx-panel/ng-jvx-panel.component';
 import {MatListModule} from '@angular/material/list';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatChipsModule} from '@angular/material/chips';
 import {HttpClientModule} from '@angular/common/http';
 import {NgScrollbarModule} from 'ngx-scrollbar';
@@ -31,7 +31,8 @@ import {SmoothScrollModule} from 'ngx-scrollbar/smooth-scroll';
     ReactiveFormsModule,
     HttpClientModule,
     NgScrollbarModule,
-    SmoothScrollModule
+    SmoothScrollModule,
+    FormsModule
   ],
   exports: [NgJvxMultiselectComponent, NgJvxOptionComponent, NgJvxOptionsTemplateDirective]
 })
