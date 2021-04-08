@@ -1,4 +1,5 @@
 <div [ngClass]="{'ng-jvx-multiselect': true, 'disabled': disabled, 'has-errors': hasErrors}" #jvxMultiselect>
+
   <div [matMenuTriggerFor]="menuRef" (onMenuOpen)="onMenuOpen()" (menuOpened)="onMenuOpened()" (onMenuClose)="onMenuClose()" (menuClosed)="onMenuClosed()"
        #trigger="matMenuTrigger">
     <mat-menu #menuRef="matMenu" class="jvx-multiselect-panel" [formGroup]="form">

@@ -104,8 +104,11 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "stylePreprocessorOptions": {
+            "includePaths": ["dist/ng-jvx-multiselect"]
+          },
           "options": {
-            "browserTarget": "demo-sandbox:build"
+            "browserTarget": "demo-sandbox:build",
           },
           "configurations": {
             "production": {

@@ -1,169 +1,173 @@
 @import '~@angular/material/list/list-theme';
-
-.ng-jvx-multiselect {
-  width: 100%;
-
-  .ng-jvx-multiselect-value-container {
+@import '~@angular/material/theming';
+@mixin ng-jvx-multiselect-style($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  @include angular-material-theme($theme);
+  .ng-jvx-multiselect {
     width: 100%;
-    display: flex;
-    cursor: pointer;
 
-    .ng-jvx-multiselect-value {
-      flex: 1 1 100%;
-      max-width: calc(100% - 28px);
+    .ng-jvx-multiselect-value-container {
+      width: 100%;
+      display: flex;
+      cursor: pointer;
 
-      ::ng-deep {
-        .mat-chip-list-wrapper {
-          .mat-standard-chip {
-            padding: 0 5px 0 7px;
-            margin: 4px 5px 0;
+      .ng-jvx-multiselect-value {
+        flex: 1 1 100%;
+        max-width: calc(100% - 28px);
 
-            .chip-content {
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              display: inline-block;
+          .mat-chip-list-wrapper {
+            .mat-standard-chip {
+              padding: 0 5px 0 7px;
+              margin: 4px 5px 0;
+
+              .chip-content {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: inline-block;
+              }
+            }
+          }
+
+      }
+
+      .ng-jvx-multiselect-arrow {
+        width: 28px;
+
+        mat-icon {
+          transition: transform 0.3s ease-in-out;
+        }
+
+        @keyframes lds-ring {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+
+        .lds-ring {
+          display: inline-block;
+          position: relative;
+          width: 24px;
+          height: 24px;
+
+          div {
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            width: 6px;
+            height: 16px;
+            margin: 4px;
+            border: 2px solid;
+            border-radius: 50%;
+            animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            border-color: green transparent transparent transparent;
+
+            &:nth-child(1) {
+              animation-delay: -0.45s;
+            }
+
+            &:nth-child(2) {
+              animation-delay: -0.3s;
+            }
+
+            &:nth-child(3) {
+              animation-delay: -0.15s;
             }
           }
         }
       }
+
+      &.is-open {
+        .ng-jvx-multiselect-arrow {
+          mat-icon {
+            transform: rotate(180deg);
+          }
+        }
+      }
+
     }
 
-    .ng-jvx-multiselect-arrow {
-      width: 28px;
+    &.disabled {
+      pointer-events: none;
 
-      mat-icon {
-        transition: transform 0.3s ease-in-out;
-      }
-
-      @keyframes lds-ring {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-
-      .lds-ring {
-        display: inline-block;
-        position: relative;
-        width: 24px;
-        height: 24px;
-
-        div {
-          box-sizing: border-box;
-          display: block;
-          position: absolute;
-          width: 6px;
-          height: 16px;
-          margin: 4px;
-          border: 2px solid;
-          border-radius: 50%;
-          animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-          border-color: green transparent transparent transparent;
-
-          &:nth-child(1) {
-            animation-delay: -0.45s;
-          }
-
-          &:nth-child(2) {
-            animation-delay: -0.3s;
-          }
-
-          &:nth-child(3) {
-            animation-delay: -0.15s;
-          }
-        }
-      }
-    }
-
-    &.is-open {
       .ng-jvx-multiselect-arrow {
         mat-icon {
-          transform: rotate(180deg);
+          opacity: 0.3;
         }
       }
     }
 
-  }
+    &.has-errors {
+      color: red;
 
-  &.disabled {
-    pointer-events: none;
-
-    .ng-jvx-multiselect-arrow {
-      mat-icon {
-        opacity: 0.3;
-      }
-    }
-  }
-
-  &.has-errors {
-    color: red;
-
-    .ng-jvx-multiselect-value {
-      &.single-value-container {
-        color: red;
-      }
-    }
-
-    .ng-jvx-multiselect-arrow {
-      mat-icon {
-        color: red;
-      }
-    }
-  }
-}
-
-.mat-select-test {
-  width: 250px;
-}
-
-.menu-list-container {
-  max-height: 300px;
-  display: flex;
-  flex-direction: column;
-}
-
-::ng-deep {
-  .jvx-multiselect-panel {
-    min-width: 100%;
-
-    .mat-menu-content {
-      padding-top: 0 !important;
-      padding-bottom: 0 !important;
-
-      .search-input-container {
-        height: 40px;
-        display: flex;
-        align-items: center;
-        padding: 10px;
-
-        input {
-          width: 100%;
-          outline: none;
-          border: none;
-
-          &:focus {
-            outline: none;
-          }
-
-          &:active {
-            outline: none
-          }
+      .ng-jvx-multiselect-value {
+        &.single-value-container {
+          color: red;
         }
       }
 
-      .mat-selection-list {
+      .ng-jvx-multiselect-arrow {
+        mat-icon {
+          color: red;
+        }
+      }
+    }
+  }
+
+  .mat-select-test {
+    width: 250px;
+  }
+
+  .menu-list-container {
+    max-height: 300px;
+    display: flex;
+    flex-direction: column;
+  }
+
+    .jvx-multiselect-panel {
+      min-width: 100%;
+
+      .mat-menu-content {
         padding-top: 0 !important;
         padding-bottom: 0 !important;
 
-        mat-list-option[aria-selected="true"], mat-list-option[aria-selected="false"] {
-          mat-pseudo-checkbox {
-            display: none
+        .search-input-container {
+          height: 40px;
+          display: flex;
+          align-items: center;
+          padding: 10px;
+
+          input {
+            width: 100%;
+            outline: none;
+            border: none;
+
+            &:focus {
+              outline: none;
+            }
+
+            &:active {
+              outline: none
+            }
           }
         }
-      }
+
+        .mat-selection-list {
+          padding-top: 0 !important;
+          padding-bottom: 0 !important;
+
+          mat-list-option[aria-selected="true"], mat-list-option[aria-selected="false"] {
+            mat-pseudo-checkbox {
+              display: none
+            }
+          }
+        }
+
     }
   }
 }
