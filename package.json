@@ -9,9 +9,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build-lib-watch-styles": "scss-bundle -e \"./projects/ng-jvx-multiselect/src/lib/ng-jvx-multiselect.component.scss\" -d \"./dist/ng-jvx-multiselect/ng-jvx-multiselect.scss\" -w \"./projects/ng-jvx-multiselect/src/lib\"",
-    "build-lib-prop-styles": "scss-bundle -e \"./projects/ng-jvx-multiselect/src/lib/ng-jvx-multiselect.component.scss\" -d \"./dist/ng-jvx-multiselect/ng-jvx-multiselect.scss\""
+    "build-lib-prod-styles": "scss-bundle -e \"./projects/ng-jvx-multiselect/src/lib/ng-jvx-multiselect.component.scss\" -d \"./dist/ng-jvx-multiselect/ng-jvx-multiselect.scss\""
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "~11.2.7",
     "@angular/cdk": "^11.2.7",
@@ -25,6 +24,7 @@
     "@angular/router": "~11.2.7",
     "ng-jvx-multiselect": "file:dist\\ng-jvx-multiselect",
     "ngx-scrollbar": "^7.5.4",
+    "node-sass": "^4.14.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.3"
@@ -45,7 +45,7 @@
     "karma-jasmine-html-reporter": "^1.5.0",
     "ng-packagr": "^11.0.0",
     "protractor": "~7.0.0",
-    "scss-bundle": "^2.5.0-beta",
+    "scss-bundle": "^2.5.1",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
     "typescript": "~4.1.5"
