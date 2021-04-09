@@ -35,7 +35,7 @@ import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-tem
       multi: true,
     }]
 })
-export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges, AfterContentChecked {
+export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
   @ViewChild('jvxMultiselect', {static: true}) jvxMultiselect: ElementRef;
   @ViewChild('selectionContainer', {static: true}) selectionContainer: ElementRef;
   @ViewChild('trigger', {static: true}) trigger: MatMenuTrigger;
@@ -93,18 +93,11 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   ngOnInit(): void {
-    console.log(innerWidth);
-    console.log(this.jvxMultiselect.nativeElement.offsetWidth);
     this.selectableOptions = [...this.options];
   }
 
   ngOnDestroy(): void {
     this.unsubscribe.next();
-  }
-
-  ngAfterContentChecked(): void {
-    console.log(this.selectionTemplate);
-    console.log(this.optionsTemplate);
   }
 
   ngAfterViewInit(): void {
