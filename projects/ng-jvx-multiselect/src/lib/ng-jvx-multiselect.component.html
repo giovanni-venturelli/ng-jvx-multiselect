@@ -1,49 +1,59 @@
 <div [ngClass]="{'ng-jvx-multiselect': true, 'disabled': disabled, 'has-errors': hasErrors}" #jvxMultiselect>
-
-  <div [matMenuTriggerFor]="menuRef" (onMenuOpen)="onMenuOpen()" (menuOpened)="onMenuOpened()" (onMenuClose)="onMenuClose()" (menuClosed)="onMenuClosed()"
+  <!-- START MENU -->
+  <div [matMenuTriggerFor]="menuRef" (onMenuOpen)="onMenuOpen()" (menuOpened)="onMenuOpened()"
+       (onMenuClose)="onMenuClose()" (menuClosed)="onMenuClosed()"
        #trigger="matMenuTrigger">
     <mat-menu #menuRef="matMenu" class="jvx-multiselect-panel" [formGroup]="form">
       <div class="menu-list-container"
            [ngStyle]="{'overflow-y': 'hidden', 'width.px': jvxMultiselect.offsetWidth, 'height': selectionContainer.offsetHeight>260? '260px': 'auto'}">
         <div class="search-input-container" *ngIf="searchInput" (click)="onSearchInputClick($event)">
-          <input type="text" [placeholder]="searchLabel" [(ngModel)]="searchValue" [ngModelOptions]="{standalone: true}" (input)="onSearchValueChange($event)" />
+          <input type="text" [placeholder]="searchLabel" [(ngModel)]="searchValue" [ngModelOptions]="{standalone: true}"
+                 (input)="onSearchValueChange($event)"/>
         </div>
         <div [ngStyle]="{height: searchInput? 'calc(100% - 40px)': '100%'}">
-        <ng-scrollbar style="width: 100%"
-                      smoothScroll
-                      [visibility]="'hover'"
-                      [appearance]="'compact'"
-                      [sensorDisabled]="isLoading"
-                      [autoHeightDisabled]="false" #scrollbar>
-          <div #selectionContainer>
-            <mat-selection-list #selection [multiple]="multi" [(ngModel)]="selectionValue"
-                                [ngStyle]="{'width.px': jvxMultiselect.offsetWidth, 'min-width.px': 112}"
-                                (click)="onCLickOnMenu($event)"
-                                (selectionChange)="onChange($event)"
-                                formControlName="selectionValue">
-              <ng-content></ng-content>
+          <ng-scrollbar style="width: 100%"
 
-              <ng-jvx-option *ngFor="let option of selectableOptions" [value]="option[itemValue]">
-                <!--        <ng-container [ngTemplateOutlet]="optionsTemplate" [ngTemplateOutletContext]="{$implicit: option}"></ng-container>-->
-                <ng-container [ngTemplateOutlet]="optionsTemplate? optionsTemplate.template : defaultTemplate"
-                              [ngTemplateOutletContext]="{$implicit: option}"></ng-container>
-              </ng-jvx-option>
+                        smoothScroll
+                        [visibility]="'hover'"
+                        [appearance]="'compact'"
+                        [sensorDisabled]="isLoading"
+                        [autoHeightDisabled]="false" #scrollbar>
+            <div #selectionContainer>
+              <mat-selection-list #selection [multiple]="multi" [(ngModel)]="selectionValue"
+                                  [ngStyle]="{'width.px': jvxMultiselect.offsetWidth, 'min-width.px': 112}"
+                                  (click)="onCLickOnMenu($event)"
+                                  (selectionChange)="onChange($event)"
+                                  formControlName="selectionValue">
+                <ng-content></ng-content>
 
-            </mat-selection-list>
-          </div>
-        </ng-scrollbar>
+                <ng-jvx-option *ngFor="let option of selectableOptions" [value]="option[itemValue]">
+                  <!--        <ng-container [ngTemplateOutlet]="optionsTemplate" [ngTemplateOutletContext]="{$implicit: option}"></ng-container>-->
+                  <ng-container [ngTemplateOutlet]="optionsTemplate? optionsTemplate.template : defaultTemplate"
+                                [ngTemplateOutletContext]="{$implicit: option}"></ng-container>
+                </ng-jvx-option>
+
+              </mat-selection-list>
+            </div>
+          </ng-scrollbar>
         </div>
       </div>
 
     </mat-menu>
   </div>
+  <!-- END MENU -->
+  <!-- START INPUT -->
   <div [ngClass]="{'ng-jvx-multiselect-value-container': true, 'is-open': isOpen}"
        (click)="clickOnMenuTrigger($event)"
        #valueContainer>
+
+    <div class="ng-jvx-multiselect__placeholder" *ngIf="value.length === 0">
+      <ng-content select="[placeholder]"></ng-content>
+    </div>
+
     <div class="ng-jvx-multiselect-value multi-value-container" *ngIf="multi" #multiContainer>
 
       <mat-chip-list #chipList [disabled]="this.disabled">
-        <mat-chip [color]="'primary'" *ngFor="let val of value" [selectable]="false"
+        <mat-chip [color]="'primary'" selected *ngFor="let val of value" [selectable]="false"
                   class="ng-jvx-multiselect-chip"
                   [removable]="true" (removed)="deselect(val)">
           <span class="chip-content"
@@ -52,9 +62,20 @@
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
       </mat-chip-list>
+
     </div>
+
     <div class="ng-jvx-multiselect-value single-value-container" *ngIf="!multi">
-      <span *ngFor="let val of value">{{val[itemText]}}</span>
+      <span *ngFor="let val of value">
+          <ng-container [ngTemplateOutlet]="selectionTemplate? selectionTemplate.template : defaultSelectionTemplate"
+                        [ngTemplateOutletContext]="{$implicit: val}"></ng-container></span>
+    </div>
+    <div class="ng-jvx-multiselect__remove-button" *ngIf="clearable && value.length > 0" (click)="clear($event)">
+      <mat-icon style="font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;">clear
+      </mat-icon>
     </div>
     <div class="ng-jvx-multiselect-arrow">
       <mat-icon *ngIf="!isLoading">expand_more</mat-icon>
@@ -66,7 +87,7 @@
       </div>
     </div>
   </div>
-  <ng-content select="[options-template]"></ng-content>
+  <!-- END INPUT -->
 </div>
 
 <ng-template #defaultTemplate let-option>
@@ -75,4 +96,8 @@
      overflow: hidden;
      text-overflow: ellipsis;">{{option[itemText]}}
   </div>
+</ng-template>
+
+<ng-template #defaultSelectionTemplate let-value>
+  {{value[itemText]}}
 </ng-template>

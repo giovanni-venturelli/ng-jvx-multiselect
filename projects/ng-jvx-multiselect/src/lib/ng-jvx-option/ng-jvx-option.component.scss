@@ -1,0 +1,11 @@
+@mixin ng-jvx-option-style($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  mat-list-option.ng-jvx-option {
+    &[aria-selected="true"] {
+      background: lighten(mat-color($primary), 45%);
+      color: mat-color($primary);
+    }
+  }
+}

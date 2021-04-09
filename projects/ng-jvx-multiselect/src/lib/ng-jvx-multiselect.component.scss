@@ -1,10 +1,12 @@
 @import '~@angular/material/list/list-theme';
-@import '~@angular/material/theming';
+@import 'ng-jvx-option/ng-jvx-option.component';
+
 @mixin ng-jvx-multiselect-style($theme) {
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
   $warn: map-get($theme, warn);
-  @include angular-material-theme($theme);
+  @include ng-jvx-option-style($theme);
+
   .ng-jvx-multiselect {
     width: 100%;
 
@@ -65,7 +67,7 @@
             border: 2px solid;
             border-radius: 50%;
             animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-            border-color: green transparent transparent transparent;
+            border-color: mat-color($accent) transparent transparent transparent;
 
             &:nth-child(1) {
               animation-delay: -0.45s;
@@ -135,7 +137,19 @@
       .mat-menu-content {
         padding-top: 0 !important;
         padding-bottom: 0 !important;
-
+        .menu-list-container {
+          ng-scrollbar {
+            --scrollbar-color: transparent;
+            --scrollbar-container-color: transparent;
+            --scrollbar-thumb-color: #{transparentize(mat-color($accent), 0.2)};
+            --scrollbar-thumb-hover-color: #{transparentize(mat-color($accent), 0.3)};
+            --scrollbar-border-radius: 4px;
+            --scrollbar-size: 6px;
+            --scrollbar-padding: 8px;
+            --scroll-view-margin: 0;
+            --scroll-view-color: transparent;
+          }
+        }
         .search-input-container {
           height: 40px;
           display: flex;

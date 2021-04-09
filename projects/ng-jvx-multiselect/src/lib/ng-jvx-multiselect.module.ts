@@ -15,10 +15,11 @@ import {MatChipsModule} from '@angular/material/chips';
 import {HttpClientModule} from '@angular/common/http';
 import {NgScrollbarModule} from 'ngx-scrollbar';
 import {SmoothScrollModule} from 'ngx-scrollbar/smooth-scroll';
+import { NgJvxSelectionTemplateDirective } from './directives/ng-jvx-selection-template.directive';
 
 
 @NgModule({
-  declarations: [NgJvxMultiselectComponent, NgJvxOptionComponent, NgJvxOptionsTemplateDirective, NgJvxPanelComponent],
+  declarations: [NgJvxMultiselectComponent, NgJvxOptionComponent, NgJvxOptionsTemplateDirective, NgJvxPanelComponent, NgJvxSelectionTemplateDirective],
   imports: [
     MatButtonModule,
     MatOptionModule,
@@ -34,6 +35,6 @@ import {SmoothScrollModule} from 'ngx-scrollbar/smooth-scroll';
     SmoothScrollModule,
     FormsModule
   ],
-  exports: [NgJvxMultiselectComponent, NgJvxOptionComponent, NgJvxOptionsTemplateDirective]
+  exports: [NgJvxMultiselectComponent, NgJvxOptionComponent, NgJvxOptionsTemplateDirective, NgJvxSelectionTemplateDirective]
 })
 export class NgJvxMultiselectModule { }

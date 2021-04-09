@@ -8,20 +8,22 @@ import {CommonModule} from '@angular/common';
 import {MatIconModule} from '@angular/material/icon';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
-  imports: [
-    BrowserModule,
-    NgJvxMultiselectModule,
-    BrowserAnimationsModule,
-    CommonModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatSelectModule
-  ],
+    imports: [
+        BrowserModule,
+        NgJvxMultiselectModule,
+        BrowserAnimationsModule,
+        CommonModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatChipsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

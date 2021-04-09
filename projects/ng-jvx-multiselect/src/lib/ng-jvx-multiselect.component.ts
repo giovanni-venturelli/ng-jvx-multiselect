@@ -1,4 +1,5 @@
 import {
+  AfterContentChecked,
   AfterViewInit,
   Component,
   ContentChild,
@@ -6,7 +7,7 @@ import {
   Input,
   OnChanges, OnDestroy,
   OnInit, Output, QueryList,
-  SimpleChanges,
+  SimpleChanges, TemplateRef,
   ViewChild, ViewChildren
 } from '@angular/core';
 import {NgJvxOptionsTemplateDirective} from './directives/ng-jvx-options-template.directive';
@@ -20,6 +21,7 @@ import {NgScrollbar} from 'ngx-scrollbar';
 import {concatAll, map, switchMap, takeUntil} from 'rxjs/operators';
 import {forkJoin, from, Observable, of, Subject} from 'rxjs';
 import {NgJvxOptionMapper} from './interfaces/ng-jvx-option-mapper';
+import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -33,13 +35,14 @@ import {NgJvxOptionMapper} from './interfaces/ng-jvx-option-mapper';
       multi: true,
     }]
 })
-export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges, AfterContentChecked {
   @ViewChild('jvxMultiselect', {static: true}) jvxMultiselect: ElementRef;
   @ViewChild('selectionContainer', {static: true}) selectionContainer: ElementRef;
   @ViewChild('trigger', {static: true}) trigger: MatMenuTrigger;
   @ViewChild('scrollbar', {static: false}) scrollbar: NgScrollbar;
 
   @ContentChild(NgJvxOptionsTemplateDirective) optionsTemplate: NgJvxOptionsTemplateDirective | null = null;
+  @ContentChild(NgJvxSelectionTemplateDirective) selectionTemplate: NgJvxSelectionTemplateDirective | null = null;
   // @ContentChild(NgJvxOptionComponent) optionComp: NgJvxOptionComponent;
   @ViewChildren(NgJvxOptionComponent) optionComp: QueryList<NgJvxOptionComponent>;
   // @ContentChild(TemplateRef) optionsTemplate: TemplateRef<any> | null = null;
@@ -99,6 +102,11 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     this.unsubscribe.next();
   }
 
+  ngAfterContentChecked(): void {
+    console.log(this.selectionTemplate);
+    console.log(this.optionsTemplate);
+  }
+
   ngAfterViewInit(): void {
     if (this.scrollbar) {
       this.scrollbar.scrolled.pipe(takeUntil(this.unsubscribe$)).subscribe((e: any) => {
@@ -132,8 +140,8 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
 
-  private propagateChange = (_: any) => {
-  };
+  private propagateChange(_: any): any {
+  }
 
   // this is the initial value set to the component
   public writeValue(obj: any[]): void {
@@ -202,23 +210,30 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       requestHeaders: this.requestHeaders,
       pageSize: this.pageSize
     }).subscribe((val) => {
+      let result = [];
+      if (this.listProp.length > 0) {
+        result = [...val[this.listProp]];
+      } else {
+        result = [...val];
+      }
       const newOptions = [];
 
-      for (const opt of val) {
+      for (const opt of result) {
         const newOption = this.mapper.mapOption(opt);
         newOptions.push(newOption);
       }
       from(newOptions).pipe(concatAll())
         .subscribe((finVal: any) => {
-        this.selectableOptions.push(finVal);
-        this.isLoading = false;
-        this.trigger.openMenu();
-      });
+          this.selectableOptions.push(finVal);
+          this.isLoading = false;
+          this.trigger.openMenu();
+        });
     });
   }
 
   onScrolled(e: any): void {
-    if (e.target.scrollTop + 220 + ((this.searchInput ? 0 : 1) * 40) === this.selectionContainer.nativeElement.offsetHeight && !this.isLoading) {
+    if (e.target.scrollTop + 220 + ((this.searchInput ? 0 : 1) * 40) === this.selectionContainer.nativeElement.offsetHeight
+      && !this.isLoading) {
       this.scrollEnd.emit();
       this.getList();
     }
@@ -232,7 +247,6 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     this.currentPage = 0;
     this.searchValue = '';
     this.closed.emit();
-    console.log('menu closed');
   }
 
   onSearchInputClick(e: MouseEvent): void {
@@ -240,6 +254,12 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   onSearchValueChange(e: any): void {
-    console.log(e.target?.value);
+  }
+
+  clear(e: Event): void {
+    e.stopPropagation();
+    e.preventDefault();
+    this.value = [];
+    this.valueChange.emit(this.value);
   }
 }
