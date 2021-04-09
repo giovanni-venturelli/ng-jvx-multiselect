@@ -19,11 +19,10 @@
                         [sensorDisabled]="isLoading"
                         [autoHeightDisabled]="false" #scrollbar>
             <div #selectionContainer>
-              <mat-selection-list #selection [multiple]="multi" [(ngModel)]="selectionValue"
+              <mat-selection-list #selection [multiple]="multi" [ngModel]="selectionValue"
                                   [ngStyle]="{'width.px': jvxMultiselect.offsetWidth, 'min-width.px': 112}"
                                   (click)="onCLickOnMenu($event)"
-                                  (selectionChange)="onChange($event)"
-                                  formControlName="selectionValue">
+                                  (selectionChange)="onChange($event)">
                 <ng-content></ng-content>
 
                 <ng-jvx-option *ngFor="let option of selectableOptions" [value]="option[itemValue]">

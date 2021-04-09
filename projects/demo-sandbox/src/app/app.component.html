@@ -333,11 +333,13 @@
 
 <div class="content" role="main">
   <div style="width: 250px">
-    <ng-jvx-multiselect [multi]="false" [value]="[{value: 1, text: 'opzione 1'}]"
-                        [options]="[{value: 1, text: 'opzione 1'}, {value: 2, text: 'opzione 2'}, {value: 3, text: 'opzione 3'}]">
-      <!--    <div *ngJvxOptionsTemplate="let option">-->
-      <!--      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>-->
-      <!--    </div>-->
+    <ng-jvx-multiselect [multi]="false" [value]="[{family: 'opzione 1'}]"
+                        [itemValue]="'family'"
+                        [itemText]="'family'"
+                        [options]="[{family: 'opzione 1'}, {family: 'opzione 2'}, {family: 'opzione 3'}]">
+          <div *ngJvxOptionsTemplate="let option">
+            <div style="font-style: italic">{{option.family}}</div>
+          </div>
     </ng-jvx-multiselect>
   </div>
 

@@ -121,9 +121,6 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     });
   }
 
-  set selectionValue(val: any[]) {
-
-  }
 
   onCLickOnMenu(e: MouseEvent): void {
     if (this.multi || this.closeOnClick === false) {
