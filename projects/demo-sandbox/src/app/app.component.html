@@ -15,7 +15,7 @@
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    }
+  }
 
   h1,
   h2,
@@ -24,15 +24,15 @@
   h5,
   h6 {
     margin: 8px 0;
-    }
+  }
 
   p {
     margin: 0;
-    }
+  }
 
   .spacer {
     flex: 1;
-    }
+  }
 
   .toolbar {
     position: absolute;
@@ -45,26 +45,26 @@
     background-color: #1976d2;
     color: white;
     font-weight: 600;
-    }
+  }
 
   .toolbar img {
     margin: 0 16px;
-    }
+  }
 
   .toolbar #twitter-logo {
     height: 40px;
     margin: 0 8px;
-    }
+  }
 
   .toolbar #youtube-logo {
     height: 40px;
     margin: 0 16px;
-    }
+  }
 
   .toolbar #twitter-logo:hover,
   .toolbar #youtube-logo:hover {
     opacity: 0.8;
-    }
+  }
 
   .content {
     display: flex;
@@ -73,27 +73,27 @@
     max-width: 960px;
     flex-direction: column;
     align-items: center;
-    }
+  }
 
   svg.material-icons {
     height: 24px;
     width: auto;
-    }
+  }
 
   svg.material-icons:not(:last-child) {
     margin-right: 8px;
-    }
+  }
 
   .card svg.material-icons path {
     fill: #888;
-    }
+  }
 
   .card-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     margin-top: 16px;
-    }
+  }
 
   .card {
     border-radius: 4px;
@@ -109,29 +109,29 @@
     align-items: center;
     transition: all 0.2s ease-in-out;
     line-height: 24px;
-    }
+  }
 
   .card-container .card:not(:last-child) {
     margin-right: 0;
-    }
+  }
 
   .card.card-small {
     height: 16px;
     width: 168px;
-    }
+  }
 
   .card-container .card:not(.highlight-card) {
     cursor: pointer;
-    }
+  }
 
   .card-container .card:not(.highlight-card):hover {
     transform: translateY(-3px);
     box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
-    }
+  }
 
   .card-container .card:not(.highlight-card):hover .material-icons path {
     fill: rgb(105, 103, 103);
-    }
+  }
 
   .card.highlight-card {
     background-color: #1976d2;
@@ -141,18 +141,18 @@
     width: auto;
     min-width: 30%;
     position: relative;
-    }
+  }
 
   .card.card.highlight-card span {
     margin-left: 60px;
-    }
+  }
 
   svg#rocket {
     width: 80px;
     position: absolute;
     left: -10px;
     top: -24px;
-    }
+  }
 
   svg#rocket-smoke {
     height: calc(100vh - 95px);
@@ -160,18 +160,18 @@
     top: 10px;
     right: 180px;
     z-index: -10;
-    }
+  }
 
   a,
   a:visited,
   a:hover {
     color: #1976d2;
     text-decoration: none;
-    }
+  }
 
   a:hover {
     color: #125699;
-    }
+  }
 
   .terminal {
     position: relative;
@@ -182,7 +182,7 @@
     margin-top: 8px;
     overflow: hidden;
     background-color: rgb(15, 15, 16);
-    }
+  }
 
   .terminal::before {
     content: "\2022 \2022 \2022";
@@ -197,14 +197,14 @@
     line-height: 0;
     padding: 14px 0;
     text-indent: 4px;
-    }
+  }
 
   .terminal pre {
     font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
     color: white;
     padding: 0 1rem 1rem;
     margin: 0;
-    }
+  }
 
   .circle-link {
     height: 40px;
@@ -219,24 +219,24 @@
     cursor: pointer;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     transition: 1s ease-out;
-    }
+  }
 
   .circle-link:hover {
     transform: translateY(-0.25rem);
     box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
-    }
+  }
 
   footer {
     margin-top: 8px;
     display: flex;
     align-items: center;
     line-height: 20px;
-    }
+  }
 
   footer a {
     display: flex;
     align-items: center;
-    }
+  }
 
   .github-star-badge {
     color: #24292e;
@@ -250,19 +250,19 @@
     margin-left: 4px;
     font-weight: 600;
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
-    }
+  }
 
   .github-star-badge:hover {
     background-image: linear-gradient(-180deg, #f0f3f6, #e6ebf1 90%);
     border-color: rgba(27, 31, 35, .35);
     background-position: -.5em;
-    }
+  }
 
   .github-star-badge .material-icons {
     height: 16px;
     width: 16px;
     margin-right: 4px;
-    }
+  }
 
   svg#clouds {
     position: fixed;
@@ -270,7 +270,7 @@
     left: -230px;
     z-index: -10;
     width: 1920px;
-    }
+  }
 
 
   /* Responsive Styles */
@@ -279,29 +279,29 @@
     .card-container > *:not(.circle-link),
     .terminal {
       width: 100%;
-      }
+    }
 
     .card:not(.highlight-card) {
       height: 16px;
       margin: 8px 0;
-      }
+    }
 
     .card.highlight-card span {
       margin-left: 72px;
-      }
+    }
 
     svg#rocket-smoke {
       right: 120px;
       transform: rotate(-5deg);
-      }
     }
+  }
 
   @media screen and (max-width: 575px) {
     svg#rocket-smoke {
       display: none;
       visibility: hidden;
-      }
     }
+  }
 </style>
 
 <!-- Toolbar -->
@@ -333,40 +333,43 @@
 
 <div class="content" role="main">
   <div style="width: 250px">
-    <ng-jvx-multiselect [multi]="false" [value]="[{family: 'opzione 1'}]"
-                        [itemValue]="'family'"
-                        [itemText]="'family'"
-                        [options]="[{family: 'opzione 1'}, {family: 'opzione 2'}, {family: 'opzione 3'}]">
-          <div *ngJvxOptionsTemplate="let option">
-            <div style="font-style: italic">{{option.family}}</div>
-          </div>
+    <ng-jvx-multiselect *ngIf="loaded" [multi]="false" [value]="selectedValue"
+                        [options]="[{value: 1, text: 'opzione 1'}, {value: 2, text: 'opzione 2'}, {value: 3, text: 'opzione 3'}]">
+      <!--    <div *ngJvxOptionsTemplate="let option">-->
+      <!--      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>-->
+      <!--    </div>-->
     </ng-jvx-multiselect>
   </div>
-
-  <div class="mat-select-test">
-    <mat-form-field appearance="legacy">
-      <mat-label>Select</mat-label>
-      <mat-select>
-        <mat-option
-          *ngFor="let option of [{value: 1, text: 'opzione 1'}, {value: 2, text: 'opzione 2'}, {value: 3, text: 'opzione 3'}]"
-          [value]="option.value">{{option.text}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div style="width: 250px;">
-    <ng-jvx-multiselect [searchInput]="true" [clearable]="true" url="https://jsonplaceholder.typicode.com/posts"
-                        [requestHeaders]="requestHeaders" [multi]="false" [mapper]="mapper"
-                        [value]="[{value: 1, text: 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit'}]">
-      <div placeholder>questo è un placeholder</div>
-      <div *ngJvxSelectionTemplate="let val">
-        <div style="font-style: italic">{{val.value}} - {{val.text}}</div>
-      </div>
-      <div *ngJvxOptionsTemplate="let option">
-        <div style="font-style: italic">{{option.value}} - {{option.text}}</div>
-      </div>
-    </ng-jvx-multiselect>
-  </div>
-
+<!--  <div>-->
+<!--    <mat-selection-list #selection [multiple]="false" [ngModel]="selectionValue">-->
+<!--      <mat-list-option-->
+<!--        *ngFor="let option of [{value: 1, text: 'opzione 1'}, {value: 2, text: 'opzione 2'}, {value: 3, text: 'opzione 3'}]"-->
+<!--        [value]="option.value">-->
+<!--        {{-->
+<!--        option.text-->
+<!--        }}-->
+<!--      </mat-list-option>-->
+<!--    </mat-selection-list>-->
+<!--  </div>-->
+  <!--  <div class="mat-select-test">-->
+  <!--    <mat-form-field appearance="legacy">-->
+  <!--      <mat-label>Select</mat-label>-->
+  <!--      <mat-select>-->
+  <!--        <mat-option *ngFor="let option of [{value: 1, text: 'opzione 1'}, {value: 2, text: 'opzione 2'}, {value: 3, text: 'opzione 3'}]" [value]="option.value">{{option.text}}</mat-option>-->
+  <!--      </mat-select>-->
+  <!--    </mat-form-field>-->
+  <!--  </div>-->
+  <!--  <div style="width: 250px;">-->
+  <!--  <ng-jvx-multiselect [searchInput]="true" url="https://jsonplaceholder.typicode.com/posts" [requestHeaders]="requestHeaders" [multi]="true" [mapper]="mapper" [value]="[{value: 1, text: 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit'}]">-->
+  <!--&lt;!&ndash;    <div *ngJvxOptionsTemplate="let option">&ndash;&gt;-->
+  <!--&lt;!&ndash;      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>&ndash;&gt;-->
+  <!--&lt;!&ndash;    </div>&ndash;&gt;-->
+  <!--  </ng-jvx-multiselect>-->
+  <!--  </div>-->
+  <button mat-button (click)="changeOption(1)">opzione 1</button>
+  <button mat-button (click)="changeOption(2)">opzione 2</button>
+  <button mat-button (click)="changeOption(3)">opzione 3</button>
+  <button mat-button (click)="reload()">reload</button>
 </div>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->

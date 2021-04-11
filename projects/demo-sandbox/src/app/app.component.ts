@@ -3,6 +3,7 @@ import {HttpHeaders} from '@angular/common/http';
 import {window} from 'rxjs/operators';
 import {NgJvxOptionMapper} from 'ng-jvx-multiselect';
 import {Observable, of} from 'rxjs';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -20,15 +21,42 @@ export class AppComponent {
       'Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Visitatori-API-Token'
     );
   public mapper = {
-    mapOption(source: any): Observable<{value: number, text: string}> {
+    mapOption(source: any): Observable<{ value: number, text: string }> {
       return of({
         value: source.id,
         text: source.title
       });
     }
-  } as NgJvxOptionMapper<{value: number, text: string}>;
-
+  } as NgJvxOptionMapper<{ value: number, text: string }>;
+  public selectedValue = [{value: 1, text: 'opzione 1'}];
+  public loaded = true;
+  form: FormGroup;
+constructor(private formBuilder: FormBuilder) {
+  this.form = this.formBuilder.group({
+    selectionValue: new FormControl([this.selectedValue[0]?.value])
+  });
+}
   getUrl(): string {
     return 'http://vm-web2016/Visitatori.Next.Api/api/utenti';
   }
+
+  changeOption(num: number): void {
+    console.log('change option');
+    this.selectedValue = [{value: num, text: 'opzione ' + num}];
+  }
+
+  reload(): void {
+    console.log('reload');
+    this.loaded = false;
+    setTimeout(() => {
+      this.loaded = true;
+    }, 0);
+
+  }
+
+  // get selectionValue(): any[] {
+  //   // return [this.selectedValue[0]?.value];
+  // }
+  // set selectionValue(val: any[]) {
+  // }
 }
