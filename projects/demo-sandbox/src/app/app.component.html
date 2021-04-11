@@ -333,29 +333,43 @@
 
 <div class="content" role="main">
   <div style="width: 250px">
-  <ng-jvx-multiselect [multi]="false" [value]="[{value: 1, text: 'opzione 1'}]" [options]="[{value: 1, text: 'opzione 1'}, {value: 2, text: 'opzione 2'}, {value: 3, text: 'opzione 3'}]">
-<!--    <div *ngJvxOptionsTemplate="let option">-->
-<!--      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>-->
-<!--    </div>-->
-  </ng-jvx-multiselect>
+    <ng-jvx-multiselect *ngIf="loaded" [multi]="false" [value]="selectedValue"
+                        [options]="[{value: 1, text: 'opzione 1'}, {value: 2, text: 'opzione 2'}, {value: 3, text: 'opzione 3'}]">
+      <!--    <div *ngJvxOptionsTemplate="let option">-->
+      <!--      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>-->
+      <!--    </div>-->
+    </ng-jvx-multiselect>
   </div>
-
-  <div class="mat-select-test">
-    <mat-form-field appearance="legacy">
-      <mat-label>Select</mat-label>
-      <mat-select>
-        <mat-option *ngFor="let option of [{value: 1, text: 'opzione 1'}, {value: 2, text: 'opzione 2'}, {value: 3, text: 'opzione 3'}]" [value]="option.value">{{option.text}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div style="width: 250px;">
-  <ng-jvx-multiselect [searchInput]="true" url="https://jsonplaceholder.typicode.com/posts" [requestHeaders]="requestHeaders" [multi]="true" [mapper]="mapper" [value]="[{value: 1, text: 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit'}]">
-<!--    <div *ngJvxOptionsTemplate="let option">-->
-<!--      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>-->
-<!--    </div>-->
-  </ng-jvx-multiselect>
-  </div>
-
+<!--  <div>-->
+<!--    <mat-selection-list #selection [multiple]="false" [ngModel]="selectionValue">-->
+<!--      <mat-list-option-->
+<!--        *ngFor="let option of [{value: 1, text: 'opzione 1'}, {value: 2, text: 'opzione 2'}, {value: 3, text: 'opzione 3'}]"-->
+<!--        [value]="option.value">-->
+<!--        {{-->
+<!--        option.text-->
+<!--        }}-->
+<!--      </mat-list-option>-->
+<!--    </mat-selection-list>-->
+<!--  </div>-->
+  <!--  <div class="mat-select-test">-->
+  <!--    <mat-form-field appearance="legacy">-->
+  <!--      <mat-label>Select</mat-label>-->
+  <!--      <mat-select>-->
+  <!--        <mat-option *ngFor="let option of [{value: 1, text: 'opzione 1'}, {value: 2, text: 'opzione 2'}, {value: 3, text: 'opzione 3'}]" [value]="option.value">{{option.text}}</mat-option>-->
+  <!--      </mat-select>-->
+  <!--    </mat-form-field>-->
+  <!--  </div>-->
+  <!--  <div style="width: 250px;">-->
+  <!--  <ng-jvx-multiselect [searchInput]="true" url="https://jsonplaceholder.typicode.com/posts" [requestHeaders]="requestHeaders" [multi]="true" [mapper]="mapper" [value]="[{value: 1, text: 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit'}]">-->
+  <!--&lt;!&ndash;    <div *ngJvxOptionsTemplate="let option">&ndash;&gt;-->
+  <!--&lt;!&ndash;      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>&ndash;&gt;-->
+  <!--&lt;!&ndash;    </div>&ndash;&gt;-->
+  <!--  </ng-jvx-multiselect>-->
+  <!--  </div>-->
+  <button mat-button (click)="changeOption(1)">opzione 1</button>
+  <button mat-button (click)="changeOption(2)">opzione 2</button>
+  <button mat-button (click)="changeOption(3)">opzione 3</button>
+  <button mat-button (click)="reload()">reload</button>
 </div>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->

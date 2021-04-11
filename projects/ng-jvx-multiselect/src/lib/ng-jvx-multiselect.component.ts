@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import {NgJvxOptionsTemplateDirective} from './directives/ng-jvx-options-template.directive';
 import {FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {MatSelectionListChange} from '@angular/material/list';
+import {MatSelectionList, MatSelectionListChange} from '@angular/material/list';
 import {NgJvxOptionComponent} from './ng-jvx-option/ng-jvx-option.component';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {NgJvxMultiselectService} from './ng-jvx-multiselect.service';
@@ -36,6 +36,7 @@ import {NgJvxOptionMapper} from './interfaces/ng-jvx-option-mapper';
 export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
   @ViewChild('jvxMultiselect', {static: true}) jvxMultiselect: ElementRef;
   @ViewChild('selectionContainer', {static: true}) selectionContainer: ElementRef;
+  @ViewChild('selection', {static: true}) selection: MatSelectionList;
   @ViewChild('trigger', {static: true}) trigger: MatMenuTrigger;
   @ViewChild('scrollbar', {static: false}) scrollbar: NgScrollbar;
 
@@ -49,7 +50,17 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @Input() requestType: 'get' | 'post' = 'get';
   @Input() itemValue = 'value';
   @Input() itemText = 'text';
-  @Input() value: any[] = [];
+  private pValue: any[] = [];
+
+  get value(): any[] {
+    return this.pValue;
+  }
+
+  @Input() set value(value: any[]) {
+    this.pValue = value;
+    this.form.get('selectionValue').setValue(this.pValue.map(v => v[this.itemValue]));
+  }
+
   @Input() ignorePagination = false;
   @Input() clearable = false;
   @Input() closeOnClick = true;
@@ -75,6 +86,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   public form: FormGroup;
   public isOpen = false;
   public isLoading = false;
+  public showList = true;
   public asyncOptions: any = [];
   public selectableOptions = [];
   public searchValue = '';
@@ -90,8 +102,6 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   ngOnInit(): void {
-    console.log(innerWidth);
-    console.log(this.jvxMultiselect.nativeElement.offsetWidth);
     this.selectableOptions = [...this.options];
   }
 
@@ -153,12 +163,17 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   onChange(e: MatSelectionListChange): void {
     const vals = e.source.selectedOptions.selected.map(o => o.value);
     this.value = [...this.selectableOptions.filter(o => vals.includes(o[this.itemValue]))];
+    this.form.get('selectionValue').setValue(this.value.map(v => v[this.itemValue]));
     this.valueChange.emit(this.value);
     this.propagateChange(this.value);
   }
 
   onMenuOpen(): void {
     this.isOpen = true;
+    this.showList = false;
+    setTimeout(() => {
+      this.showList = true;
+    }, 0);
     this.open.emit();
   }
 
@@ -210,10 +225,10 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       }
       from(newOptions).pipe(concatAll())
         .subscribe((finVal: any) => {
-        this.selectableOptions.push(finVal);
-        this.isLoading = false;
-        this.trigger.openMenu();
-      });
+          this.selectableOptions.push(finVal);
+          this.isLoading = false;
+          this.trigger.openMenu();
+        });
     });
   }
 
@@ -232,7 +247,6 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     this.currentPage = 0;
     this.searchValue = '';
     this.closed.emit();
-    console.log('menu closed');
   }
 
   onSearchInputClick(e: MouseEvent): void {
