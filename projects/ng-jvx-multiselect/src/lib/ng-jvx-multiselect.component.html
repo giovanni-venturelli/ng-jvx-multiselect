@@ -1,10 +1,12 @@
+
 <div [ngClass]="{'ng-jvx-multiselect': true, 'disabled': disabled, 'has-errors': hasErrors}" #jvxMultiselect>
   <!-- START MENU -->
   <div [matMenuTriggerFor]="menuRef" (onMenuOpen)="onMenuOpen()" (menuOpened)="onMenuOpened()"
        (onMenuClose)="onMenuClose()" (menuClosed)="onMenuClosed()"
        #trigger="matMenuTrigger">
-    <mat-menu #menuRef="matMenu" [ngClass]="['jvx-multiselect-panel', panelClass]" [formGroup]="form">
+    <mat-menu #menuRef="matMenu" [class]="['jvx-multiselect-panel', panelClass].join(' ')" [formGroup]="form" [yPosition]="window.innerHeight - jvxMultiselect.getBoundingClientRect().top < 260? 'above': 'below'">
       <div class="menu-list-container"
+           #menuLIstContainer
            [ngStyle]="{'overflow-y': 'hidden', 'width.px': jvxMultiselect.offsetWidth, 'height': selectionContainer.offsetHeight>260? '260px': 'auto', 'min-height': selectionContainer.offsetHeight<=260?selectionContainer.offsetHeight+'px': '260px'}">
         <div class="search-input-container" *ngIf="searchInput" (click)="onSearchInputClick($event)">
           <input type="text" [placeholder]="searchLabel" [(ngModel)]="searchValue" [ngModelOptions]="{standalone: true}"
@@ -20,7 +22,7 @@
             <div #selectionContainer>
               <mat-selection-list #selection [multiple]="multi"
                                   *ngIf="showList"
-                                  [ngStyle]="{'width.px': jvxMultiselect.offsetWidth, 'min-width.px': 112}"
+                                  [ngStyle]="{'padding': 0, 'width.px': jvxMultiselect.offsetWidth, 'min-width.px': 112}"
                                   (click)="onCLickOnMenu($event)"
                                   (selectionChange)="onChange($event)"
                                   formControlName="selectionValue">

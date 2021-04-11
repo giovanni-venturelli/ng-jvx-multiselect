@@ -28,7 +28,7 @@ export class AppComponent {
       });
     }
   } as NgJvxOptionMapper<{ value: number, text: string }>;
-  public selectedValue = [{value: 1, text: 'opzione 1'}];
+  public selectedValue = [{value: 1, text: 'op1'}];
   public loaded = true;
   form: FormGroup;
 constructor(private formBuilder: FormBuilder) {

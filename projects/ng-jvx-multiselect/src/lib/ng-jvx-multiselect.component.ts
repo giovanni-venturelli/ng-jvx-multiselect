@@ -81,12 +81,13 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   };
   @Input() requestHeaders: HttpHeaders = new HttpHeaders();
   @Output() valueChange: EventEmitter<any[]> = new EventEmitter<any[]>();
-  @Output() open: EventEmitter<void> = new EventEmitter<void>();
-  @Output() opened: EventEmitter<void> = new EventEmitter<void>();
-  @Output() close: EventEmitter<void> = new EventEmitter<void>();
-  @Output() closed: EventEmitter<void> = new EventEmitter<void>();
+  @Output() jvxMultiselectOpen: EventEmitter<void> = new EventEmitter<void>();
+  @Output() jvxMultiselectOpened: EventEmitter<void> = new EventEmitter<void>();
+  @Output() jvxMultiselectClose: EventEmitter<void> = new EventEmitter<void>();
+  @Output() jvxMultiselectClosed: EventEmitter<void> = new EventEmitter<void>();
   @Output() scrollEnd: EventEmitter<void> = new EventEmitter<void>();
-
+  public document = document;
+  public window = window;
   public form: FormGroup;
   public isOpen = false;
   public isLoading = false;
@@ -175,12 +176,12 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     setTimeout(() => {
       this.showList = true;
     }, 0);
-    this.open.emit();
+    this.jvxMultiselectOpen.emit();
   }
 
   onMenuClose(): void {
     this.isOpen = false;
-    this.close.emit();
+    this.jvxMultiselectClose.emit();
   }
 
   deselect(val: any): void {
@@ -243,20 +244,20 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     if (e.target.scrollTop + 220 + ((this.searchInput ? 0 : 1) * 40) === this.selectionContainer.nativeElement.offsetHeight
       && !this.isLoading) {
       this.scrollEnd.emit();
-      if ( this.url && this.url.length > 0 && !this.ignorePagination) {
+      if (this.url && this.url.length > 0 && !this.ignorePagination) {
         this.getList();
       }
     }
   }
 
   onMenuOpened(): void {
-    this.opened.emit();
+    this.jvxMultiselectOpened.emit();
   }
 
   onMenuClosed(): void {
     this.currentPage = 0;
     this.searchValue = '';
-    this.closed.emit();
+    this.jvxMultiselectClosed.emit();
   }
 
   onSearchInputClick(e: MouseEvent): void {
