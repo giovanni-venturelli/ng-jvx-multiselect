@@ -73,6 +73,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @Input() searchLabel = 'search';
   @Input() listProp = '';
   @Input() totalRowsProp = '';
+  @Input() panelClass = '';
   @Input() mapper: NgJvxOptionMapper<any> = {
     mapOption(source: any): Observable<any> {
       return of(source);

@@ -3,16 +3,15 @@
   <div [matMenuTriggerFor]="menuRef" (onMenuOpen)="onMenuOpen()" (menuOpened)="onMenuOpened()"
        (onMenuClose)="onMenuClose()" (menuClosed)="onMenuClosed()"
        #trigger="matMenuTrigger">
-    <mat-menu #menuRef="matMenu" class="jvx-multiselect-panel" [formGroup]="form">
+    <mat-menu #menuRef="matMenu" [ngClass]="['jvx-multiselect-panel', panelClass]" [formGroup]="form">
       <div class="menu-list-container"
-           [ngStyle]="{'overflow-y': 'hidden', 'width.px': jvxMultiselect.offsetWidth, 'height': selectionContainer.offsetHeight>260? '260px': 'auto'}">
+           [ngStyle]="{'overflow-y': 'hidden', 'width.px': jvxMultiselect.offsetWidth, 'height': selectionContainer.offsetHeight>260? '260px': 'auto', 'min-height': selectionContainer.offsetHeight<=260?selectionContainer.offsetHeight+'px': '260px'}">
         <div class="search-input-container" *ngIf="searchInput" (click)="onSearchInputClick($event)">
           <input type="text" [placeholder]="searchLabel" [(ngModel)]="searchValue" [ngModelOptions]="{standalone: true}"
                  (input)="onSearchValueChange($event)"/>
         </div>
         <div [ngStyle]="{height: searchInput? 'calc(100% - 40px)': '100%'}">
           <ng-scrollbar style="width: 100%"
-
                         smoothScroll
                         [visibility]="'hover'"
                         [appearance]="'compact'"
