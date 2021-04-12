@@ -22,7 +22,7 @@
             <div #selectionContainer (click)="onCLickOnMenu($event)">
               <mat-selection-list #selection [multiple]="multi"
                                   *ngIf="showList"
-                                  [ngStyle]="{'padding': 0, 'width.px': jvxMultiselect.offsetWidth, 'min-width.px': 112}"
+                                  [ngStyle]="{'padding': 0, 'width': listContainerSize.width, 'min-width.px': 112}"
 
                                   (selectionChange)="onChange($event)"
                                   formControlName="selectionValue">
