@@ -18,7 +18,7 @@ import {MatMenuTrigger} from '@angular/material/menu';
 import {NgJvxMultiselectService} from './ng-jvx-multiselect.service';
 import {HttpHeaders} from '@angular/common/http';
 import {NgScrollbar} from 'ngx-scrollbar';
-import {concatAll, map, switchMap, takeUntil} from 'rxjs/operators';
+import {concatAll, debounce, debounceTime, map, switchMap, take, takeUntil} from 'rxjs/operators';
 import {forkJoin, from, Observable, of, Subject, timer} from 'rxjs';
 import {NgJvxOptionMapper} from './interfaces/ng-jvx-option-mapper';
 import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
@@ -101,6 +101,8 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   private pageSize = 15;
   private unsubscribe = new Subject<void>();
   private unsubscribe$ = this.unsubscribe.asObservable();
+  private resizeSubject = new Subject<void>();
+  private resize$ = this.resizeSubject.asObservable();
 
   constructor(private formBuilder: FormBuilder, private service: NgJvxMultiselectService) {
     this.form = this.formBuilder.group({
@@ -112,8 +114,11 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     this.selectableOptions = [...this.options];
     window.addEventListener('resize', () => {
       timer(0).subscribe(() => {
-        this.listContainerSize.width = this.jvxMultiselect.nativeElement.offsetWidth + 'px';
+        this.resizeSubject.next();
       });
+    });
+    this.resize$.pipe(takeUntil(this.unsubscribe), debounceTime(100)).subscribe(() => {
+      this.listContainerSize.width = this.jvxMultiselect.nativeElement.offsetWidth + 'px';
     });
   }
 
