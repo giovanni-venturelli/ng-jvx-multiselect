@@ -110,6 +110,11 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   ngOnInit(): void {
     this.selectableOptions = [...this.options];
+    window.addEventListener('resize', () => {
+      timer(0).subscribe(() => {
+        this.listContainerSize.width = this.jvxMultiselect.nativeElement.offsetWidth + 'px';
+      });
+    });
   }
 
   ngOnDestroy(): void {
@@ -117,7 +122,10 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   ngAfterViewInit(): void {
-    this.listContainerSize.width = this.jvxMultiselect.nativeElement.offsetWidth + 'px';
+    timer(0).subscribe(() => {
+      this.listContainerSize.width = this.jvxMultiselect.nativeElement.offsetWidth + 'px';
+    });
+
     if (this.scrollbar) {
       this.scrollbar.scrolled.pipe(takeUntil(this.unsubscribe$)).subscribe((e: any) => {
         this.onScrolled(e);
