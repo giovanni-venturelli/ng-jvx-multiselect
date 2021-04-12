@@ -1,5 +1,5 @@
 import {
-  AfterContentChecked,
+  AfterContentChecked, AfterViewChecked,
   AfterViewInit,
   Component,
   ContentChild,
@@ -35,9 +35,9 @@ import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-tem
       multi: true,
     }]
 })
-export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges, AfterViewChecked {
   @ViewChild('jvxMultiselect', {static: true}) jvxMultiselect: ElementRef;
-  @ViewChild('selectionContainer', {static: true}) selectionContainer: ElementRef;
+  @ViewChild('selectionContainer', {static: false}) selectionContainer: ElementRef;
   @ViewChild('selection', {static: true}) selection: MatSelectionList;
   @ViewChild('trigger', {static: true}) trigger: MatMenuTrigger;
   @ViewChild('scrollbar', {static: false}) scrollbar: NgScrollbar;
@@ -96,6 +96,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   public selectableOptions = [];
   public searchValue = '';
   public currentPage = 0;
+  public listContainerSize: { height: string, minHeight: string } = {height: 'auto', minHeight: '0'};
   private pageSize = 15;
   private unsubscribe = new Subject<void>();
   private unsubscribe$ = this.unsubscribe.asObservable();
@@ -140,7 +141,6 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     if (this.multi || this.closeOnClick === false) {
       e.stopPropagation();
     }
-
   }
 
 
@@ -272,5 +272,14 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     e.preventDefault();
     this.value = [];
     this.valueChange.emit(this.value);
+  }
+
+  ngAfterViewChecked(): void {
+    setTimeout(() => {
+      if (this.selectionContainer) {
+        this.listContainerSize.height = this.selectionContainer.nativeElement.offsetHeight > 260 ? '260px' : 'auto';
+        this.listContainerSize.minHeight = this.selectionContainer.nativeElement.offsetHeight <= 260 ? this.selectionContainer.nativeElement.offsetHeight + 'px' : '260px';
+      }
+    }, 0);
   }
 }
