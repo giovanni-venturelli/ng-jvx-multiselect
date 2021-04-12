@@ -35,7 +35,7 @@ import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-tem
       multi: true,
     }]
 })
-export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges, AfterViewChecked {
+export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
   @ViewChild('jvxMultiselect', {static: true}) jvxMultiselect: ElementRef;
   @ViewChild('selectionContainer', {static: false}) selectionContainer: ElementRef;
   @ViewChild('selection', {static: true}) selection: MatSelectionList;
@@ -172,10 +172,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   onMenuOpen(): void {
     this.isOpen = true;
-    this.showList = false;
-    setTimeout(() => {
-      this.showList = true;
-    }, 0);
+
     this.jvxMultiselectOpen.emit();
   }
 
@@ -196,15 +193,29 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     this.valueChange.emit(this.value);
   }
 
+  private setSelectionContainerSize(): void {
+    if (this.selectionContainer) {
+      this.listContainerSize.height = this.selectionContainer.nativeElement.offsetHeight > 260 ? '260px' : 'auto';
+      this.listContainerSize.minHeight = this.selectionContainer.nativeElement.offsetHeight <= 260 ? this.selectionContainer.nativeElement.offsetHeight + 'px' : '260px';
+    }
+  }
+
   clickOnMenuTrigger(e: MouseEvent): void {
     if (!this.disabled) {
-      if (this.url.length > 0) {
-        e.preventDefault();
-        this.selectableOptions.length = 0;
-        this.getList();
-      } else {
-        this.trigger.openMenu();
-      }
+      this.showList = false;
+      setTimeout(() => {
+        this.showList = true;
+        if (this.url.length > 0) {
+          e.preventDefault();
+          this.selectableOptions.length = 0;
+          this.getList();
+        } else {
+          this.trigger.openMenu();
+          setTimeout(() => {
+            this.setSelectionContainerSize();
+          }, 0);
+        }
+      }, 0);
     }
   }
 
@@ -236,6 +247,10 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
           this.selectableOptions.push(finVal);
           this.isLoading = false;
           this.trigger.openMenu();
+          setTimeout(() => {
+
+            this.setSelectionContainerSize();
+          }, 0);
         });
     });
   }
@@ -274,12 +289,4 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     this.valueChange.emit(this.value);
   }
 
-  ngAfterViewChecked(): void {
-    setTimeout(() => {
-      if (this.selectionContainer) {
-        this.listContainerSize.height = this.selectionContainer.nativeElement.offsetHeight > 260 ? '260px' : 'auto';
-        this.listContainerSize.minHeight = this.selectionContainer.nativeElement.offsetHeight <= 260 ? this.selectionContainer.nativeElement.offsetHeight + 'px' : '260px';
-      }
-    }, 0);
-  }
 }
