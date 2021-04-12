@@ -18,19 +18,19 @@
         flex: 1 1 100%;
         max-width: calc(100% - 28px);
 
-          .mat-chip-list-wrapper {
-            .mat-standard-chip {
-              padding: 0 5px 0 7px;
-              margin: 4px 5px 0;
+        .mat-chip-list-wrapper {
+          .mat-standard-chip {
+            padding: 0 5px 0 7px;
+            margin: 4px 5px 0;
 
-              .chip-content {
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: inline-block;
-              }
+            .chip-content {
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: inline-block;
             }
           }
+        }
 
       }
 
@@ -130,56 +130,59 @@
     flex-direction: column;
   }
 
-    .jvx-multiselect-panel {
-      min-width: 100%;
+  .jvx-multiselect-panel {
+    min-width: 100%;
+    max-width: 100%;
 
-      .mat-menu-content {
+    .mat-menu-content {
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+
+      .menu-list-container {
+        ng-scrollbar {
+          --scrollbar-color: transparent;
+          --scrollbar-container-color: transparent;
+          --scrollbar-thumb-color: #{transparentize(mat-color($accent), 0.2)};
+          --scrollbar-thumb-hover-color: #{transparentize(mat-color($accent), 0.3)};
+          --scrollbar-border-radius: 4px;
+          --scrollbar-size: 6px;
+          --scrollbar-padding: 8px;
+          --scroll-view-margin: 0;
+          --scroll-view-color: transparent;
+        }
+      }
+
+      .search-input-container {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        padding: 10px;
+
+        input {
+          width: 100%;
+          outline: none;
+          border: none;
+
+          &:focus {
+            outline: none;
+          }
+
+          &:active {
+            outline: none
+          }
+        }
+      }
+
+      .mat-selection-list {
         padding-top: 0 !important;
         padding-bottom: 0 !important;
-        .menu-list-container {
-          ng-scrollbar {
-            --scrollbar-color: transparent;
-            --scrollbar-container-color: transparent;
-            --scrollbar-thumb-color: #{transparentize(mat-color($accent), 0.2)};
-            --scrollbar-thumb-hover-color: #{transparentize(mat-color($accent), 0.3)};
-            --scrollbar-border-radius: 4px;
-            --scrollbar-size: 6px;
-            --scrollbar-padding: 8px;
-            --scroll-view-margin: 0;
-            --scroll-view-color: transparent;
+
+        mat-list-option[aria-selected="true"], mat-list-option[aria-selected="false"] {
+          mat-pseudo-checkbox {
+            display: none
           }
         }
-        .search-input-container {
-          height: 40px;
-          display: flex;
-          align-items: center;
-          padding: 10px;
-
-          input {
-            width: 100%;
-            outline: none;
-            border: none;
-
-            &:focus {
-              outline: none;
-            }
-
-            &:active {
-              outline: none
-            }
-          }
-        }
-
-        .mat-selection-list {
-          padding-top: 0 !important;
-          padding-bottom: 0 !important;
-
-          mat-list-option[aria-selected="true"], mat-list-option[aria-selected="false"] {
-            mat-pseudo-checkbox {
-              display: none
-            }
-          }
-        }
+      }
 
     }
   }

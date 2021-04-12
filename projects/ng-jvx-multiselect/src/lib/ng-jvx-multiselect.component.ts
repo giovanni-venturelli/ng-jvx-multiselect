@@ -19,7 +19,7 @@ import {NgJvxMultiselectService} from './ng-jvx-multiselect.service';
 import {HttpHeaders} from '@angular/common/http';
 import {NgScrollbar} from 'ngx-scrollbar';
 import {concatAll, map, switchMap, takeUntil} from 'rxjs/operators';
-import {forkJoin, from, Observable, of, Subject} from 'rxjs';
+import {forkJoin, from, Observable, of, Subject, timer} from 'rxjs';
 import {NgJvxOptionMapper} from './interfaces/ng-jvx-option-mapper';
 import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
 
@@ -86,6 +86,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @Output() jvxMultiselectClose: EventEmitter<void> = new EventEmitter<void>();
   @Output() jvxMultiselectClosed: EventEmitter<void> = new EventEmitter<void>();
   @Output() scrollEnd: EventEmitter<void> = new EventEmitter<void>();
+
   public document = document;
   public window = window;
   public form: FormGroup;
@@ -96,7 +97,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   public selectableOptions = [];
   public searchValue = '';
   public currentPage = 0;
-  public listContainerSize: { height: string, minHeight: string } = {height: 'auto', minHeight: '0'};
+  public listContainerSize: { height: string, minHeight: string, width: string } = {height: 'auto', minHeight: '0', width: '100%'};
   private pageSize = 15;
   private unsubscribe = new Subject<void>();
   private unsubscribe$ = this.unsubscribe.asObservable();
@@ -116,6 +117,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   ngAfterViewInit(): void {
+    this.listContainerSize.width = this.jvxMultiselect.nativeElement.offsetWidth + 'px';
     if (this.scrollbar) {
       this.scrollbar.scrolled.pipe(takeUntil(this.unsubscribe$)).subscribe((e: any) => {
         this.onScrolled(e);
@@ -194,16 +196,19 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   private setSelectionContainerSize(): void {
-    if (this.selectionContainer) {
-      this.listContainerSize.height = this.selectionContainer.nativeElement.offsetHeight > 260 ? '260px' : 'auto';
-      this.listContainerSize.minHeight = this.selectionContainer.nativeElement.offsetHeight <= 260 ? this.selectionContainer.nativeElement.offsetHeight + 'px' : '260px';
-    }
+    timer(0).subscribe(() => {
+      if (this.selectionContainer) {
+        this.listContainerSize.height = this.selectionContainer.nativeElement.offsetHeight > 260 ? '260px' : 'auto';
+        this.listContainerSize.minHeight = this.selectionContainer.nativeElement.offsetHeight <= 260 ?
+          this.selectionContainer.nativeElement.offsetHeight + 'px' : '260px';
+      }
+    });
   }
 
   clickOnMenuTrigger(e: MouseEvent): void {
     if (!this.disabled) {
       this.showList = false;
-      setTimeout(() => {
+      timer(0).subscribe(() => {
         this.showList = true;
         if (this.url.length > 0) {
           e.preventDefault();
@@ -211,11 +216,9 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
           this.getList();
         } else {
           this.trigger.openMenu();
-          setTimeout(() => {
-            this.setSelectionContainerSize();
-          }, 0);
+          this.setSelectionContainerSize();
         }
-      }, 0);
+      });
     }
   }
 
@@ -247,10 +250,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
           this.selectableOptions.push(finVal);
           this.isLoading = false;
           this.trigger.openMenu();
-          setTimeout(() => {
-
-            this.setSelectionContainerSize();
-          }, 0);
+          this.setSelectionContainerSize();
         });
     });
   }
