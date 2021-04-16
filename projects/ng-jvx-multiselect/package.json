@@ -1,6 +1,6 @@
 {
   "name": "ng-jvx-multiselect",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "ng-jvx-multiselect is a select based on angular material. It handles both single and multiple selections and allows to retrieves the options via asynchronous calls.",
   "peerDependencies": {
     "@angular/common": "^11.2.7",
