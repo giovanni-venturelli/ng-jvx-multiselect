@@ -13,6 +13,14 @@
       width: 100%;
       display: flex;
       cursor: pointer;
+      position: relative;
+
+      .ng-jvx-multiselect__placeholder {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        position: absolute;
+      }
 
       .ng-jvx-multiselect-value {
         flex: 1 1 100%;

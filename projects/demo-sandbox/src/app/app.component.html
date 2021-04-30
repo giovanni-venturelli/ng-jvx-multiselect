@@ -333,8 +333,9 @@
 
 <div class="content" role="main">
   <div style="width: 250px; margin-top: 400px">
-    <ng-jvx-multiselect *ngIf="loaded" [multi]="false" [value]="selectedValue"
+    <ng-jvx-multiselect *ngIf="loaded" [multi]="false"
                         [options]="[{value: 1, text: 'op1'}, {value: 2, text: 'op2'}, {value: 3, text: 'op3'}]">
+      <div placeholder>placeholder</div>
       <!--    <div *ngJvxOptionsTemplate="let option">-->
       <!--      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>-->
       <!--    </div>-->
@@ -361,6 +362,7 @@
   <!--  </div>-->
     <div style="width: 250px;">
     <ng-jvx-multiselect [searchInput]="true" url="https://jsonplaceholder.typicode.com/posts" [requestHeaders]="requestHeaders" [multi]="true" [mapper]="mapper" [value]="[{value: 1, text: 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit'}]">
+      <div placeholder>placeholder</div>
   <!--    <div *ngJvxOptionsTemplate="let option">-->
   <!--      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>-->
   <!--    </div>-->
