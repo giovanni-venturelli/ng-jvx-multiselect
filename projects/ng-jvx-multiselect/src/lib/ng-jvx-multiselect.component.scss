@@ -14,7 +14,7 @@
       display: flex;
       cursor: pointer;
       position: relative;
-
+      justify-content: space-between;
       .ng-jvx-multiselect__placeholder {
         height: 100%;
         display: flex;
@@ -49,8 +49,8 @@
       }
 
       .ng-jvx-multiselect-arrow {
-        width: 28px;
-
+        width: 24px;
+        padding-right: 4px;
         mat-icon {
           transition: transform 0.3s ease-in-out;
         }
