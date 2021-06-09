@@ -18,8 +18,8 @@ import {MatMenuTrigger} from '@angular/material/menu';
 import {NgJvxMultiselectService} from './ng-jvx-multiselect.service';
 import {HttpHeaders} from '@angular/common/http';
 import {NgScrollbar} from 'ngx-scrollbar';
-import {concatAll, debounce, debounceTime, map, switchMap, take, takeUntil} from 'rxjs/operators';
-import {forkJoin, from, Observable, of, Subject, timer} from 'rxjs';
+import {concatAll, debounce, debounceTime, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {forkJoin, from, fromEvent, noop, Observable, of, Subject, timer} from 'rxjs';
 import {NgJvxOptionMapper} from './interfaces/ng-jvx-option-mapper';
 import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
 
@@ -41,6 +41,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @ViewChild('selection', {static: true}) selection: MatSelectionList;
   @ViewChild('trigger', {static: true}) trigger: MatMenuTrigger;
   @ViewChild('scrollbar', {static: false}) scrollbar: NgScrollbar;
+  @ViewChild('multiContainer', {static: false}) multiContainer: ElementRef;
 
   @ContentChild(NgJvxOptionsTemplateDirective) optionsTemplate: NgJvxOptionsTemplateDirective | null = null;
   @ContentChild(NgJvxSelectionTemplateDirective) selectionTemplate: NgJvxSelectionTemplateDirective | null = null;
@@ -101,8 +102,8 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   private pageSize = 15;
   private unsubscribe = new Subject<void>();
   private unsubscribe$ = this.unsubscribe.asObservable();
-  private resizeSubject = new Subject<void>();
-  private resize$ = this.resizeSubject.asObservable();
+  multiContainerWidth = 100;
+  public yPosition: 'above' | 'below' = 'above';
 
   constructor(private formBuilder: FormBuilder, private service: NgJvxMultiselectService) {
     this.form = this.formBuilder.group({
@@ -112,14 +113,14 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   ngOnInit(): void {
     this.selectableOptions = [...this.options];
-    window.addEventListener('resize', () => {
-      timer(0).subscribe(() => {
-        this.resizeSubject.next();
-      });
-    });
-    this.resize$.pipe(takeUntil(this.unsubscribe), debounceTime(100)).subscribe(() => {
-      this.listContainerSize.width = this.jvxMultiselect.nativeElement.offsetWidth + 'px';
-    });
+    fromEvent(window, 'resize').pipe(takeUntil(this.unsubscribe), debounceTime(100), map(() => {
+      return this.listContainerSize.width = this.jvxMultiselect.nativeElement.offsetWidth + 'px';
+
+    }), switchMap(() => timer(100)), tap(() => {
+      this.multiContainerWidth = this.multiContainer?.nativeElement?.offsetWidth ?? 100;
+      this.yPosition = window.innerHeight - this.jvxMultiselect.nativeElement?.getBoundingClientRect()?.top < 260 ? 'above' : 'below';
+    })).subscribe(noop);
+
   }
 
   ngOnDestroy(): void {
@@ -136,6 +137,10 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
         this.onScrolled(e);
       });
     }
+    timer(0).pipe(tap(() => {
+      this.multiContainerWidth = this.multiContainer?.nativeElement?.offsetWidth ?? 100;
+      this.yPosition = window.innerHeight - this.jvxMultiselect.nativeElement?.getBoundingClientRect()?.top < 260 ? 'above' : 'below';
+    })).subscribe(noop);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -181,6 +186,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     const vals = e.source.selectedOptions.selected.map(o => o.value);
     this.value = [...this.selectableOptions.filter(o => vals.includes(o[this.itemValue]))];
     this.form.get('selectionValue').setValue(this.value.map(v => v[this.itemValue]));
+
     this.valueChange.emit(this.value);
     this.propagateChange(this.value);
   }
@@ -198,13 +204,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   deselect(val: any): void {
     this.value.splice(this.value.findIndex(v => v[this.itemValue] === val[this.itemValue]), 1);
-
-    this.optionComp.toArray().forEach((opt) => {
-        if (opt.value === val[this.itemValue]) {
-          opt.deselect();
-        }
-      }
-    );
+    this.form.get('selectionValue').setValue(this.value.map(m => m.value));
     this.valueChange.emit(this.value);
   }
 

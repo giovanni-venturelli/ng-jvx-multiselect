@@ -41,12 +41,10 @@ constructor(private formBuilder: FormBuilder) {
   }
 
   changeOption(num: number): void {
-    console.log('change option');
     this.selectedValue = [{value: num, text: 'opzione ' + num}];
   }
 
   reload(): void {
-    console.log('reload');
     this.loaded = false;
     setTimeout(() => {
       this.loaded = true;

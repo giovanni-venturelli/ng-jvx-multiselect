@@ -1,10 +1,9 @@
-
 <div [ngClass]="{'ng-jvx-multiselect': true, 'disabled': disabled, 'has-errors': hasErrors}" #jvxMultiselect>
   <!-- START MENU -->
   <div [matMenuTriggerFor]="menuRef" (onMenuOpen)="onMenuOpen()" (menuOpened)="onMenuOpened()"
        (onMenuClose)="onMenuClose()" (menuClosed)="onMenuClosed()"
        #trigger="matMenuTrigger">
-    <mat-menu #menuRef="matMenu" [class]="['jvx-multiselect-panel', panelClass].join(' ')" [formGroup]="form" [yPosition]="window.innerHeight - jvxMultiselect.getBoundingClientRect().top < 260? 'above': 'below'">
+    <mat-menu #menuRef="matMenu" [class]="['jvx-multiselect-panel', panelClass].join(' ')" [formGroup]="form" [yPosition]="yPosition">
       <div class="menu-list-container"
            #menuLIstContainer
            [ngStyle]="{'overflow-y': 'hidden', 'width': listContainerSize.width, 'max-height': '260px', 'height': listContainerSize.height, 'min-height': listContainerSize.minHeight}">
@@ -38,6 +37,10 @@
             </div>
           </ng-scrollbar>
         </div>
+
+      </div>
+      <div class="menu-footer">
+        <ng-content select="[ng-jvx-footer]"></ng-content>
       </div>
 
     </mat-menu>
@@ -59,7 +62,7 @@
                   class="ng-jvx-multiselect-chip"
                   [removable]="true" (removed)="deselect(val)">
           <span class="chip-content"
-                [ngStyle]="{'max-width': multiContainer.offsetWidth - 50 +'px'}">{{val[itemText]}}</span>
+                [ngStyle]="{'max-width': multiContainerWidth - 50 +'px'}">{{val[itemText]}}</span>
 
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
@@ -91,7 +94,6 @@
   </div>
   <!-- END INPUT -->
 </div>
-
 <ng-template #defaultTemplate let-option>
   <div style="max-width: 100%;
      white-space: nowrap;

@@ -175,5 +175,14 @@ i.e.
 This directive works exactly as the `ngJvxOptionsTemplate` except it defines the selection template.  
 It only works for non multiple selects.
 
-
-
+#### ngJvxDisabledOption
+This directive disables the selection of the host option. 
+i.e.
+```angular2html
+<div *ngJvxOptionsTemplate="let option" [ngJvxDisabledOption]="option.text === 'text of the disabled option'">
+    <span>{{option.text}}</span>
+    <span>
+        <img src="{{option.preview}}"/>
+    </span>
+</div>
+```
