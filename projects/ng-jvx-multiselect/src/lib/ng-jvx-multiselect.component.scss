@@ -1,9 +1,11 @@
+@use '~@angular/material' as ngJvxMultiselectMat;
+@use 'sass:map';
 @import 'ng-jvx-option/ng-jvx-option.component';
 
 @mixin ng-jvx-multiselect-style($theme) {
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  $warn: map-get($theme, warn);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  $warn: map.get($theme, warn);
   @include ng-jvx-option-style($theme);
 
   .ng-jvx-multiselect {
@@ -83,7 +85,7 @@
             border: 2px solid;
             border-radius: 50%;
             animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-            border-color: mat-color($accent) transparent transparent transparent;
+            border-color: ngJvxMultiselectMat.get-color-from-palette($accent) transparent transparent transparent;
 
             &:nth-child(1) {
               animation-delay: -0.45s;
@@ -166,8 +168,8 @@
         ng-scrollbar {
           --scrollbar-color: transparent;
           --scrollbar-container-color: transparent;
-          --scrollbar-thumb-color: #{transparentize(mat-color($accent), 0.2)};
-          --scrollbar-thumb-hover-color: #{transparentize(mat-color($accent), 0.3)};
+          --scrollbar-thumb-color: #{transparentize(ngJvxMultiselectMat.get-color-from-palette($accent), 0.2)};
+          --scrollbar-thumb-hover-color: #{transparentize(ngJvxMultiselectMat.get-color-from-palette($accent), 0.3)};
           --scrollbar-border-radius: 4px;
           --scrollbar-size: 6px;
           --scrollbar-padding: 8px;

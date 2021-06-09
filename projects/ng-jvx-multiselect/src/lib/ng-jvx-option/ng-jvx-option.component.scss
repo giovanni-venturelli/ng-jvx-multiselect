@@ -1,11 +1,15 @@
+@use '~@angular/material' as ngJvxOptionMat;
+@use 'sass:map';
+
 @mixin ng-jvx-option-style($theme) {
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  $warn: map-get($theme, warn);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  $warn: map.get($theme, warn);
   mat-list-option.ng-jvx-option {
     &[aria-selected="true"] {
-      background: lighten(mat-color($primary), 45%);
-      color: mat-color($primary);
+      $color: ngJvxOptionMat.get-color-from-palette($primary, 500);
+      background: lighten($color, 45%);
+      color: $color;
     }
   }
 }
