@@ -16,23 +16,32 @@ export class NgJvxMultiselectService {
             pageSize,
             requestType = 'get',
             requestHeaders,
+            search,
             data
           }: {
     url: string, ignorePagination: boolean,
     currentPage: number,
     pageSize: number,
     requestType: 'get' | 'post',
-    requestHeaders: any, data: any
+    requestHeaders: any,
+    search?: string,
+    data: any
   }): Observable<any> {
+    let params = new HttpParams();
+    if (search && search.length > 0) {
+      params = params.set('search', search);
+    }
+    if (!ignorePagination) {
+      params = params.set('page', currentPage.toString())
+        .set('size', pageSize.toString());
+    }
     const options = {
       mode: 'no-cors', // cors
       headers: requestHeaders,
-      withCredentials: true,
-      credentials: 'same-origin', // cache: 'default',
+      // withCredentials: true,
+      // credentials: 'same-origin', // cache: 'default',
       data,
-      params: new HttpParams()
-        .set('page', currentPage.toString())
-        .set('size', pageSize.toString())
+      params
     };
     if (requestType === 'get') {
       return this.http.get(url, options);

@@ -8,7 +8,7 @@
            #menuLIstContainer
            [ngStyle]="{'overflow-y': 'hidden', 'width': listContainerSize.width, 'max-height': '260px', 'height': listContainerSize.height, 'min-height': listContainerSize.minHeight}">
         <div class="search-input-container" *ngIf="searchInput" (click)="onSearchInputClick($event)">
-          <input type="text" [placeholder]="searchLabel" [(ngModel)]="searchValue" [ngModelOptions]="{standalone: true}"
+          <input type="text" [placeholder]="searchLabel" [ngModel]="searchValue" [ngModelOptions]="{standalone: true}"
                  (input)="onSearchValueChange($event)"/>
         </div>
         <div [ngStyle]="{height: searchInput? 'calc(100% - 40px)': '100%'}">
@@ -22,7 +22,6 @@
               <mat-selection-list #selection [multiple]="multi"
                                   *ngIf="showList"
                                   [ngStyle]="{'padding': 0, 'width': listContainerSize.width, 'min-width.px': 112}"
-
                                   (selectionChange)="onChange($event)"
                                   formControlName="selectionValue">
                 <ng-content></ng-content>

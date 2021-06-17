@@ -332,15 +332,15 @@
 </div>
 
 <div class="content" role="main">
-  <div style="width: 250px; margin-top: 400px">
-    <ng-jvx-multiselect *ngIf="loaded" [multi]="false"
-                        [options]="[{value: 1, text: 'op1'}, {value: 2, text: 'op2'}, {value: 3, text: 'op3'}]">
-      <div placeholder>placeholder</div>
-      <!--    <div *ngJvxOptionsTemplate="let option">-->
-      <!--      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>-->
-      <!--    </div>-->
-    </ng-jvx-multiselect>
-  </div>
+<!--  <div style="width: 250px; margin-top: 400px">-->
+<!--    <ng-jvx-multiselect *ngIf="loaded" [multi]="false"-->
+<!--                        [options]="[{value: 1, text: 'op1'}, {value: 2, text: 'op2'}, {value: 3, text: 'op3'}]">-->
+<!--      <div placeholder>placeholder</div>-->
+<!--      &lt;!&ndash;    <div *ngJvxOptionsTemplate="let option">&ndash;&gt;-->
+<!--      &lt;!&ndash;      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>&ndash;&gt;-->
+<!--      &lt;!&ndash;    </div>&ndash;&gt;-->
+<!--    </ng-jvx-multiselect>-->
+<!--  </div>-->
 <!--  <div>-->
 <!--    <mat-selection-list #selection [multiple]="false" [ngModel]="selectionValue">-->
 <!--      <mat-list-option-->
@@ -362,24 +362,31 @@
   <!--  </div>-->
     <div style="width: 250px;">
 
-      <ng-jvx-multiselect
-                          style="width: 100%"
-                          [options]="[{value: 1, text: 'text 1'}, {value: 2, text: 'text 2'}, {value: 3, text: 'text 3'}, {value: 4, text: 'text 4'},{value: 5, text: 'text 5'},{value: 6, text: 'text 6'},{value: 7, text: 'text 7'},{value: 8, text: 'text 8'},{value: 9, text: 'text 9'},{value: 10, text: 'text 10'}]"
-                          [listProp]="'message'"
-                          [ignorePagination]="true"
-                          [clearable]="false"
-                          label=""
-                          [multi]="true"
-                          [closeOnClick]="true">
-        <div *ngJvxOptionsTemplate="let option" [ngJvxDisabledOption]="option.value === 3">
-            <div>
-               aaa - {{option.text}}
-            </div>
+<!--      <ng-jvx-multiselect-->
+<!--                          style="width: 100%"-->
+<!--                          [options]="[{value: 1, text: 'text 1'}, {value: 2, text: 'text 2'}, {value: 3, text: 'text 3'}, {value: 4, text: 'text 4'},{value: 5, text: 'text 5'},{value: 6, text: 'text 6'},{value: 7, text: 'text 7'},{value: 8, text: 'text 8'},{value: 9, text: 'text 9'},{value: 10, text: 'text 10'}]"-->
+<!--                          [listProp]="'message'"-->
+<!--                          [ignorePagination]="true"-->
+<!--                          [clearable]="false"-->
+<!--                          label=""-->
+<!--                          [multi]="true"-->
+<!--                          [closeOnClick]="true">-->
+<!--        <div *ngJvxOptionsTemplate="let option" [ngJvxDisabledOption]="option.value === 3">-->
+<!--            <div>-->
+<!--               aaa - {{option.text}}-->
+<!--            </div>-->
 
-        </div>
-      </ng-jvx-multiselect>
+<!--        </div>-->
+<!--      </ng-jvx-multiselect>-->
 
-<!--    <ng-jvx-multiselect [searchInput]="true" url="https://jsonplaceholder.typicode.com/posts" [requestHeaders]="requestHeaders" [multi]="true" [mapper]="mapper" [value]="[{value: 1, text: 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit'}]">-->
+    <ng-jvx-multiselect [searchInput]="true" url="http://localhost:3000/jvx-multiselect-test" [requestType]="'get'">
+      <div placeholder>placeholder</div>
+  <!--    <div *ngJvxOptionsTemplate="let option">-->
+  <!--      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>-->
+  <!--    </div>-->
+    </ng-jvx-multiselect>
+
+<!--    <ng-jvx-multiselect [searchInput]="true" url="https://localhost:3000/jvx-multiselect-test" [requestHeaders]="requestHeaders" [multi]="true" [mapper]="mapper" [value]="[{value: 1, text: 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit'}]">-->
 <!--      <div placeholder>placeholder</div>-->
 <!--  &lt;!&ndash;    <div *ngJvxOptionsTemplate="let option">&ndash;&gt;-->
 <!--  &lt;!&ndash;      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>&ndash;&gt;-->
