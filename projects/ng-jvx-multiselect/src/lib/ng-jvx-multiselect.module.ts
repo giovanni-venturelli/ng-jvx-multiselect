@@ -20,7 +20,13 @@ import {NgJvxDisabledOptionDirective} from './directives/ng-jvx-disabled-option.
 
 
 @NgModule({
-  declarations: [NgJvxMultiselectComponent, NgJvxOptionComponent, NgJvxOptionsTemplateDirective, NgJvxPanelComponent, NgJvxSelectionTemplateDirective, NgJvxDisabledOptionDirective],
+  declarations: [
+    NgJvxMultiselectComponent,
+    NgJvxOptionComponent,
+    NgJvxOptionsTemplateDirective,
+    NgJvxPanelComponent,
+    NgJvxSelectionTemplateDirective,
+    NgJvxDisabledOptionDirective],
   imports: [
     MatButtonModule,
     MatOptionModule,

@@ -17,6 +17,7 @@ export class NgJvxMultiselectService {
             requestType = 'get',
             requestHeaders,
             search,
+            searchProp = 'search',
             data
           }: {
     url: string, ignorePagination: boolean,
@@ -25,11 +26,12 @@ export class NgJvxMultiselectService {
     requestType: 'get' | 'post',
     requestHeaders: any,
     search?: string,
+    searchProp?: string,
     data: any
   }): Observable<any> {
     let params = new HttpParams();
     if (search && search.length > 0) {
-      params = params.set('search', search);
+      params = params.set(searchProp, search);
     }
     if (!ignorePagination) {
       params = params.set('page', currentPage.toString())

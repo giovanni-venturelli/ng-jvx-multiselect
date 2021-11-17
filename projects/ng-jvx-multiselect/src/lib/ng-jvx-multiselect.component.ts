@@ -42,11 +42,10 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @ViewChild('trigger', {static: true}) trigger: MatMenuTrigger;
   @ViewChild('scrollbar', {static: false}) scrollbar: NgScrollbar;
   @ViewChild('multiContainer', {static: false}) multiContainer: ElementRef;
-
+  @ViewChildren(NgJvxOptionComponent) optionComp: QueryList<NgJvxOptionComponent>;
   @ContentChild(NgJvxOptionsTemplateDirective) optionsTemplate: NgJvxOptionsTemplateDirective | null = null;
   @ContentChild(NgJvxSelectionTemplateDirective) selectionTemplate: NgJvxSelectionTemplateDirective | null = null;
   // @ContentChild(NgJvxOptionComponent) optionComp: NgJvxOptionComponent;
-  @ViewChildren(NgJvxOptionComponent) optionComp: QueryList<NgJvxOptionComponent>;
   // @ContentChild(TemplateRef) optionsTemplate: TemplateRef<any> | null = null;
   @Input() options: any[] = [];
   @Input() multi = false;
@@ -54,18 +53,6 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @Input() requestType: 'get' | 'post' = 'get';
   @Input() itemValue = 'value';
   @Input() itemText = 'text';
-  private pValue: any[] = [];
-  private shouldLoadMore = true;
-
-  get value(): any[] {
-    return this.pValue;
-  }
-
-  @Input() set value(value: any[]) {
-    this.pValue = value;
-    this.form.get('selectionValue').setValue(this.pValue.map(v => v[this.itemValue]));
-  }
-
   @Input() ignorePagination = false;
   @Input() clearable = false;
   @Input() closeOnClick = true;
@@ -76,11 +63,19 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @Input() listProp = '';
   @Input() totalRowsProp = '';
   @Input() panelClass = '';
+  @Input() searchProp = 'search';
   @Input() mapper: NgJvxOptionMapper<any> = {
     mapOption(source: any): Observable<any> {
       return of(source);
     }
   };
+  @Input() set value(value: any[]) {
+    this.pValue = value;
+    this.form.get('selectionValue').setValue(this.pValue.map(v => v[this.itemValue]));
+  }
+  get value(): any[] {
+    return this.pValue;
+  }
   @Input() requestHeaders: HttpHeaders = new HttpHeaders();
   @Output() valueChange: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() jvxMultiselectOpen: EventEmitter<void> = new EventEmitter<void>();
@@ -98,15 +93,18 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   public asyncOptions: any = [];
   public selectableOptions = [];
   public searchValue = '';
+  public yPosition: 'above' | 'below' = 'above';
   private searchValueSubject = new Subject<string>();
   private searchValue$ = this.searchValueSubject.asObservable();
   public currentPage = 0;
   public listContainerSize: { height: string, minHeight: string, width: string } = {height: 'auto', minHeight: '0', width: '100%'};
+  private pValue: any[] = [];
+  private shouldLoadMore = true;
   private pageSize = 15;
   private unsubscribe = new Subject<void>();
   private unsubscribe$ = this.unsubscribe.asObservable();
   multiContainerWidth = 100;
-  public yPosition: 'above' | 'below' = 'above';
+
 
   constructor(private formBuilder: FormBuilder, private service: NgJvxMultiselectService) {
     this.form = this.formBuilder.group({
@@ -260,6 +258,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       ignorePagination: this.ignorePagination,
       requestHeaders: this.requestHeaders,
       search: this.searchValue,
+      searchProp: this.searchProp,
       pageSize: this.pageSize
     }).subscribe((val) => {
       let result = [];

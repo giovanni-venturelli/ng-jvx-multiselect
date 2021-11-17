@@ -71,6 +71,7 @@ $candy-app-theme: mat-light-theme((
 | `requestType`           | <code>'GET'&#124;'POST'</code>  | `'GET'`   | The type of the HTTP request.
 | `searchInput`           | `Boolean`                       | `false`   | True to enable the search input for the options list.
 | `searchLabel`           | `String`                        | `'search'`| The label of the search input.
+| `searchProp`            | `String`                        | `'search'`| The name of the search property of the HTTP request.
 | `listProp`              | `String`                        | `''`      | Name of the property in response.data where the list is stored.
 | `url`                   | `String`                        | `''`      | The url to get the options.
 | `value`                 | `Array`                         | `[]`      | The current value of the selection.
@@ -124,6 +125,7 @@ For example if the request returns an array of objects like this:
 The user can use the properties `itemText` and `itemValue` to prevent the need for the mapping (being in the example above `itemText = 'title'` and `itemValue = 'id'`).
 #### Search
 When the user searches for a term, the property `searchInput` is updated with the searched value. Its value is then copied in the property `search` of the object of the search parameters.
+`searchProp` defines the name of the property for the call.
 
 ### Slots
 #### default
