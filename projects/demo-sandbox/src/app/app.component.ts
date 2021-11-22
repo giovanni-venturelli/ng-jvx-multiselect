@@ -3,7 +3,7 @@ import {HttpHeaders} from '@angular/common/http';
 import {window} from 'rxjs/operators';
 import {NgJvxOptionMapper} from 'ng-jvx-multiselect';
 import {Observable, of} from 'rxjs';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -30,12 +30,19 @@ export class AppComponent {
   } as NgJvxOptionMapper<{ value: number, text: string }>;
   public selectedValue = [{value: 1, text: 'op1'}];
   public loaded = true;
-  form: FormGroup;
-constructor(private formBuilder: FormBuilder) {
-  this.form = this.formBuilder.group({
-    selectionValue: new FormControl([this.selectedValue[0]?.value])
-  });
-}
+  public form: FormGroup;
+
+  constructor(private formBuilder: FormBuilder) {
+    this.form = this.formBuilder.group({
+      selectionValue: ['', Validators.required]
+    });
+
+    this.form.valueChanges.subscribe((val) => {
+      console.log('value change');
+      console.log(val);
+    });
+  }
+
   getUrl(): string {
     return 'http://vm-web2016/Visitatori.Next.Api/api/utenti';
   }
@@ -57,4 +64,9 @@ constructor(private formBuilder: FormBuilder) {
   // }
   // set selectionValue(val: any[]) {
   // }
+  checkValidity(): void {
+    console.log(this.form.valid);
+    this.form.controls.selectionValue.updateValueAndValidity();
+    console.log(this.form.valid);
+  }
 }

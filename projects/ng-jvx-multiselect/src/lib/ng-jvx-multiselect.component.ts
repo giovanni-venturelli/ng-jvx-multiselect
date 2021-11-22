@@ -3,15 +3,15 @@ import {
   AfterViewInit,
   Component,
   ContentChild,
-  ElementRef, EventEmitter, forwardRef,
+  ElementRef, EventEmitter, forwardRef, HostBinding,
   Input,
   OnChanges, OnDestroy,
-  OnInit, Output, QueryList,
+  OnInit, Optional, Output, QueryList, Self,
   SimpleChanges, TemplateRef,
   ViewChild, ViewChildren
 } from '@angular/core';
 import {NgJvxOptionsTemplateDirective} from './directives/ng-jvx-options-template.directive';
-import {FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR, NgControl} from '@angular/forms';
 import {MatSelectionList, MatSelectionListChange} from '@angular/material/list';
 import {NgJvxOptionComponent} from './ng-jvx-option/ng-jvx-option.component';
 import {MatMenuTrigger} from '@angular/material/menu';
@@ -22,6 +22,8 @@ import {concatAll, debounce, debounceTime, map, switchMap, take, takeUntil, tap}
 import {forkJoin, from, fromEvent, iif, noop, Observable, of, Subject, timer} from 'rxjs';
 import {NgJvxOptionMapper} from './interfaces/ng-jvx-option-mapper';
 import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
+import {MatFormFieldControl} from '@angular/material/form-field';
+import {coerceBooleanProperty} from '@angular/cdk/coercion';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -30,12 +32,13 @@ import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-tem
   styleUrls: ['./ng-jvx-multiselect.component.scss'],
   providers: [
     {
-      provide: NG_VALUE_ACCESSOR,
+      provide: MatFormFieldControl,
       useExisting: forwardRef(() => NgJvxMultiselectComponent),
       multi: true,
     }]
 })
-export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges, MatFormFieldControl<any>, ControlValueAccessor {
+  static nextId = 0;
   @ViewChild('jvxMultiselect', {static: true}) jvxMultiselect: ElementRef;
   @ViewChild('selectionContainer', {static: false}) selectionContainer: ElementRef;
   @ViewChild('selection', {static: true}) selection: MatSelectionList;
@@ -56,7 +59,6 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @Input() ignorePagination = false;
   @Input() clearable = false;
   @Input() closeOnClick = true;
-  @Input() disabled = false;
   @Input() hasErrors = false;
   @Input() searchInput = false;
   @Input() searchLabel = 'search';
@@ -69,14 +71,54 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       return of(source);
     }
   };
+
   @Input() set value(value: any[]) {
     this.pValue = value;
-    this.form.get('selectionValue').setValue(this.pValue.map(v => v[this.itemValue]));
+    if(value) {
+      this.form.get('selectionValue').setValue(this.pValue.map(v => v[this.itemValue]));
+    } else {
+      this.form.get('selectionValue').setValue(value);
+    }
+    this.stateChanges.next();
   }
+
   get value(): any[] {
     return this.pValue;
   }
+
   @Input() requestHeaders: HttpHeaders = new HttpHeaders();
+
+  @Input()
+  get required(): boolean {
+    return this._required;
+  }
+
+  set required(req) {
+    this._required = coerceBooleanProperty(req);
+    this.stateChanges.next();
+  }
+
+  // tslint:disable-next-line:variable-name
+  private _required = false;
+
+  @Input()
+  get disabled(): boolean {
+    return this._disabled;
+  }
+
+  set disabled(value: boolean) {
+    this._disabled = coerceBooleanProperty(value);
+    this._disabled ? this.parts.disable() : this.parts.enable();
+    this.stateChanges.next();
+  }
+
+  // tslint:disable-next-line:variable-name
+  private _disabled = false;
+
+  get errorState(): boolean {
+    return this.parts.invalid && this.touched;
+  }
+
   @Output() valueChange: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() jvxMultiselectOpen: EventEmitter<void> = new EventEmitter<void>();
   @Output() jvxMultiselectOpened: EventEmitter<void> = new EventEmitter<void>();
@@ -84,6 +126,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @Output() jvxMultiselectClosed: EventEmitter<void> = new EventEmitter<void>();
   @Output() scrollEnd: EventEmitter<void> = new EventEmitter<void>();
 
+  public controlType = 'ng-jvx-multiselect';
   public document = document;
   public window = window;
   public form: FormGroup;
@@ -94,22 +137,50 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   public selectableOptions = [];
   public searchValue = '';
   public yPosition: 'above' | 'below' = 'above';
-  private searchValueSubject = new Subject<string>();
-  private searchValue$ = this.searchValueSubject.asObservable();
+  public stateChanges = new Subject<void>();
   public currentPage = 0;
   public listContainerSize: { height: string, minHeight: string, width: string } = {height: 'auto', minHeight: '0', width: '100%'};
+  public parts: FormGroup;
+
+  public touched = false;
+
+  private searchValueSubject = new Subject<string>();
+  private searchValue$ = this.searchValueSubject.asObservable();
   private pValue: any[] = [];
   private shouldLoadMore = true;
   private pageSize = 15;
   private unsubscribe = new Subject<void>();
   private unsubscribe$ = this.unsubscribe.asObservable();
+  public placeholder: string;
+  public focused = false;
+
   multiContainerWidth = 100;
 
 
-  constructor(private formBuilder: FormBuilder, private service: NgJvxMultiselectService) {
+  constructor(private formBuilder: FormBuilder, private service: NgJvxMultiselectService,
+              private elementRef: ElementRef,
+              @Optional() @Self() public ngControl: NgControl, fb: FormBuilder) {
+    if (this.ngControl != null) {
+      // Setting the value accessor directly (instead of using
+      // the providers) to avoid running into a circular import.
+      this.ngControl.valueAccessor = this;
+    }
+
+    this.parts = fb.group({
+      area: '',
+      exchange: '',
+      subscriber: '',
+    });
     this.form = this.formBuilder.group({
       selectionValue: new FormControl(this.selectionValue)
     });
+  }
+
+  @HostBinding() id = `jvx-multiselect-${NgJvxMultiselectComponent.nextId++}`;
+
+  @HostBinding('class.floating')
+  get shouldLabelFloat(): boolean {
+    return this.focused || !this.empty;
   }
 
   ngOnInit(): void {
@@ -135,6 +206,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   ngOnDestroy(): void {
     this.unsubscribe.next();
+    this.stateChanges.complete();
   }
 
   ngAfterViewInit(): void {
@@ -166,6 +238,10 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     });
   }
 
+  get empty(): boolean {
+    const n = this.parts.value;
+    return !n.area && !n.exchange && !n.subscriber;
+  }
 
   onCLickOnMenu(e: MouseEvent): void {
     if (this.multi || this.closeOnClick === false) {
@@ -199,6 +275,23 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
     this.valueChange.emit(this.value);
     this.propagateChange(this.value);
+  }
+
+
+  onFocusIn(event: FocusEvent): void {
+    if (!this.focused) {
+      this.focused = true;
+      this.stateChanges.next();
+    }
+  }
+
+  onFocusOut(event: FocusEvent): void {
+    if (!this.elementRef.nativeElement.contains(event.relatedTarget as Element)) {
+      this.touched = true;
+      this.focused = false;
+      // this.onTouched();
+      this.stateChanges.next();
+    }
   }
 
   onMenuOpen(): void {
@@ -326,4 +419,15 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     this.valueChange.emit(this.value);
   }
 
+  setDescribedByIds(ids: string[]): void {
+    // const controlElement = this.elementRef.nativeElement
+    //   .querySelector('.ng-jvx-multiselect-value');
+    // controlElement.setAttribute('aria-describedby', ids.join(' '));
+  }
+
+  onContainerClick(event: MouseEvent): void {
+    // if ((event.target as Element).tagName.toLowerCase() !== 'input') {
+    //   this.elementRef.nativeElement.querySelector('input').focus();
+    // }
+  }
 }
