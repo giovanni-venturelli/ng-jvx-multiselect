@@ -1,5 +1,4 @@
 import {
-  AfterContentChecked, AfterViewChecked,
   AfterViewInit,
   Component,
   ContentChild,
@@ -39,6 +38,13 @@ import {coerceBooleanProperty} from '@angular/cdk/coercion';
 })
 export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges, MatFormFieldControl<any>, ControlValueAccessor {
   static nextId = 0;
+  @HostBinding() id = `jvx-multiselect-${NgJvxMultiselectComponent.nextId++}`;
+
+  @HostBinding('class.floating')
+  get shouldLabelFloat(): boolean {
+    return this.focused || !this.empty;
+  }
+
   @ViewChild('jvxMultiselect', {static: true}) jvxMultiselect: ElementRef;
   @ViewChild('selectionContainer', {static: false}) selectionContainer: ElementRef;
   @ViewChild('selection', {static: true}) selection: MatSelectionList;
@@ -74,7 +80,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   @Input() set value(value: any[]) {
     this.pValue = value;
-    if(value) {
+    if (value) {
       this.form.get('selectionValue').setValue(this.pValue.map(v => v[this.itemValue]));
     } else {
       this.form.get('selectionValue').setValue(value);
@@ -116,7 +122,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   private _disabled = false;
 
   get errorState(): boolean {
-    return this.parts.invalid && this.touched;
+    return this.ngControl.invalid && this.ngControl.touched;
   }
 
   @Output() valueChange: EventEmitter<any[]> = new EventEmitter<any[]>();
@@ -144,6 +150,10 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   public touched = false;
 
+  public placeholder: string;
+  public focused = false;
+  public multiContainerWidth = 100;
+
   private searchValueSubject = new Subject<string>();
   private searchValue$ = this.searchValueSubject.asObservable();
   private pValue: any[] = [];
@@ -151,10 +161,8 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   private pageSize = 15;
   private unsubscribe = new Subject<void>();
   private unsubscribe$ = this.unsubscribe.asObservable();
-  public placeholder: string;
-  public focused = false;
-
-  multiContainerWidth = 100;
+  public onTouched = () => {
+  }
 
 
   constructor(private formBuilder: FormBuilder, private service: NgJvxMultiselectService,
@@ -174,13 +182,6 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     this.form = this.formBuilder.group({
       selectionValue: new FormControl(this.selectionValue)
     });
-  }
-
-  @HostBinding() id = `jvx-multiselect-${NgJvxMultiselectComponent.nextId++}`;
-
-  @HostBinding('class.floating')
-  get shouldLabelFloat(): boolean {
-    return this.focused || !this.empty;
   }
 
   ngOnInit(): void {
@@ -264,8 +265,8 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     this.propagateChange = fn;
   }
 
-  // not used, used for touch input
-  public registerOnTouched(): void {
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
   }
 
   onChange(e: MatSelectionListChange): void {
@@ -289,7 +290,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     if (!this.elementRef.nativeElement.contains(event.relatedTarget as Element)) {
       this.touched = true;
       this.focused = false;
-      // this.onTouched();
+      this.onTouched();
       this.stateChanges.next();
     }
   }
@@ -420,9 +421,9 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   setDescribedByIds(ids: string[]): void {
-    // const controlElement = this.elementRef.nativeElement
-    //   .querySelector('.ng-jvx-multiselect-value');
-    // controlElement.setAttribute('aria-describedby', ids.join(' '));
+    const controlElement = this.elementRef.nativeElement
+      .querySelector('.ng-jvx-multiselect');
+    controlElement.setAttribute('aria-describedby', ids.join(' '));
   }
 
   onContainerClick(event: MouseEvent): void {

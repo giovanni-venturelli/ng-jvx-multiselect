@@ -1,4 +1,4 @@
-<div [ngClass]="{'ng-jvx-multiselect': true, 'disabled': disabled, 'has-errors': hasErrors}" #jvxMultiselect>
+<div class="ng-jvx-multiselect" [ngClass]="{'disabled': disabled, 'has-errors': hasErrors}" #jvxMultiselect>
   <!-- START MENU -->
   <div [matMenuTriggerFor]="menuRef" (onMenuOpen)="onMenuOpen()" (menuOpened)="onMenuOpened()"
        (onMenuClose)="onMenuClose()" (menuClosed)="onMenuClosed()"

@@ -34,7 +34,8 @@ export class AppComponent {
 
   constructor(private formBuilder: FormBuilder) {
     this.form = this.formBuilder.group({
-      selectionValue: ['', Validators.required]
+      selectionValue: ['', Validators.required],
+      testInput: ['', Validators.required]
     });
 
     this.form.valueChanges.subscribe((val) => {
@@ -66,7 +67,10 @@ export class AppComponent {
   // }
   checkValidity(): void {
     console.log(this.form.valid);
+    this.form.markAllAsTouched();
     this.form.controls.selectionValue.updateValueAndValidity();
+    this.form.controls.testInput.updateValueAndValidity();
+    this.form.markAllAsTouched();
     console.log(this.form.valid);
   }
 }
