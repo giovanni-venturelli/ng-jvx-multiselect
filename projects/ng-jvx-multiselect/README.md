@@ -121,8 +121,24 @@ The property `listProp` defines the path of the array in the response object (i.
 #### Mapper
 The `mapper` property will be an object implementing the interface `NgJvxOptionMapper<T>`. It will expose a method `mapOption` which accepts the option to be mapped in the form of an Object and returns an Observable of type `T`.
 For example if the request returns an array of objects like this:
-
-The user can use the properties `itemText` and `itemValue` to prevent the need for the mapping (being in the example above `itemText = 'title'` and `itemValue = 'id'`).
+```javascript
+{
+  id: number;
+  description: string;
+}
+```
+it is possible to write a mapper like this:
+```javascript
+ const mapper: NgJvxOptionMapper<{value: number, text: string}> = {
+  mapOption(source: {
+    id: number,
+    description: string
+  }): Observable<any> {
+    return of({value: source.id, text: source.description });
+  }
+}
+```
+The user can use the properties `itemText` and `itemValue` to prevent the need for the mapping (being in the example above `itemText = 'description'` and `itemValue = 'id'`), though the mapper should still be used for more complex cases.
 #### Search
 When the user searches for a term, the property `searchInput` is updated with the searched value. Its value is then copied in the property `search` of the object of the search parameters.
 `searchProp` defines the name of the property for the call.
