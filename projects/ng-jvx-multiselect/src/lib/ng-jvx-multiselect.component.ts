@@ -79,7 +79,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   };
 
   @Input() set value(value: any[]) {
-    this.pValue = value;
+    this.pValue = value ?? [];
     if (value) {
       this.form.get('selectionValue').setValue(this.pValue.map(v => v[this.itemValue]));
     } else {

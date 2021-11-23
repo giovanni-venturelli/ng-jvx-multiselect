@@ -28,15 +28,18 @@ export class AppComponent {
       });
     }
   } as NgJvxOptionMapper<{ value: number, text: string }>;
-  public selectedValue = [{value: 1, text: 'op1'}];
+  public selectedValue = [{text: 'value 1', value: 1}];
   public loaded = true;
   public form: FormGroup;
 
   constructor(private formBuilder: FormBuilder) {
+    console.log('selected value: ');
+    console.log(this.selectedValue);
     this.form = this.formBuilder.group({
-      selectionValue: ['', Validators.required],
+      selectionValue: [this.selectedValue, Validators.required],
       testInput: ['', Validators.required]
     });
+
 
     this.form.valueChanges.subscribe((val) => {
       console.log('value change');
@@ -66,11 +69,9 @@ export class AppComponent {
   // set selectionValue(val: any[]) {
   // }
   checkValidity(): void {
-    console.log(this.form.valid);
     this.form.markAllAsTouched();
     this.form.controls.selectionValue.updateValueAndValidity();
     this.form.controls.testInput.updateValueAndValidity();
     this.form.markAllAsTouched();
-    console.log(this.form.valid);
   }
 }
