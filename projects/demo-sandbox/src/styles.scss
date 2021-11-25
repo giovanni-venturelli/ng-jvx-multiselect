@@ -1,7 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
-@use '~@angular/material' as mat;
-@import '~@angular/material/theming';
-@import '~ng-jvx-multiselect/ng-jvx-multiselect';
+@use '@angular/material' as mat;
+@use 'ng-jvx-multiselect' as ng-jvx-multiselect;
+@import '@angular/material/theming';
+
+
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -32,5 +34,5 @@ $candy-app-theme: mat.define-light-theme((
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include mat.all-component-themes($candy-app-theme);
-@include ng-jvx-multiselect-style($candy-app-theme);
+@include ng-jvx-multiselect.ng-jvx-multiselect-style($candy-app-theme);
 

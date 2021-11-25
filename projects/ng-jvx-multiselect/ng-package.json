@@ -1,7 +1,9 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/ng-jvx-multiselect",
+  "assets": ["./assets", "./**/*.scss"],
   "lib": {
+    "styleIncludePaths": ["../../node_modules/", "./"],
     "entryFile": "src/public-api.ts"
   }
 }

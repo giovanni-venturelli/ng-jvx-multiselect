@@ -1,4 +1,4 @@
-@use '~@angular/material' as ngJvxOptionMat;
+@use '@angular/material' as ngJvxOptionMat;
 @use 'sass:map' as ngJvxOptionMap;
 
 @mixin ng-jvx-option-style($theme) {

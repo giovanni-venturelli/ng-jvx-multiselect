@@ -114,7 +114,7 @@
             "includePaths": ["dist/ng-jvx-multiselect"]
           },
           "options": {
-            "browserTarget": "demo-sandbox:build",
+            "browserTarget": "demo-sandbox:build"
           },
           "configurations": {
             "production": {
