@@ -1,5 +1,5 @@
 import {
-  AfterViewInit,
+  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ContentChild,
   ElementRef, EventEmitter, forwardRef, HostBinding,
@@ -29,6 +29,7 @@ import {coerceBooleanProperty} from '@angular/cdk/coercion';
   selector: 'ng-jvx-multiselect',
   templateUrl: './ng-jvx-multiselect.component.html',
   styleUrls: ['./ng-jvx-multiselect.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: MatFormFieldControl,
@@ -162,11 +163,12 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   private unsubscribe = new Subject<void>();
   private unsubscribe$ = this.unsubscribe.asObservable();
   public onTouched = () => {
-  }
+  };
 
 
   constructor(private formBuilder: FormBuilder, private service: NgJvxMultiselectService,
               private elementRef: ElementRef,
+              private changeDetectorRef: ChangeDetectorRef,
               @Optional() @Self() public ngControl: NgControl, fb: FormBuilder) {
     if (this.ngControl != null) {
       // Setting the value accessor directly (instead of using
@@ -185,6 +187,9 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   ngOnInit(): void {
+    this.stateChange$.pipe(takeUntil(this.unsubscribe)).subscribe(() => {
+      this.changeDetectorRef.markForCheck();
+    });
     this.selectableOptions = [...this.options];
     fromEvent(window, 'resize').pipe(takeUntil(this.unsubscribe), debounceTime(100), map(() => {
       return this.listContainerSize.width = this.jvxMultiselect.nativeElement.offsetWidth + 'px';
@@ -276,6 +281,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
     this.valueChange.emit(this.value);
     this.propagateChange(this.value);
+    this.changeDetectorRef.markForCheck();
   }
 
 
@@ -378,6 +384,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
             this.isLoading = false;
             this.trigger.openMenu();
             this.setSelectionContainerSize();
+            this.changeDetectorRef.markForCheck();
           });
       }
     });
@@ -401,6 +408,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     this.currentPage = 0;
     this.searchValue = '';
     this.jvxMultiselectClosed.emit();
+    this.changeDetectorRef.markForCheck();
   }
 
   onSearchInputClick(e: MouseEvent): void {
@@ -418,6 +426,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     this.form.get('selectionValue').setValue(this.value.map(v => v[this.itemValue]));
     this.propagateChange(this.value);
     this.valueChange.emit(this.value);
+    this.changeDetectorRef.markForCheck();
   }
 
   setDescribedByIds(ids: string[]): void {
@@ -430,5 +439,9 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     // if ((event.target as Element).tagName.toLowerCase() !== 'input') {
     //   this.elementRef.nativeElement.querySelector('input').focus();
     // }
+  }
+
+  private get stateChange$(): Observable<any> {
+    return this.stateChanges.asObservable();
   }
 }
