@@ -378,16 +378,16 @@
 
     <!--        </div>-->
     <!--      </ng-jvx-multiselect>-->
-    <form [formGroup]="form">
-      <mat-form-field>
+    <form [formGroup]="form" style="width: 500px;">
+      <mat-form-field  style="width: 500px;">
         <input formControlName="testInput" matInput/>
       </mat-form-field>
-      <mat-form-field>
-        <ng-jvx-multiselect matInput [searchInput]="true" [mapper]="mapper" url="http://localhost:3000/jvx-multiselect-test" [requestType]="'get'" [formControlName]="'selectionValue'" [clearable]="true">
+      <mat-form-field  style="width: 500px;">
+        <ng-jvx-multiselect matInput [searchInput]="true" url="http://localhost:3000/jvx-multiselect-test" [requestType]="'get'" [formControlName]="'selectionValue'" [multi]="true">
           <div placeholder>placeholder</div>
-          <!--    <div *ngJvxOptionsTemplate="let option">-->
-          <!--      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>-->
-          <!--    </div>-->
+              <div *ngJvxSelectionTemplate="let option">
+                <div style="font-style: italic">{{option.value}}</div>
+              </div>
         </ng-jvx-multiselect>
       </mat-form-field>
     </form>

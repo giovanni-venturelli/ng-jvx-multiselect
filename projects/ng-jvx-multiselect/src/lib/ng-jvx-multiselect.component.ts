@@ -197,6 +197,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     }), switchMap(() => timer(100)), tap(() => {
       this.multiContainerWidth = this.multiContainer?.nativeElement?.offsetWidth ?? 100;
       this.yPosition = window.innerHeight - this.jvxMultiselect.nativeElement?.getBoundingClientRect()?.top < 260 ? 'above' : 'below';
+      this.changeDetectorRef.markForCheck();
     })).subscribe(noop);
 
     this.searchValue$.pipe(takeUntil(this.unsubscribe), debounceTime(300), tap((val) => {
@@ -228,6 +229,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     timer(0).pipe(tap(() => {
       this.multiContainerWidth = this.multiContainer?.nativeElement?.offsetWidth ?? 100;
       this.yPosition = window.innerHeight - this.jvxMultiselect.nativeElement?.getBoundingClientRect()?.top < 260 ? 'above' : 'below';
+      this.changeDetectorRef.markForCheck();
     })).subscribe(noop);
   }
 
