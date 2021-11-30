@@ -6,7 +6,7 @@ import {
   Input,
   OnChanges, OnDestroy,
   OnInit, Optional, Output, QueryList, Self,
-  SimpleChanges, TemplateRef,
+  SimpleChanges,
   ViewChild, ViewChildren
 } from '@angular/core';
 import {NgJvxOptionsTemplateDirective} from './directives/ng-jvx-options-template.directive';
@@ -163,7 +163,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   private unsubscribe = new Subject<void>();
   private unsubscribe$ = this.unsubscribe.asObservable();
   public onTouched = () => {
-  };
+  }
 
 
   constructor(private formBuilder: FormBuilder, private service: NgJvxMultiselectService,

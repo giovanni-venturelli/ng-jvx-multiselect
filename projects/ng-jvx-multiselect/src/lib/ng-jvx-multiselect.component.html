@@ -56,16 +56,9 @@
 
     <div class="ng-jvx-multiselect-value multi-value-container" *ngIf="multi" #multiContainer>
 
-      <mat-chip-list #chipList [disabled]="this.disabled">
-        <mat-chip [color]="'primary'" selected *ngFor="let val of value" [selectable]="false"
-                  class="ng-jvx-multiselect-chip"
-                  [removable]="true" (removed)="deselect(val)">
-          <span class="chip-content"
-                [ngStyle]="{'max-width': multiContainerWidth - 50 +'px'}">{{val[itemText]}}</span>
+      <ng-container [ngTemplateOutlet]="selectionTemplate? selectionTemplate.template : defaultMultiSelectionTemplate"
+                    [ngTemplateOutletContext]="{$implicit: value}"></ng-container>
 
-          <mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip>
-      </mat-chip-list>
 
     </div>
 
@@ -103,4 +96,17 @@
 
 <ng-template #defaultSelectionTemplate let-value>
   {{value[itemText]}}
+</ng-template>
+
+<ng-template #defaultMultiSelectionTemplate let-value>
+  <mat-chip-list #chipList [disabled]="this.disabled">
+    <mat-chip [color]="'primary'" selected *ngFor="let val of value" [selectable]="false"
+              class="ng-jvx-multiselect-chip"
+              [removable]="true" (removed)="deselect(val)">
+          <span class="chip-content"
+                [ngStyle]="{'max-width': multiContainerWidth - 50 +'px'}">{{val[itemText]}}</span>
+
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+  </mat-chip-list>
 </ng-template>

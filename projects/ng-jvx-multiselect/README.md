@@ -191,7 +191,7 @@ i.e.
 ```
 #### *ngJvxSelectionTemplate
 This directive works exactly as the `ngJvxOptionsTemplate` except it defines the selection template.  
-It only works for non-multiple selects.
+In case of a multiple selection the context is the array of the selected options, for the non-multiple selection the context is the selected option.
 
 #### ngJvxDisabledOption
 This directive disables the selection of the host option. 

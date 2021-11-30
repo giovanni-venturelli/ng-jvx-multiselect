@@ -167,60 +167,62 @@
     max-height: 30px;
     overflow: hidden;
   }
-  .jvx-multiselect-panel {
-    min-width: 100%;
-    max-width: 100%;
+  .cdk-overlay-pane {
+    .mat-menu-panel.jvx-multiselect-panel {
+      min-width: 100%;
+      max-width: 100%;
 
-    .mat-menu-content {
-      padding-top: 0 !important;
-      padding-bottom: 0 !important;
-
-      .menu-list-container {
-        ng-scrollbar {
-          --scrollbar-color: transparent;
-          --scrollbar-container-color: transparent;
-          --scrollbar-thumb-color: #{transparentize(ngJvxMultiselectMat.get-color-from-palette($accent), 0.2)};
-          --scrollbar-thumb-hover-color: #{transparentize(ngJvxMultiselectMat.get-color-from-palette($accent), 0.3)};
-          --scrollbar-border-radius: 4px;
-          --scrollbar-size: 6px;
-          --scrollbar-padding: 8px;
-          --scroll-view-margin: 0;
-          --scroll-view-color: transparent;
-        }
-      }
-
-      .search-input-container {
-        height: 40px;
-        display: flex;
-        align-items: center;
-        padding: 10px;
-
-        input {
-          width: 100%;
-          outline: none;
-          border: none;
-
-          &:focus {
-            outline: none;
-          }
-
-          &:active {
-            outline: none
-          }
-        }
-      }
-
-      .mat-selection-list {
+      .mat-menu-content {
         padding-top: 0 !important;
         padding-bottom: 0 !important;
 
-        mat-list-option[aria-selected="true"], mat-list-option[aria-selected="false"] {
-          mat-pseudo-checkbox {
-            display: none
+        .menu-list-container {
+          ng-scrollbar {
+            --scrollbar-color: transparent;
+            --scrollbar-container-color: transparent;
+            --scrollbar-thumb-color: #{transparentize(ngJvxMultiselectMat.get-color-from-palette($accent), 0.2)};
+            --scrollbar-thumb-hover-color: #{transparentize(ngJvxMultiselectMat.get-color-from-palette($accent), 0.3)};
+            --scrollbar-border-radius: 4px;
+            --scrollbar-size: 6px;
+            --scrollbar-padding: 8px;
+            --scroll-view-margin: 0;
+            --scroll-view-color: transparent;
           }
         }
-      }
 
+        .search-input-container {
+          height: 40px;
+          display: flex;
+          align-items: center;
+          padding: 10px;
+
+          input {
+            width: 100%;
+            outline: none;
+            border: none;
+
+            &:focus {
+              outline: none;
+            }
+
+            &:active {
+              outline: none
+            }
+          }
+        }
+
+        .mat-selection-list {
+          padding-top: 0 !important;
+          padding-bottom: 0 !important;
+
+          mat-list-option[aria-selected="true"], mat-list-option[aria-selected="false"] {
+            mat-pseudo-checkbox {
+              display: none
+            }
+          }
+        }
+
+      }
     }
   }
 }
