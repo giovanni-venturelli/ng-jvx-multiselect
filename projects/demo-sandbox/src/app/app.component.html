@@ -384,17 +384,19 @@
       </mat-form-field>
       <mat-form-field style="width: 500px;">
         <ng-jvx-multiselect matInput [searchInput]="true" url="http://localhost:3000/jvx-multiselect-test"
-                            [requestType]="'get'" [formControlName]="'selectionValue'" [multi]="true">
+                            [groupBy]="'group'"
+                            [ignorePagination]="true"
+                            [requestType]="'get'" [formControlName]="'selectionValue'">
           <div placeholder>placeholder</div>
+          <div *ngJvxGroupHeader="let group" style="padding: 5px 15px">
+            This is the {{group.group}} group
+          </div>
           <!--              <div *ngJvxSelectionTemplate="let option">-->
           <!--                <div style="font-style: italic">{{option.value}}</div>-->
           <!--              </div>-->
           <div *ngJvxOptionsTemplate="let option"
                [ngJvxDisabledOption]="option.text.includes('0')">
-            {{option.text}}
-          </div>
-          <div *ngJvxSelectionTemplate="let options">
-            Selezionati {{options.length}} elementi
+            testo: {{option.text}}
           </div>
         </ng-jvx-multiselect>
       </mat-form-field>

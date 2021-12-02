@@ -17,6 +17,7 @@ import {NgScrollbarModule} from 'ngx-scrollbar';
 import {SmoothScrollModule} from 'ngx-scrollbar/smooth-scroll';
 import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
 import {NgJvxDisabledOptionDirective} from './directives/ng-jvx-disabled-option.directive';
+import { NgJvxGroupHeaderDirective } from './directives/ng-jvx-group-header.directive';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import {NgJvxDisabledOptionDirective} from './directives/ng-jvx-disabled-option.
     NgJvxOptionsTemplateDirective,
     NgJvxPanelComponent,
     NgJvxSelectionTemplateDirective,
-    NgJvxDisabledOptionDirective],
+    NgJvxDisabledOptionDirective,
+    NgJvxGroupHeaderDirective],
   imports: [
     MatButtonModule,
     MatOptionModule,
@@ -42,7 +44,7 @@ import {NgJvxDisabledOptionDirective} from './directives/ng-jvx-disabled-option.
     SmoothScrollModule,
     FormsModule
   ],
-  exports: [NgJvxMultiselectComponent, NgJvxOptionComponent, NgJvxOptionsTemplateDirective, NgJvxSelectionTemplateDirective, NgJvxDisabledOptionDirective]
+  exports: [NgJvxMultiselectComponent, NgJvxOptionComponent, NgJvxOptionsTemplateDirective, NgJvxSelectionTemplateDirective, NgJvxDisabledOptionDirective, NgJvxGroupHeaderDirective]
 })
 export class NgJvxMultiselectModule {
 }

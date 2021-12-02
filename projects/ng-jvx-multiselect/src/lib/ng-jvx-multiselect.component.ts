@@ -23,6 +23,7 @@ import {NgJvxOptionMapper} from './interfaces/ng-jvx-option-mapper';
 import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
+import {NgJvxGroupHeaderDirective} from './directives/ng-jvx-group-header.directive';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -55,6 +56,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @ViewChildren(NgJvxOptionComponent) optionComp: QueryList<NgJvxOptionComponent>;
   @ContentChild(NgJvxOptionsTemplateDirective) optionsTemplate: NgJvxOptionsTemplateDirective | null = null;
   @ContentChild(NgJvxSelectionTemplateDirective) selectionTemplate: NgJvxSelectionTemplateDirective | null = null;
+  @ContentChild(NgJvxGroupHeaderDirective) groupHeaderTemplate: NgJvxGroupHeaderDirective | null = null;
   // @ContentChild(NgJvxOptionComponent) optionComp: NgJvxOptionComponent;
   // @ContentChild(TemplateRef) optionsTemplate: TemplateRef<any> | null = null;
   @Input() options: any[] = [];
@@ -73,6 +75,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @Input() totalRowsProp = '';
   @Input() panelClass = '';
   @Input() searchProp = 'search';
+  @Input() groupBy: string;
   @Input() mapper: NgJvxOptionMapper<any> = {
     mapOption(source: any): Observable<any> {
       return of(source);
@@ -142,6 +145,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   public showList = true;
   public asyncOptions: any = [];
   public selectableOptions = [];
+  public orderedOptions: { group: any, options: any[] }[] = [];
   public searchValue = '';
   public yPosition: 'above' | 'below' = 'above';
   public stateChanges = new Subject<void>();
@@ -163,7 +167,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   private unsubscribe = new Subject<void>();
   private unsubscribe$ = this.unsubscribe.asObservable();
   public onTouched = () => {
-  }
+  };
 
 
   constructor(private formBuilder: FormBuilder, private service: NgJvxMultiselectService,
@@ -191,6 +195,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       this.changeDetectorRef.markForCheck();
     });
     this.selectableOptions = [...this.options];
+    this.updateOrderedOptions();
     fromEvent(window, 'resize').pipe(takeUntil(this.unsubscribe), debounceTime(100), map(() => {
       return this.listContainerSize.width = this.jvxMultiselect.nativeElement.offsetWidth + 'px';
 
@@ -205,6 +210,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
         this.searchValue = val;
         this.currentPage = 0;
         this.selectableOptions = [];
+        this.updateOrderedOptions();
         this.shouldLoadMore = true;
         this.getList();
       }
@@ -236,6 +242,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.options) {
       this.selectableOptions = [...this.options];
+      this.updateOrderedOptions();
     }
   }
 
@@ -341,6 +348,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
           e.preventDefault();
 
           this.selectableOptions.length = 0;
+          this.updateOrderedOptions();
           this.getList();
 
         } else {
@@ -384,6 +392,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
         from(newOptions).pipe(concatAll())
           .subscribe((finVal: any) => {
             this.selectableOptions.push(finVal);
+            this.updateOrderedOptions();
             this.isLoading = false;
             this.trigger.openMenu();
             this.setSelectionContainerSize();
@@ -446,5 +455,18 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   private get stateChange$(): Observable<any> {
     return this.stateChanges.asObservable();
+  }
+
+  updateOrderedOptions(): void {
+    if (this.groupBy && this.groupBy.length > 0) {
+      this.orderedOptions.length = 0;
+      const groups = [...new Set(this.selectableOptions.map(item => item[this.groupBy]))];
+      for (const group of groups) {
+        this.orderedOptions.push({
+          group,
+          options: this.selectableOptions.filter(option => JSON.stringify(option[this.groupBy]) === JSON.stringify(group))
+        });
+      }
+    }
   }
 }

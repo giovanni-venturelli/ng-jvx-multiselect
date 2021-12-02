@@ -3,7 +3,8 @@
   <div [matMenuTriggerFor]="menuRef" (onMenuOpen)="onMenuOpen()" (menuOpened)="onMenuOpened()"
        (onMenuClose)="onMenuClose()" (menuClosed)="onMenuClosed()"
        #trigger="matMenuTrigger">
-    <mat-menu #menuRef="matMenu" [class]="['jvx-multiselect-panel', panelClass].join(' ')" [formGroup]="form" [yPosition]="yPosition">
+    <mat-menu #menuRef="matMenu" [class]="['jvx-multiselect-panel', panelClass].join(' ')" [formGroup]="form"
+              [yPosition]="yPosition">
       <div class="menu-list-container"
            #menuLIstContainer
            [ngStyle]="{'overflow-y': 'hidden', 'width': listContainerSize.width, 'max-height': '260px', 'height': listContainerSize.height, 'min-height': listContainerSize.minHeight}">
@@ -25,13 +26,26 @@
                                   (selectionChange)="onChange($event)"
                                   formControlName="selectionValue">
                 <ng-content></ng-content>
+                <ng-container *ngIf="!!groupBy && groupBy.length > 0">
+                  <ng-container *ngFor="let opt of orderedOptions">
+                    <ng-container [ngTemplateOutlet]="groupHeaderTemplate? groupHeaderTemplate.template: defaultGroupHeaderTemplate" [ngTemplateOutletContext]="{$implicit: opt}"></ng-container>
 
-                <ng-jvx-option *ngFor="let option of selectableOptions" [value]="option[itemValue]">
-                  <!--        <ng-container [ngTemplateOutlet]="optionsTemplate" [ngTemplateOutletContext]="{$implicit: option}"></ng-container>-->
-                  <ng-container [ngTemplateOutlet]="optionsTemplate? optionsTemplate.template : defaultTemplate"
-                                [ngTemplateOutletContext]="{$implicit: option}"></ng-container>
-                </ng-jvx-option>
-
+                    <ng-jvx-option *ngFor="let option of opt.options" [value]="option[itemValue]">
+                      <!--        <ng-container [ngTemplateOutlet]="optionsTemplate" [ngTemplateOutletContext]="{$implicit: option}"></ng-container>-->
+                      <span style="padding-inline: 10px">
+                      <ng-container [ngTemplateOutlet]="optionsTemplate? optionsTemplate.template : defaultTemplate"
+                                    [ngTemplateOutletContext]="{$implicit: option}"></ng-container>
+                        </span>
+                    </ng-jvx-option>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngIf="!groupBy || groupBy.length === 0">
+                  <ng-jvx-option *ngFor="let option of selectableOptions" [value]="option[itemValue]">
+                    <!--        <ng-container [ngTemplateOutlet]="optionsTemplate" [ngTemplateOutletContext]="{$implicit: option}"></ng-container>-->
+                    <ng-container [ngTemplateOutlet]="optionsTemplate? optionsTemplate.template : defaultTemplate"
+                                  [ngTemplateOutletContext]="{$implicit: option}"></ng-container>
+                  </ng-jvx-option>
+                </ng-container>
               </mat-selection-list>
             </div>
           </ng-scrollbar>
@@ -109,4 +123,7 @@
       <mat-icon matChipRemove>cancel</mat-icon>
     </mat-chip>
   </mat-chip-list>
+</ng-template>
+<ng-template #defaultGroupHeaderTemplate let-opt>
+  <div style="padding-inline: 15px"><strong>{{opt.group}}</strong></div>
 </ng-template>
