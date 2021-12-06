@@ -1,15 +1,30 @@
-@use '@angular/material' as ngJvxOptionMat;
-@use 'sass:map' as ngJvxOptionMap;
+@use '@angular/material' as mat;
+@use 'sass:map';
 
-@mixin ng-jvx-option-style($theme) {
-  $primary: ngJvxOptionMap.get($theme, primary);
-  $accent: ngJvxOptionMap.get($theme, accent);
-  $warn: ngJvxOptionMap.get($theme, warn);
+@mixin ng-jvx-option-style($theme: null) {
+  $primary: var(--jvx-multiselect-primary);
+  $accent: var(--jvx-multiselect-accent);
+  $warn: var(--jvx-multiselect-warn);
+  @if($theme){
+    $primary: mat.get-color-from-palette(map.get($theme, primary));
+    $accent: mat.get-color-from-palette(map.get($theme, accent));
+    $warn: mat.get-color-from-palette(map.get($theme, warn));
+  }
+
   mat-list-option.ng-jvx-option {
     &[aria-selected="true"] {
-      $color: ngJvxOptionMat.get-color-from-palette($primary, 500);
-      background: lighten($color, 45%);
-      color: $color;
+
+      color: #{$primary};
+      .list-option-background{
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: -1;
+        opacity: 0.10;
+        height: 100%;
+        width: 100%;
+        background: #{$primary};
+      }
     }
   }
 }
