@@ -383,7 +383,7 @@
         <input formControlName="testInput" matInput/>
       </mat-form-field>
       <mat-form-field style="width: 500px;">
-<!--        <ng-jvx-multiselect matInput [searchInput]="true" url="http://localhost:3000/jvx-multiselect-test"-->
+<!--        <ng-jvx-multiselect matInput [searchMode]="true" url="http://localhost:3000/jvx-multiselect-test"-->
 <!--                            [groupBy]="'group'"-->
 <!--                            [ignorePagination]="true"-->
 <!--                            [requestType]="'get'" [formControlName]="'selectionValue'">-->
@@ -401,6 +401,7 @@
 <!--        </ng-jvx-multiselect>-->
         <ng-jvx-multiselect matInput
                             [options]="options"
+                            [searchMode]="'client'"
                             [searchInput]="true"
                             [formControlName]="'selectionValue'">
           <div placeholder>placeholder</div>
@@ -418,7 +419,7 @@
       </mat-form-field>
     </form>
     <button mat-button [color]="'primary'" (click)="checkValidity()">check</button>
-    <!--    <ng-jvx-multiselect [searchInput]="true" url="https://localhost:3000/jvx-multiselect-test" [requestHeaders]="requestHeaders" [multi]="true" [mapper]="mapper" [value]="[{value: 1, text: 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit'}]">-->
+    <!--    <ng-jvx-multiselect [searchMode]="true" url="https://localhost:3000/jvx-multiselect-test" [requestHeaders]="requestHeaders" [multi]="true" [mapper]="mapper" [value]="[{value: 1, text: 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit'}]">-->
     <!--      <div placeholder>placeholder</div>-->
     <!--  &lt;!&ndash;    <div *ngJvxOptionsTemplate="let option">&ndash;&gt;-->
     <!--  &lt;!&ndash;      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>&ndash;&gt;-->
@@ -427,7 +428,7 @@
   </div>
   <div style="width: 250px;">
 
-    <!--    <ng-jvx-multiselect [searchInput]="true" url="https://jsonplaceholder.typicode.com/posts" [requestHeaders]="requestHeaders" [multi]="true" [mapper]="mapper" [value]="[{value: 1, text: 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit'}]">-->
+    <!--    <ng-jvx-multiselect [searchMode]="true" url="https://jsonplaceholder.typicode.com/posts" [requestHeaders]="requestHeaders" [multi]="true" [mapper]="mapper" [value]="[{value: 1, text: 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit'}]">-->
     <!--      <div placeholder>placeholder</div>-->
     <!--  &lt;!&ndash;    <div *ngJvxOptionsTemplate="let option">&ndash;&gt;-->
     <!--  &lt;!&ndash;      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>&ndash;&gt;-->

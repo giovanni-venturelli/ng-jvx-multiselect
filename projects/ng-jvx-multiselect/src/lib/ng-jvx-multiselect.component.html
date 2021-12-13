@@ -8,7 +8,7 @@
       <div class="menu-list-container"
            #menuLIstContainer
            [ngStyle]="{'overflow-y': 'hidden', 'width': listContainerSize.width, 'max-height': '260px', 'height': listContainerSize.height, 'min-height': listContainerSize.minHeight}">
-        <div class="search-input-container" *ngIf="searchInput" (click)="onSearchInputClick($event)">
+        <div class="search-input-container" *ngIf="!!searchInput" (click)="onSearchInputClick($event)">
           <input type="text" [placeholder]="searchLabel" [ngModel]="searchValue" [ngModelOptions]="{standalone: true}"
                  (input)="onSearchValueChange($event)"/>
         </div>

@@ -70,6 +70,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @Input() clearable = false;
   @Input() closeOnClick = true;
   @Input() hasErrors = false;
+  @Input() searchMode: null | 'server' | 'client' = null;
   @Input() searchInput = false;
   @Input() searchLabel = 'search';
   @Input() listProp = '';
@@ -224,14 +225,14 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       }),
       concatMap(val => {
           const obs = [of(val)];
-          if ((val) && (!this.url || this.url.length === 0)) {
+          if (val && (!this.url || this.url.length === 0 || this.ignorePagination) && this.searchMode === 'client') {
             obs.push(this.searchMapper.mapSearch(this.searchValue));
           }
           return combineLatest(obs);
         }
       )
     ).subscribe((val: any[]) => {
-      if ((val[0]) && (this.url && this.url.length > 0)) {
+      if ((val[0]) && (this.url && this.url.length > 0) && this.searchMode === 'server') {
         this.shouldLoadMore = true;
         this.getList();
       }

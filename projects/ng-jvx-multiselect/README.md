@@ -64,25 +64,26 @@ $candy-app-theme: mat-light-theme((
 
 ### Inputs
 
-| Name             | Type                           | Default    | Description
-|------------------|--------------------------------|------------| ---------------------------------------------------------------------------
-| `clearable`      | `Boolean`                      | `false`    | True to enable the empty selection.
-| `disabled`       | `Boolean`                      | `false`    | True to disable the select.
-| `itemText`       | `String`                       | `'text'`   | The name of the property of the option object that will be displayed as description of the options.
-| `itemValue`      | `String`                       | `'value'`  | The name of the property of the option object that will be treated as value of the options.
-| `multi`          | `Boolean`                      | `false`    | True if it's a multiselect.
-| `options`        | `Array`                        | `[]`       | Array of option objects.
-| `requestHeaders` | `Object`                       | `{...}`    | The headers of the HTTP request.
-| `requestType`    | <code>'GET'&#124;'POST'</code> | `'GET'`    | The type of the HTTP request.
-| `searchInput`    | `Boolean`                      | `false`    | True to enable the search input for the options list.
-| `searchLabel`    | `String`                       | `'search'` | The label of the search input.
-| `searchProp`     | `String`                       | `'search'` | The name of the search property of the HTTP request.
-| `listProp`       | `String`                       | `''`       | Name of the property in response.data where the list is stored.
-| `url`            | `String`                       | `''`       | The url to get the options.
-| `value`          | `Array`                        | `[]`       | The current value of the selection.
-| `mapper`         | `NgJvxOptionMapper`            | `*`        | The object that will map the response of the async call.
-| `searchMapper`   | `NgJvxSearchMapper`            | `*`        | The object that will map the client search result.
-| `groupBy`        | `any`                          | `null`     | If set it defines the the property of each option by which group them in the list.
+| Name             | Type                                   | Default    | Description                                                                                         
+|------------------|----------------------------------------|------------|-----------------------------------------------------------------------------------------------------
+| `clearable`      | `Boolean`                              | `false`    | True to enable the empty selection.                                                                 
+| `disabled`       | `Boolean`                              | `false`    | True to disable the select.                                                                         
+| `itemText`       | `String`                               | `'text'`   | The name of the property of the option object that will be displayed as description of the options. 
+| `itemValue`      | `String`                               | `'value'`  | The name of the property of the option object that will be treated as value of the options.         
+| `multi`          | `Boolean`                              | `false`    | True if it's a multiselect.                                                                         
+| `options`        | `Array`                                | `[]`       | Array of option objects.                                                                            
+| `requestHeaders` | `Object`                               | `{...}`    | The headers of the HTTP request.                                                                    
+| `requestType`    | <code>'GET'&#124;'POST'</code>         | `'GET'`    | The type of the HTTP request.
+| `searchInput`    | `Boolean`                              | `false`    | True to enable the search input for the options list.
+| `searchMode`     | <code>'client' &#124;'server'</code>   | `server`   | `'client'` if the search is only client side, `'server'` if it's server side.
+| `searchLabel`    | `String`                               | `'search'` | The label of the search input.                                                                      
+| `searchProp`     | `String`                               | `'search'` | The name of the search property of the HTTP request.                                                
+| `listProp`       | `String`                               | `''`       | Name of the property in response.data where the list is stored.                                     
+| `url`            | `String`                               | `''`       | The url to get the options.                                                                         
+| `value`          | `Array`                                | `[]`       | The current value of the selection.                                                                 
+| `mapper`         | `NgJvxOptionMapper`                    | `*`        | The object that will map the response of the async call.                                            
+| `searchMapper`   | `NgJvxSearchMapper`                    | `*`        | The object that will map the client search result.                                                  
+| `groupBy`        | `any`                                  | `null`     | If set it defines the the property of each option by which group them in the list.                  
 
 ### Methods
 
@@ -155,7 +156,7 @@ it is possible to write a mapper like this:
 ```
 #### Search
 
-If the property `searchInput` is on true, the user will be able to search a value amongst the options.
+If the property `searchInput` is `true`, the user will be able to search a value amongst the options.
 `searchProp` defines the name of the property for the HTTP call.
 
 ##### searchMapper
