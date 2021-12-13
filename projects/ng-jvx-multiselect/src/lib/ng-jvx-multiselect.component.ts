@@ -85,7 +85,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   };
   @Input() searchMapper: NgJvxSearchMapper<any> = {
     mapSearch: (source: string, options: any[]): Observable<any> => {
-      return of(options.filter(o => o[this.itemText].includes(source)));
+      return of(options.filter(o => o[this.itemText].toLowerCase().includes(source.toLowerCase())));
     }
   };
 

@@ -162,9 +162,19 @@ If the property `searchInput` is `true`, the user will be able to search a value
 ##### searchMapper
 
 The `searchMapper` property is an object implementing the interface `NgJvxSearchMapper<T>`. It exposes the
-method `mapSearch` which accepts the value of the search (a string) and returns an Observable of type `T[]`. 
+method `mapSearch` which accepts the value of the search (a string) and an array of the selectable options. 
+The method returns an Observable of type `T[]`. 
 The value of the returned Observable will then be used as the new option list.
 This property is only useful for a client side search.
+
+For example:
+```typescript
+const searchMapper: NgJvxSearchMapper<any> = {
+  mapSearch: (source: string, options: {text: string, value: number}[]): Observable<{text: string, value: number}[]> => {
+     return of(options.filter(o => o.text.toLowerCase().includes(source.toLowerCase())));
+  }
+}
+```
 
 ### Slots
 
