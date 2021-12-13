@@ -84,8 +84,8 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     }
   };
   @Input() searchMapper: NgJvxSearchMapper<any> = {
-    mapSearch: (source: string): Observable<any> => {
-      return of(this.options.filter(o => o[this.itemText].includes(source)));
+    mapSearch: (source: string, options: any[]): Observable<any> => {
+      return of(options.filter(o => o[this.itemText].includes(source)));
     }
   };
 
@@ -212,35 +212,51 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       this.changeDetectorRef.markForCheck();
     })).subscribe(noop);
 
-    this.searchValue$.pipe(takeUntil(this.unsubscribe), debounceTime(300), map((val: string) => {
-        let res = false;
+    this.searchValue$.pipe(takeUntil(this.unsubscribe), debounceTime(300), switchMap((val: string) => {
+
+        const obsArray = [];
         if (val !== this.searchValue) {
-          this.searchValue = val;
-          this.currentPage = 0;
-          this.selectableOptions = [];
-          this.updateOrderedOptions(this.selectableOptions);
-          res = true;
-        }
-        return res;
-      }),
-      concatMap(val => {
-          const obs = [of(val)];
-          if (val && (!this.url || this.url.length === 0 || this.ignorePagination) && this.searchMode === 'client') {
-            obs.push(this.searchMapper.mapSearch(this.searchValue));
+          obsArray.push(of(true));
+          if (this.searchMode === 'client' && this.url && this.url.length > 0) {
+            this.selectableOptions = [];
+            this.updateOrderedOptions(this.selectableOptions);
+            this.shouldLoadMore = true;
+            this.currentPage = 0;
+            obsArray.push(this.getList().pipe(tap(() => {
+              this.searchValue = val;
+            })));
+          } else if (!this.url || this.url.length === 0) {
+            obsArray.push(of(this.options));
+            this.searchValue = val;
+          } else {
+            this.shouldLoadMore = true;
+            this.currentPage = 0;
+            this.searchValue = val;
           }
-          return combineLatest(obs);
+        } else {
+          obsArray.push(of(false));
+        }
+        return combineLatest(obsArray);
+      }),
+      switchMap(val => {
+          if (val[0] && this.searchMode === 'client') {
+            return this.searchMapper.mapSearch(this.searchValue, val[1]).pipe(tap((res) => {
+              this.selectableOptions = [];
+              this.selectableOptions.push(...res);
+              this.updateOrderedOptions(this.selectableOptions);
+            }));
+          } else if (val[0]) {
+            this.selectableOptions = [];
+            this.updateOrderedOptions(this.selectableOptions);
+            this.shouldLoadMore = true;
+            return this.getList();
+          } else {
+            return of(null);
+          }
         }
       )
     ).subscribe((val: any[]) => {
-      if ((val[0]) && (this.url && this.url.length > 0) && this.searchMode === 'server') {
-        this.shouldLoadMore = true;
-        this.getList();
-      }
-      if (val[0] && val[1]) {
-        this.selectableOptions.push(...val[1]);
-        this.updateOrderedOptions(this.selectableOptions);
-        this.changeDetectorRef.markForCheck();
-      }
+      this.changeDetectorRef.markForCheck();
     });
   }
 
@@ -376,7 +392,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
           this.selectableOptions.length = 0;
           this.updateOrderedOptions(this.selectableOptions);
-          this.getList();
+          this.getList().subscribe(noop);
 
         } else {
           this.trigger.openMenu();
@@ -386,9 +402,9 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
-  private getList(): void {
+  private getList(): Observable<any> {
     this.isLoading = true;
-    this.service.getList({
+    return this.service.getList({
       url: this.url,
       requestType: this.requestType,
       data: {},
@@ -398,7 +414,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       search: this.searchValue,
       searchProp: this.searchProp,
       pageSize: this.pageSize
-    }).subscribe((val) => {
+    }).pipe(switchMap((val) => {
       let result = [];
       if (this.listProp.length > 0) {
         result = [...val[this.listProp]];
@@ -409,6 +425,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       if (result.length === 0) {
         this.shouldLoadMore = false;
         this.isLoading = false;
+        return forkJoin([]);
       } else {
         const newOptions = [];
 
@@ -416,17 +433,16 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
           const newOption = this.mapper.mapOption(opt);
           newOptions.push(newOption);
         }
-        from(newOptions).pipe(concatAll())
-          .subscribe((finVal: any) => {
-            this.selectableOptions.push(finVal);
-            this.updateOrderedOptions(this.selectableOptions);
-            this.isLoading = false;
-            this.trigger.openMenu();
-            this.setSelectionContainerSize();
-            this.changeDetectorRef.markForCheck();
-          });
+        return forkJoin(newOptions);
       }
-    });
+    }), tap((finVal: any) => {
+      this.selectableOptions.push(...finVal);
+      this.updateOrderedOptions(this.selectableOptions);
+      this.isLoading = false;
+      this.trigger.openMenu();
+      this.setSelectionContainerSize();
+      this.changeDetectorRef.markForCheck();
+    }));
   }
 
   onScrolled(e: any): void {
@@ -434,7 +450,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       && !this.isLoading) {
       this.scrollEnd.emit();
       if (this.url && this.url.length > 0 && !this.ignorePagination && this.shouldLoadMore) {
-        this.getList();
+        this.getList().subscribe(noop);
       }
     }
   }
@@ -447,8 +463,8 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     if (!this.url || this.url.length === 0) {
       this.searchValueSubject.next('');
     } else {
-      this.currentPage = 0;
       this.searchValue = '';
+      this.currentPage = 0;
     }
     this.jvxMultiselectClosed.emit();
     this.changeDetectorRef.markForCheck();
