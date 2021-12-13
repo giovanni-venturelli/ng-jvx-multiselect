@@ -383,10 +383,26 @@
         <input formControlName="testInput" matInput/>
       </mat-form-field>
       <mat-form-field style="width: 500px;">
-        <ng-jvx-multiselect matInput [searchInput]="true" url="http://localhost:3000/jvx-multiselect-test"
-                            [groupBy]="'group'"
-                            [ignorePagination]="true"
-                            [requestType]="'get'" [formControlName]="'selectionValue'">
+<!--        <ng-jvx-multiselect matInput [searchInput]="true" url="http://localhost:3000/jvx-multiselect-test"-->
+<!--                            [groupBy]="'group'"-->
+<!--                            [ignorePagination]="true"-->
+<!--                            [requestType]="'get'" [formControlName]="'selectionValue'">-->
+<!--          <div placeholder>placeholder</div>-->
+<!--          <div *ngJvxGroupHeader="let group" style="padding: 5px 15px">-->
+<!--            This is the {{group.group}} group-->
+<!--          </div>-->
+<!--          &lt;!&ndash;              <div *ngJvxSelectionTemplate="let option">&ndash;&gt;-->
+<!--          &lt;!&ndash;                <div style="font-style: italic">{{option.value}}</div>&ndash;&gt;-->
+<!--          &lt;!&ndash;              </div>&ndash;&gt;-->
+<!--          <div *ngJvxOptionsTemplate="let option"-->
+<!--               [ngJvxDisabledOption]="option.text.includes('0')">-->
+<!--            testo: {{option.text}}-->
+<!--          </div>-->
+<!--        </ng-jvx-multiselect>-->
+        <ng-jvx-multiselect matInput
+                            [options]="options"
+                            [searchInput]="true"
+                            [formControlName]="'selectionValue'">
           <div placeholder>placeholder</div>
           <div *ngJvxGroupHeader="let group" style="padding: 5px 15px">
             This is the {{group.group}} group

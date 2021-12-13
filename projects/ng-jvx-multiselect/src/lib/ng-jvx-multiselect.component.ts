@@ -17,13 +17,14 @@ import {MatMenuTrigger} from '@angular/material/menu';
 import {NgJvxMultiselectService} from './ng-jvx-multiselect.service';
 import {HttpHeaders} from '@angular/common/http';
 import {NgScrollbar} from 'ngx-scrollbar';
-import {concatAll, debounce, debounceTime, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {forkJoin, from, fromEvent, iif, noop, Observable, of, Subject, timer} from 'rxjs';
+import {concatAll, concatMap, debounce, debounceTime, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {combineLatest, forkJoin, from, fromEvent, iif, noop, observable, Observable, of, Subject, timer} from 'rxjs';
 import {NgJvxOptionMapper} from './interfaces/ng-jvx-option-mapper';
 import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {NgJvxGroupHeaderDirective} from './directives/ng-jvx-group-header.directive';
+import {NgJvxSearchMapper} from './interfaces/ng-jvx-search-mapper';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -79,6 +80,11 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @Input() mapper: NgJvxOptionMapper<any> = {
     mapOption(source: any): Observable<any> {
       return of(source);
+    }
+  };
+  @Input() searchMapper: NgJvxSearchMapper<any> = {
+    mapSearch: (source: string): Observable<any> => {
+      return of(this.options.filter(o => o[this.itemText].includes(source)));
     }
   };
 
@@ -195,7 +201,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       this.changeDetectorRef.markForCheck();
     });
     this.selectableOptions = [...this.options];
-    this.updateOrderedOptions();
+    this.updateOrderedOptions(this.selectableOptions);
     fromEvent(window, 'resize').pipe(takeUntil(this.unsubscribe), debounceTime(100), map(() => {
       return this.listContainerSize.width = this.jvxMultiselect.nativeElement.offsetWidth + 'px';
 
@@ -205,16 +211,36 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       this.changeDetectorRef.markForCheck();
     })).subscribe(noop);
 
-    this.searchValue$.pipe(takeUntil(this.unsubscribe), debounceTime(300), tap((val) => {
-      if (val !== this.searchValue) {
-        this.searchValue = val;
-        this.currentPage = 0;
-        this.selectableOptions = [];
-        this.updateOrderedOptions();
+    this.searchValue$.pipe(takeUntil(this.unsubscribe), debounceTime(300), map((val: string) => {
+        let res = false;
+        if (val !== this.searchValue) {
+          this.searchValue = val;
+          this.currentPage = 0;
+          this.selectableOptions = [];
+          this.updateOrderedOptions(this.selectableOptions);
+          res = true;
+        }
+        return res;
+      }),
+      concatMap(val => {
+          const obs = [of(val)];
+          if ((val) && (!this.url || this.url.length === 0)) {
+            obs.push(this.searchMapper.mapSearch(this.searchValue));
+          }
+          return combineLatest(obs);
+        }
+      )
+    ).subscribe((val: any[]) => {
+      if ((val[0]) && (this.url && this.url.length > 0)) {
         this.shouldLoadMore = true;
         this.getList();
       }
-    })).subscribe(noop);
+      if (val[0] && val[1]) {
+        this.selectableOptions.push(...val[1]);
+        this.updateOrderedOptions(this.selectableOptions);
+        this.changeDetectorRef.markForCheck();
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -242,7 +268,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.options) {
       this.selectableOptions = [...this.options];
-      this.updateOrderedOptions();
+      this.updateOrderedOptions(this.selectableOptions);
     }
   }
 
@@ -348,7 +374,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
           e.preventDefault();
 
           this.selectableOptions.length = 0;
-          this.updateOrderedOptions();
+          this.updateOrderedOptions(this.selectableOptions);
           this.getList();
 
         } else {
@@ -392,7 +418,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
         from(newOptions).pipe(concatAll())
           .subscribe((finVal: any) => {
             this.selectableOptions.push(finVal);
-            this.updateOrderedOptions();
+            this.updateOrderedOptions(this.selectableOptions);
             this.isLoading = false;
             this.trigger.openMenu();
             this.setSelectionContainerSize();
@@ -417,8 +443,12 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   onMenuClosed(): void {
-    this.currentPage = 0;
-    this.searchValue = '';
+    if (!this.url || this.url.length === 0) {
+      this.searchValueSubject.next('');
+    } else {
+      this.currentPage = 0;
+      this.searchValue = '';
+    }
     this.jvxMultiselectClosed.emit();
     this.changeDetectorRef.markForCheck();
   }
@@ -457,14 +487,14 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     return this.stateChanges.asObservable();
   }
 
-  updateOrderedOptions(): void {
+  updateOrderedOptions(options): void {
     if (this.groupBy && this.groupBy.length > 0) {
       this.orderedOptions.length = 0;
-      const groups = [...new Set(this.selectableOptions.map(item => item[this.groupBy]))];
+      const groups = [...new Set(options.map(item => item[this.groupBy]))];
       for (const group of groups) {
         this.orderedOptions.push({
           group,
-          options: this.selectableOptions.filter(option => JSON.stringify(option[this.groupBy]) === JSON.stringify(group))
+          options: options.filter(option => JSON.stringify(option[this.groupBy]) === JSON.stringify(group))
         });
       }
     }

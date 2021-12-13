@@ -81,6 +81,7 @@ $candy-app-theme: mat-light-theme((
 | `url`            | `String`                       | `''`       | The url to get the options.
 | `value`          | `Array`                        | `[]`       | The current value of the selection.
 | `mapper`         | `NgJvxOptionMapper`            | `*`        | The object that will map the response of the async call.
+| `searchMapper`   | `NgJvxSearchMapper`            | `*`        | The object that will map the client search result.
 | `groupBy`        | `any`                          | `null`     | If set it defines the the property of each option by which group them in the list.
 
 ### Methods
@@ -152,15 +153,17 @@ it is possible to write a mapper like this:
   }
 }
 ```
-
-The user can use the properties `itemText` and `itemValue` to prevent the need for the mapping (being in the example
-above `itemText = 'description'` and `itemValue = 'id'`), though the mapper should still be used for more complex cases.
-
 #### Search
 
-When the user searches for a term, the property `searchInput` is updated with the searched value. Its value is then
-copied in the property `search` of the object of the search parameters.
-`searchProp` defines the name of the property for the call.
+If the property `searchInput` is on true, the user will be able to search a value amongst the options.
+`searchProp` defines the name of the property for the HTTP call.
+
+##### searchMapper
+
+The `searchMapper` property is an object implementing the interface `NgJvxSearchMapper<T>`. It exposes the
+method `mapSearch` which accepts the value of the search (a string) and returns an Observable of type `T[]`. 
+The value of the returned Observable will then be used as the new option list.
+This property is only useful for a client side search.
 
 ### Slots
 
