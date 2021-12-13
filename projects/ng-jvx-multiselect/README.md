@@ -169,7 +169,7 @@ This property is only useful for a client side search.
 
 For example:
 ```typescript
-const searchMapper: NgJvxSearchMapper<any> = {
+const searchMapper: NgJvxSearchMapper<{text: string, value: number}> = {
   mapSearch: (source: string, options: {text: string, value: number}[]): Observable<{text: string, value: number}[]> => {
      return of(options.filter(o => o.text.toLowerCase().includes(source.toLowerCase())));
   }
