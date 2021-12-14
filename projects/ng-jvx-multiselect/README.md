@@ -116,7 +116,7 @@ interface NgJvxGroup<T> {
 }
 ```
 The `mapGroup` method hence takes the option and wraps it in an object that defines the name of the group it belongs to.
-It is possible to define the look of the headers of the groups with the directive [*ngJvxGroupHeaderTemplate](#ngjvxgroupheadertemplate)
+It is possible to define the look of the headers of the groups with the directive [*ngJvxGroupHeaderTemplate](#*ngjvxgroupheadertemplate)
 ### HTTP Request
 
 #### Request
@@ -247,13 +247,13 @@ It's possible to use the context inside attributes too. i.e.
 </div>
 ```
 
-#### ngJvxSelectionTemplate
+#### *ngJvxSelectionTemplate
 
 This directive works exactly as the `ngJvxOptionsTemplate` except it defines the selection template.  
 In case of a multiple selection the context is the array of the selected options, for the non-multiple selection the
 context is the selected option.
 
-#### ngJvxGroupHeaderTemplate
+#### *ngJvxGroupHeaderTemplate
 
 When an element inside the `ng-jvx-multiselect` is decorated with this directive it becomes the template for the header
 of the groups by which the options are devided. The directive provides a context which describes the group with its
@@ -291,7 +291,7 @@ and we want the header of each group be in the form of 'Type of animal: [mammal 
 <div *ngJvxGroupHeaderTemplate="let g">Type of animal: {{g.group}}</div>
 ```
 
-#### ngJvxDisabledOption
+#### *ngJvxDisabledOption
 
 This directive disables the selection of the host option. i.e.
 
