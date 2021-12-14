@@ -116,7 +116,7 @@ interface NgJvxGroup<T> {
 }
 ```
 The `mapGroup` method hence takes the option and wraps it in an object that defines the name of the group it belongs to.
-It is possible to define the look of the headers of the groups with the directive [*ngJvxGroupHeaderTemplate](#*ngjvxgroupheadertemplate)
+It is possible to define the look of the headers of the groups with the directive [*ngJvxGroupHeaderTemplate](#ngjvxgroupheadertemplate)
 ### HTTP Request
 
 #### Request
