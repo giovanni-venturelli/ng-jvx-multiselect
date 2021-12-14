@@ -12,3 +12,4 @@ export * from './lib/ng-jvx-multiselect.component';
 export * from './lib/ng-jvx-multiselect.module';
 export * from './lib/interfaces/ng-jvx-option-mapper';
 export * from './lib/interfaces/ng-jvx-search-mapper';
+export * from './lib/interfaces/ng-jvx-group-mapper';

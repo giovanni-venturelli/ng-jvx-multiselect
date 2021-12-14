@@ -26,7 +26,7 @@
                                   (selectionChange)="onChange($event)"
                                   formControlName="selectionValue">
                 <ng-content></ng-content>
-                <ng-container *ngIf="!!groupBy && groupBy.length > 0">
+                <ng-container *ngIf="!!groupBy">
                   <ng-container *ngFor="let opt of orderedOptions">
                     <ng-container [ngTemplateOutlet]="groupHeaderTemplate? groupHeaderTemplate.template: defaultGroupHeaderTemplate" [ngTemplateOutletContext]="{$implicit: opt}"></ng-container>
 
