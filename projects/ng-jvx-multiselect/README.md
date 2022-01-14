@@ -24,8 +24,9 @@ import {NgJvxMultiselectModule} from 'ng-jvx-multiselect';
 In <b>styles.scss</b>
 
 ```scss
-@import '~@angular/material/theming';
-@import '~ng-jvx-multiselect/ng-jvx-multiselect';
+@use '@angular/material' as mat;
+@use 'ng-jvx-multiselect' as ng-jvx-multiselect;
+@import '@angular/material/theming';
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material.
@@ -57,33 +58,33 @@ $candy-app-theme: mat-light-theme((
 
 ### Slots
 
-| Name           | Description
-| -------------- | -----------
-| `default`      | Using the default slot is one way of defining the options via the component `<ng-jvx-option>`.
-| `placeholder`  | This slot allows the user to define a placeholder which will be displayed when no selection has been made.
+| Name          | Description                                                                                                |
+|---------------|------------------------------------------------------------------------------------------------------------|
+| `default`     | Using the default slot is one way of defining the options via the component `<ng-jvx-option>`.             |
+| `placeholder` | This slot allows the user to define a placeholder which will be displayed when no selection has been made. |
 
 ### Inputs
 
-| Name             | Type                                                     | Default    | Description                                                                                         
-|------------------|----------------------------------------------------------|------------|-----------------------------------------------------------------------------------------------------
-| `clearable`      | `Boolean`                                                | `false`    | True to enable the empty selection.                                                                 
-| `disabled`       | `Boolean`                                                | `false`    | True to disable the select.                                                                         
-| `itemText`       | `String`                                                 | `'text'`   | The name of the property of the option object that will be displayed as description of the options. 
-| `itemValue`      | `String`                                                 | `'value'`  | The name of the property of the option object that will be treated as value of the options.         
-| `multi`          | `Boolean`                                                | `false`    | True if it's a multiselect.                                                                         
-| `options`        | `Array`                                                  | `[]`       | Array of option objects.                                                                            
-| `requestHeaders` | `Object`                                                 | `{...}`    | The headers of the HTTP request.                                                                    
-| `requestType`    | <code>'GET'&#124;'POST'</code>                           | `'GET'`    | The type of the HTTP request.
-| `searchInput`    | `Boolean`                                                | `false`    | True to enable the search input for the options list.
-| `searchMode`     | <code>'client'&#124;'server'</code>                      | `server`   | `'client'` if the search is only client side, `'server'` if it's server side.
-| `searchLabel`    | `String`                                                 | `'search'` | The label of the search input.                                                                      
-| `searchProp`     | `String`                                                 | `'search'` | The name of the search property of the HTTP request.                                                
-| `listProp`       | `String`                                                 | `''`       | Name of the property in response.data where the list is stored.                                     
-| `url`            | `String`                                                 | `''`       | The url to get the options.                                                                         
-| `value`          | `Array`                                                  | `[]`       | The current value of the selection.                                                                 
-| `mapper`         | `NgJvxOptionMapper`                                      | `*`        | The object that will map the response of the async call.                                            
-| `searchMapper`   | `NgJvxSearchMapper`                                      | `*`        | The object that will map the client search result.                                                  
-| `groupBy`        | <code>NgJvxGroupMapper<any>&#124;string&#124;null</code> | `null`     | If it's a `string` it defines the the property of each option by which group them in the list. If it's a `NgJvxGroupMapper` it offers a method that groups the options (useful for nested properties).                   
+| Name             | Type                                                     | Default    | Description                                                                                                                                                                                                |
+|------------------|----------------------------------------------------------|------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `clearable`      | `Boolean`                                                | `false`    | True to enable the empty selection.                                                                                                                                                                        |
+| `disabled`       | `Boolean`                                                | `false`    | True to disable the select.                                                                                                                                                                                |
+| `itemText`       | `String`                                                 | `'text'`   | The name of the property of the option object that will be displayed as description of the options.                                                                                                        |
+| `itemValue`      | `String`                                                 | `'value'`  | The name of the property of the option object that will be treated as value of the options.                                                                                                                |
+| `multi`          | `Boolean`                                                | `false`    | True if it's a multiselect.                                                                                                                                                                                |
+| `options`        | `Array`                                                  | `[]`       | Array of option objects.                                                                                                                                                                                   |
+| `requestHeaders` | `Object`                                                 | `{...}`    | The headers of the HTTP request.                                                                                                                                                                           |
+| `requestType`    | <code>'GET'&#124;'POST'</code>                           | `'GET'`    | The type of the HTTP request.                                                                                                                                                                              |
+| `searchInput`    | `Boolean`                                                | `false`    | True to enable the search input for the options list.                                                                                                                                                      |
+| `searchMode`     | <code>'client'&#124;'server'</code>                      | `server`   | `'client'` if the search is only client side, `'server'` if it's server side.                                                                                                                              |
+| `searchLabel`    | `String`                                                 | `'search'` | The label of the search input.                                                                                                                                                                             |
+| `searchProp`     | `String`                                                 | `'search'` | The name of the search property of the HTTP request.                                                                                                                                                       |
+| `listProp`       | `String`                                                 | `''`       | Name of the property in response.data where the list is stored.                                                                                                                                            |
+| `url`            | `String`                                                 | `''`       | The url to get the options.                                                                                                                                                                                |
+| `value`          | `Array`                                                  | `[]`       | The current value of the selection.                                                                                                                                                                        |
+| `mapper`         | `NgJvxOptionMapper`                                      | `*`        | The object that will map the response of the async call.                                                                                                                                                   |
+| `searchMapper`   | `NgJvxSearchMapper`                                      | `*`        | The object that will map the client search result.                                                                                                                                                         |
+| `groupBy`        | <code>NgJvxGroupMapper<any>&#124;string&#124;null</code> | `null`     | If it's a `string` it defines the the property of each option by which group them in the list. If it's a `NgJvxGroupMapper` it offers a method that groups the options (useful for nested properties).     |                
 
 ### Methods
 
@@ -91,14 +92,14 @@ $candy-app-theme: mat-light-theme((
 
 ### Events
 
-| Event Name            | Detail  | Description
-| --------------------- | ------- | -----------
-| `valueChange`         | `Array` | Fired when the user changes the value of the input. The detail contains the value of the selection.
-| `scrollEnd`           | *None*  | Fired when the scrollbar in the options menu reaches the bottom.
-| `open`                | *None*  | Fired when the the menu starts opening.
-| `opened`              | *None*  | Fired when the the menu is opened.
-| `close`               | *None*  | Fired when the the menu starts closing.
-| `closed`              | *None*  | Fired when the the menu is closed.
+| Event Name    | Detail  | Description                                                                                         |
+|---------------|---------|-----------------------------------------------------------------------------------------------------|
+| `valueChange` | `Array` | Fired when the user changes the value of the input. The detail contains the value of the selection. |
+| `scrollEnd`   | *None*  | Fired when the scrollbar in the options menu reaches the bottom.                                    |
+| `open`        | *None*  | Fired when the the menu starts opening.                                                             |
+| `opened`      | *None*  | Fired when the the menu is opened.                                                                  |
+| `close`       | *None*  | Fired when the the menu starts closing.                                                             |
+| `closed`      | *None*  | Fired when the the menu is closed.                                                                  |
 
 ### Groups
 
@@ -231,14 +232,12 @@ and we want our options to have in the text field both the property color and th
 template like so:
 
 ```angular2html
-
 <div *ngJvxOptionsTemplate="let option">{{option.color}} {{option.text}}</div>
 ```
 
 It's possible to use the context inside attributes too. i.e.
 
 ```angular2html
-
 <div *ngJvxOptionsTemplate="let option">
   <span>{{option.text}}</span>
   <span>

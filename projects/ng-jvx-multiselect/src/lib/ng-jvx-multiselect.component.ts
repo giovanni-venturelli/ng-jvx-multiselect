@@ -529,4 +529,8 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     }
     return obs;
   }
+
+  public closeMenu(): void{
+    this.trigger.closeMenu();
+  }
 }
