@@ -18,6 +18,7 @@ import {SmoothScrollModule} from 'ngx-scrollbar/smooth-scroll';
 import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
 import {NgJvxDisabledOptionDirective} from './directives/ng-jvx-disabled-option.directive';
 import { NgJvxGroupHeaderDirective } from './directives/ng-jvx-group-header.directive';
+import { NgJvxFocusDirective } from './directives/ng-jvx-focus.directive';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { NgJvxGroupHeaderDirective } from './directives/ng-jvx-group-header.dire
     NgJvxPanelComponent,
     NgJvxSelectionTemplateDirective,
     NgJvxDisabledOptionDirective,
-    NgJvxGroupHeaderDirective],
+    NgJvxGroupHeaderDirective,
+    NgJvxFocusDirective],
   imports: [
     MatButtonModule,
     MatOptionModule,
