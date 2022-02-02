@@ -24,7 +24,6 @@
     "@angular/platform-browser": "13.0.2",
     "@angular/platform-browser-dynamic": "13.0.2",
     "@angular/router": "13.0.2",
-    "ng-jvx-multiselect": "file:dist\\ng-jvx-multiselect",
     "ngx-scrollbar": "^8.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

@@ -383,8 +383,10 @@
         <input formControlName="testInput" matInput/>
       </mat-form-field>
       <mat-form-field style="width: 500px;">
-        <ng-jvx-multiselect matInput [searchMode]="'client'" [searchInput]="true" url="http://localhost:3000/jvx-multiselect-test"
+
+        <ng-jvx-multiselect matInput [searchInput]="true" [options]="options"
                             [groupBy]="'group'"
+                            [searchMode]="'client'"
                             [ignorePagination]="true"
                             [requestType]="'get'" [formControlName]="'selectionValue'">
           <div placeholder>placeholder</div>

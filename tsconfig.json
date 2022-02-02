@@ -12,8 +12,7 @@
     "importHelpers": true,
     "paths": {
       "ng-jvx-multiselect": [
-        "dist/ng-jvx-multiselect/ng-jvx-multiselect",
-        "dist/ng-jvx-multiselect"
+        "projects/ng-jvx-multiselect/src"
       ]
     },
     "target": "es2015",

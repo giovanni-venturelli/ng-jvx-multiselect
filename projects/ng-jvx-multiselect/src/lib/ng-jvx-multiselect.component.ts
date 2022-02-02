@@ -220,7 +220,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
           this.currentPage = 0;
           if (this.searchMode === 'client') {
             return this.clientSearch();
-          } else {
+          } else if (this.url && this.url.length > 0) {
             return this.serverSearch();
           }
         }
@@ -460,7 +460,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   onMenuClosed(): void {
-    if (!this.url || this.url.length === 0) {
+    if ((!this.url || this.url.length === 0) && this.searchMode === 'client') {
       this.searchValueSubject.next('');
     } else {
       this.searchValue = '';
@@ -506,11 +506,11 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   updateOrderedOptions(options): Observable<any> {
     let obs = of(options);
-    if (this. groupBy) {
+    if (this.groupBy) {
       this.orderedOptions.length = 0;
       const obsArr = [];
       for (const option of options) {
-        if(typeof this.groupBy !== 'string') {
+        if (typeof this.groupBy !== 'string') {
           obsArr.push(this.groupBy.mapGroup(option));
         } else {
           obsArr.push(of({group: option[this.groupBy], option} as NgJvxGroup<any>));
@@ -530,7 +530,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     return obs;
   }
 
-  public closeMenu(): void{
+  public closeMenu(): void {
     this.trigger.closeMenu();
   }
 }

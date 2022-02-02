@@ -3,7 +3,12 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/app",
-    "types": []
+    "types": [],
+    "paths": {
+      "ng-jvx-multiselect": [
+        "projects/ng-jvx-multiselect/src"
+      ]
+    }
   },
   "files": [
     "src/main.ts",

@@ -57,6 +57,11 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "projects/ng-jvx-multiselect"
+              ]
+            },
             "outputPath": "dist/demo-sandbox",
             "index": "projects/demo-sandbox/src/index.html",
             "main": "projects/demo-sandbox/src/main.ts",
@@ -110,9 +115,6 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "stylePreprocessorOptions": {
-            "includePaths": ["dist/ng-jvx-multiselect"]
-          },
           "options": {
             "browserTarget": "demo-sandbox:build"
           },

@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {HttpHeaders} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {NgJvxGroup, NgJvxGroupMapper, NgJvxOptionMapper} from 'ng-jvx-multiselect';
+import {NgJvxGroup, NgJvxGroupMapper, NgJvxOptionMapper} from '../../../ng-jvx-multiselect/src/public-api';
 
 @Component({
   selector: 'app-root',

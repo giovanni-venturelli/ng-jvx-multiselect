@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @use '@angular/material' as mat;
-@use 'ng-jvx-multiselect' as ng-jvx-multiselect;
+@use 'index' as ng-jvx-multiselect;
+
 @import '@angular/material/theming';
 
 

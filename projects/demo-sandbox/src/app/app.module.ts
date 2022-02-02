@@ -10,8 +10,9 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatListModule} from '@angular/material/list';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {NgJvxMultiselectModule} from 'ng-jvx-multiselect';
+
 import {MatInputModule} from '@angular/material/input';
+import {NgJvxMultiselectModule} from '../../../ng-jvx-multiselect/src/lib/ng-jvx-multiselect.module';
 
 @NgModule({
   declarations: [
