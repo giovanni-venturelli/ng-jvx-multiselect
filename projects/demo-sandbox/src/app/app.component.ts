@@ -30,6 +30,7 @@ export class AppComponent {
   public selectedValue = [{text: 'value 1', value: 1}];
   public loaded = true;
   public form: FormGroup;
+  public url = 'https://localhost:3000/jvx-multiselect-test';
   public groupMapper: NgJvxGroupMapper<any> = {
     mapGroup(option: any): Observable<NgJvxGroup<any>> {
       return of({group: option.nested.group, option});

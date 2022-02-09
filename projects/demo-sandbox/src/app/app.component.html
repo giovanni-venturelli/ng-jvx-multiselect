@@ -384,7 +384,11 @@
       </mat-form-field>
       <mat-form-field style="width: 500px;">
 
-        <ng-jvx-multiselect matInput [searchInput]="true" [options]="options"
+        <ng-jvx-multiselect matInput
+                            [clearable]="true"
+                            [searchInput]="true"
+                            [url]="url"
+                            [multi]="true"
                             [groupBy]="'group'"
                             [searchMode]="'client'"
                             [ignorePagination]="true"
@@ -396,28 +400,36 @@
           <!--              <div *ngJvxSelectionTemplate="let option">-->
           <!--                <div style="font-style: italic">{{option.value}}</div>-->
           <!--              </div>-->
-          <div *ngJvxOptionsTemplate="let option"
-               [ngJvxDisabledOption]="option.text.includes('0')">
-            testo: {{option.text}}
-          </div>
-        </ng-jvx-multiselect>
-<!--        <ng-jvx-multiselect matInput-->
-<!--                            [options]="options"-->
-<!--                            [searchMode]="'client'"-->
-<!--                            [searchInput]="true"-->
-<!--                            [formControlName]="'selectionValue'">-->
-<!--          <div placeholder>placeholder</div>-->
-<!--          <div *ngJvxGroupHeader="let group" style="padding: 5px 15px">-->
-<!--            This is the {{group.group}} group-->
-<!--          </div>-->
-<!--          &lt;!&ndash;              <div *ngJvxSelectionTemplate="let option">&ndash;&gt;-->
-<!--          &lt;!&ndash;                <div style="font-style: italic">{{option.value}}</div>&ndash;&gt;-->
-<!--          &lt;!&ndash;              </div>&ndash;&gt;-->
 <!--          <div *ngJvxOptionsTemplate="let option"-->
 <!--               [ngJvxDisabledOption]="option.text.includes('0')">-->
-<!--            testo: {{option.text}}-->
+<!--            <div style="padding: 5px 0">-->
+<!--              <div>testo: {{option.text}}</div>-->
+<!--              <div>valore: {{option.value}}</div>-->
+<!--              <div>valore: {{option.value}}</div>-->
+<!--              <div>valore: {{option.value}}</div>-->
+<!--              <div>valore: {{option.value}}</div>-->
+<!--              <div>valore: {{option.value}}</div>-->
+<!--              <div>valore: {{option.value}}</div>-->
+<!--            </div>-->
 <!--          </div>-->
-<!--        </ng-jvx-multiselect>-->
+        </ng-jvx-multiselect>
+        <!--        <ng-jvx-multiselect matInput-->
+        <!--                            [options]="options"-->
+        <!--                            [searchMode]="'client'"-->
+        <!--                            [searchInput]="true"-->
+        <!--                            [formControlName]="'selectionValue'">-->
+        <!--          <div placeholder>placeholder</div>-->
+        <!--          <div *ngJvxGroupHeader="let group" style="padding: 5px 15px">-->
+        <!--            This is the {{group.group}} group-->
+        <!--          </div>-->
+        <!--          &lt;!&ndash;              <div *ngJvxSelectionTemplate="let option">&ndash;&gt;-->
+        <!--          &lt;!&ndash;                <div style="font-style: italic">{{option.value}}</div>&ndash;&gt;-->
+        <!--          &lt;!&ndash;              </div>&ndash;&gt;-->
+        <!--          <div *ngJvxOptionsTemplate="let option"-->
+        <!--               [ngJvxDisabledOption]="option.text.includes('0')">-->
+        <!--            testo: {{option.text}}-->
+        <!--          </div>-->
+        <!--        </ng-jvx-multiselect>-->
       </mat-form-field>
     </form>
     <button mat-button [color]="'primary'" (click)="checkValidity()">check</button>

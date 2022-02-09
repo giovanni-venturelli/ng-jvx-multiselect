@@ -5,17 +5,27 @@
   $primary: var(--jvx-multiselect-primary);
   $accent: var(--jvx-multiselect-accent);
   $warn: var(--jvx-multiselect-warn);
-  @if($theme){
+  @if ($theme) {
     $primary: mat.get-color-from-palette(map.get($theme, primary));
     $accent: mat.get-color-from-palette(map.get($theme, accent));
     $warn: mat.get-color-from-palette(map.get($theme, warn));
   }
 
-  mat-list-option.ng-jvx-option {
+  mat-list-option.mat-list-item.mat-list-option.ng-jvx-option {
+    height: auto;
+    min-height: 48px;
+
+    .mat-list-text {
+      min-height: 48px;
+      display: flex;
+      justify-content: center;
+    }
+
     &[aria-selected="true"] {
 
       color: #{$primary};
-      .list-option-background{
+
+      .list-option-background {
         position: absolute;
         left: 0;
         top: 0;

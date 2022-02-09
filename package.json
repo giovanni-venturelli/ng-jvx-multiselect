@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4300",
+    "start": "ng serve --port 4300 --ssl true",
     "build": "ng build --watch",
     "build-prod": "ng build --configuration production",
     "test": "ng test",
