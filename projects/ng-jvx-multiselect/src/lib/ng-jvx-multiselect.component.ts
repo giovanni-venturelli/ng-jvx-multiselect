@@ -134,7 +134,11 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   private _disabled = false;
 
   get errorState(): boolean {
-    return this.ngControl.invalid && this.ngControl.touched;
+    if (this.ngControl != null) {
+      return this.ngControl.invalid && this.ngControl.touched;
+    } else {
+      return false;
+    }
   }
 
   @Output() valueChange: EventEmitter<any[]> = new EventEmitter<any[]>();

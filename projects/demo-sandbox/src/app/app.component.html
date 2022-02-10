@@ -389,10 +389,11 @@
                             [searchInput]="true"
                             [url]="url"
                             [multi]="true"
+                            [value]="this.selectedValue"
                             [groupBy]="'group'"
                             [searchMode]="'client'"
                             [ignorePagination]="true"
-                            [requestType]="'get'" [formControlName]="'selectionValue'">
+                            [requestType]="'get'">
           <div placeholder>placeholder</div>
           <div *ngJvxGroupHeader="let group" style="padding: 5px 15px">
             This is the {{group.group}} group
