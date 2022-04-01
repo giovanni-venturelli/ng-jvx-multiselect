@@ -367,10 +367,12 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   deselect(val: any): void {
-    this.value = [...this.value];
-    this.value.splice(this.value.findIndex(v => v[this.itemValue] === val[this.itemValue]), 1);
+    this.value = [...this.value.filter(v => v[this.itemValue] !== val[this.itemValue])];
+    // this.value.splice(this.value.findIndex(v => v[this.itemValue] === val[this.itemValue]), 1);
     this.form.get('selectionValue').setValue(this.value.map(m => m.value));
     this.valueChange.emit(this.value);
+    this.propagateChange(this.value);
+    this.changeDetectorRef.markForCheck();
   }
 
   private setSelectionContainerSize(): void {
