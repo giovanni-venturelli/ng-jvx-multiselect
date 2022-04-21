@@ -206,7 +206,7 @@ component if it's decorated with one of the available directives, since it will 
 
 The slot `placeholder` will define the placeholder. It's shown only when the selection's value is empty.
 
-### Directive
+### Directives
 
 #### ngJvxOptionsTemplate
 
