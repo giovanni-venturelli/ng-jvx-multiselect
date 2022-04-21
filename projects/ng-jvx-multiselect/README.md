@@ -25,7 +25,7 @@ In <b>styles.scss</b>
 
 ```scss
 @use '@angular/material' as mat;
-@use 'ng-jvx-multiselect' as ng-jvx-multiselect;
+@use 'index' as ng-jvx-multiselect;
 @import '@angular/material/theming';
 // Plus imports for other components in your app.
 
