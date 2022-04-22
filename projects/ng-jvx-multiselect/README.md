@@ -77,8 +77,7 @@ In <b>example.component.ts</b>
     {value: 9, text: 'text 9'},
     {value: 10, text: 'text 10'}];
 ```
-
-![](https://github.com/giovanni-venturelli/ng-jvx-multiselect/blob/basic_usage.gif)
+![result](https://github.com/giovanni-venturelli/ng-jvx-multiselect/blob/main/blob/basic_usage.gif)
 
 ## API
 
