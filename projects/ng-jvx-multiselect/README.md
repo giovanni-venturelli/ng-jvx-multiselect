@@ -53,6 +53,32 @@ $candy-app-theme: mat-light-theme((
 @include angular-material-theme($candy-app-theme);
 @include ng-jvx-multiselect-style($candy-app-theme);
 ```
+In <b>example.component.html</b>
+
+```angular2html
+<ng-jvx-multiselect style="width: 100%" [options]="options">
+  <ng-container placeholder>
+    this is a placeholder
+  </ng-container>
+</ng-jvx-multiselect>
+```
+In <b>example.component.ts</b>
+
+```typescript
+  public options = [
+    {value: 1, text: 'text 1'},
+    {value: 2, text: 'text 2'},
+    {value: 3, text: 'text 3'},
+    {value: 4, text: 'text 4'},
+    {value: 5, text: 'text 5'},
+    {value: 6, text: 'text 6'},
+    {value: 7, text: 'text 7'},
+    {value: 8, text: 'text 8'},
+    {value: 9, text: 'text 9'},
+    {value: 10, text: 'text 10'}];
+```
+
+![result](https://github.com/giovanni-venturelli/ng-jvx-multiselect/blob/basic_usage.gif?raw=true)
 
 ## API
 

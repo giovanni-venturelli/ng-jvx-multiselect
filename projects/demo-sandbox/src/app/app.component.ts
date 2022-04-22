@@ -36,25 +36,38 @@ export class AppComponent {
       return of({group: option.nested.group, option});
     }
   };
+
   public options = [
-    {group: 'a', nested: {group: 'nested a'}, text: 'value 0', value: 0},
-    {group: 'a', nested: {group: 'nested a'}, text: 'value 1', value: 1},
-    {group: 'a', nested: {group: 'nested a'}, text: 'value 2', value: 2},
-    {group: 'a', nested: {group: 'nested a'}, text: 'value 3', value: 3},
-    {group: 'a', nested: {group: 'nested a'}, text: 'value 4', value: 4},
-    {group: 'a', nested: {group: 'nested a'}, text: 'value 5', value: 5},
-    {group: 'a', nested: {group: 'nested a'}, text: 'value 6', value: 6},
-    {group: 'a', nested: {group: 'nested a'}, text: 'value 7', value: 7},
-    {group: 'a', nested: {group: 'nested a'}, text: 'value 8', value: 8},
-    {group: 'a', nested: {group: 'nested a'}, text: 'value 9', value: 9},
-    {group: 'b', nested: {group: 'nested b'}, text: 'value 10', value: 10},
-    {group: 'b', nested: {group: 'nested b'}, text: 'value 11', value: 11},
-    {group: 'b', nested: {group: 'nested b'}, text: 'value 12', value: 12},
-    {group: 'b', nested: {group: 'nested b'}, text: 'value 13', value: 13},
-    {group: 'b', nested: {group: 'nested b'}, text: 'value 14', value: 14},
-    {group: 'b', nested: {group: 'nested b'}, text: 'value 15', value: 15},
-    {group: 'b', nested: {group: 'nested b'}, text: 'value 16', value: 16}
-  ];
+    {value: 1, text: 'text 1'},
+    {value: 2, text: 'text 2'},
+    {value: 3, text: 'text 3'},
+    {value: 4, text: 'text 4'},
+    {value: 5, text: 'text 5'},
+    {value: 6, text: 'text 6'},
+    {value: 7, text: 'text 7'},
+    {value: 8, text: 'text 8'},
+    {value: 9, text: 'text 9'},
+    {value: 10, text: 'text 10'}];
+
+  // public options = [
+  //   {group: 'a', nested: {group: 'nested a'}, text: 'value 0', value: 0},
+  //   {group: 'a', nested: {group: 'nested a'}, text: 'value 1', value: 1},
+  //   {group: 'a', nested: {group: 'nested a'}, text: 'value 2', value: 2},
+  //   {group: 'a', nested: {group: 'nested a'}, text: 'value 3', value: 3},
+  //   {group: 'a', nested: {group: 'nested a'}, text: 'value 4', value: 4},
+  //   {group: 'a', nested: {group: 'nested a'}, text: 'value 5', value: 5},
+  //   {group: 'a', nested: {group: 'nested a'}, text: 'value 6', value: 6},
+  //   {group: 'a', nested: {group: 'nested a'}, text: 'value 7', value: 7},
+  //   {group: 'a', nested: {group: 'nested a'}, text: 'value 8', value: 8},
+  //   {group: 'a', nested: {group: 'nested a'}, text: 'value 9', value: 9},
+  //   {group: 'b', nested: {group: 'nested b'}, text: 'value 10', value: 10},
+  //   {group: 'b', nested: {group: 'nested b'}, text: 'value 11', value: 11},
+  //   {group: 'b', nested: {group: 'nested b'}, text: 'value 12', value: 12},
+  //   {group: 'b', nested: {group: 'nested b'}, text: 'value 13', value: 13},
+  //   {group: 'b', nested: {group: 'nested b'}, text: 'value 14', value: 14},
+  //   {group: 'b', nested: {group: 'nested b'}, text: 'value 15', value: 15},
+  //   {group: 'b', nested: {group: 'nested b'}, text: 'value 16', value: 16}
+  // ];
 
   constructor(private formBuilder: FormBuilder) {
     console.log('selected value: ');
