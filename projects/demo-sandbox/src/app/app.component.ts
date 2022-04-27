@@ -40,7 +40,7 @@ export class AppComponent {
   public options = [
     {value: 1, text: 'text 1'},
     {value: 2, text: 'text 2'},
-    {value: 3, text: 'text 3'},
+    {value: 3, text: 3},
     {value: 4, text: 'text 4'},
     {value: 5, text: 'text 5'},
     {value: 6, text: 'text 6'},
