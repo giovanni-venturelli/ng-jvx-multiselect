@@ -360,7 +360,7 @@
   <!--      </mat-select>-->
   <!--    </mat-form-field>-->
   <!--  </div>-->
-  <div style="width: 250px;">
+  <div [ngStyle]="{'width.px': width}">
 
     <!--      <ng-jvx-multiselect-->
     <!--                          style="width: 100%"-->
@@ -378,7 +378,7 @@
 
     <!--        </div>-->
     <!--      </ng-jvx-multiselect>-->
-    <form [formGroup]="form" style="width: 500px;">
+    <form [formGroup]="form" [ngStyle]="{'width.px': width}">
 
 
             <ng-jvx-multiselect style="width: 100%"

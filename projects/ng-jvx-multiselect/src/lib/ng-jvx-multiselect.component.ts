@@ -381,6 +381,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
         this.listContainerSize.height = this.selectionContainer.nativeElement.offsetHeight > 260 ? '260px' : 'auto';
         this.listContainerSize.minHeight = this.selectionContainer.nativeElement.offsetHeight <= 260 ?
           this.selectionContainer.nativeElement.offsetHeight + 'px' : '260px';
+        this.listContainerSize.width = this.jvxMultiselect.nativeElement.offsetWidth + 'px';
       }
     });
   }
@@ -397,6 +398,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
           this.selectableOptions.length = 0;
           this.updateOrderedOptions(this.selectableOptions);
           this.getList().subscribe(noop);
+          this.setSelectionContainerSize();
 
         } else {
           this.trigger.openMenu();

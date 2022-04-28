@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpHeaders} from '@angular/common/http';
-import {Observable, of} from 'rxjs';
+import {Observable, of, timer} from 'rxjs';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgJvxGroup, NgJvxGroupMapper, NgJvxOptionMapper} from '../../../ng-jvx-multiselect/src/public-api';
 
@@ -9,7 +9,8 @@ import {NgJvxGroup, NgJvxGroupMapper, NgJvxOptionMapper} from '../../../ng-jvx-m
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  width = 0;
   title = 'demo-sandbox';
   requestHeaders = new HttpHeaders().set(
     'Visitatori-API-Token',
@@ -110,5 +111,11 @@ export class AppComponent {
     this.form.controls.selectionValue.updateValueAndValidity();
     this.form.controls.testInput.updateValueAndValidity();
     this.form.markAllAsTouched();
+  }
+
+  ngOnInit(): void {
+    timer(500).subscribe(() => {
+      this.width = 257;
+    });
   }
 }
