@@ -389,6 +389,9 @@
               <ng-container placeholder>
                 this is a placeholder
               </ng-container>
+              <div *ngJvxSelectionTemplate="let option">
+                ciao {{option.text}}
+              </div>
             </ng-jvx-multiselect>
 
 

@@ -78,9 +78,9 @@
     </div>
 
     <div class="ng-jvx-multiselect-value single-value-container" *ngIf="!multi">
-      <span *ngFor="let val of value">
+      <div *ngFor="let val of value" style="width: 100%;">
           <ng-container [ngTemplateOutlet]="selectionTemplate? selectionTemplate.template : defaultSelectionTemplate"
-                        [ngTemplateOutletContext]="{$implicit: val}"></ng-container></span>
+                        [ngTemplateOutletContext]="{$implicit: val}"></ng-container></div>
     </div>
     <div class="ng-jvx-multiselect__remove-button" *ngIf="clearable && value.length > 0" (click)="clear($event)">
       <mat-icon style="font-size: 18px;
