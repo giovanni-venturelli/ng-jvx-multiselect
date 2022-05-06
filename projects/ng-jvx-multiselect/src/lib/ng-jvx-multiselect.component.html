@@ -4,6 +4,7 @@
        (onMenuClose)="onMenuClose()" (menuClosed)="onMenuClosed()"
        #trigger="matMenuTrigger">
     <mat-menu #menuRef="matMenu" [class]="['jvx-multiselect-panel', panelClass].join(' ')" [formGroup]="form"
+
               [yPosition]="yPosition">
       <div class="menu-list-container"
            #menuLIstContainer
@@ -13,7 +14,7 @@
                  [ngJvxFocus]="isOpen"
                  (input)="onSearchValueChange($event)"/>
         </div>
-        <div [ngStyle]="{height: searchInput? 'calc(100% - 40px)': '100%'}">
+        <div [ngStyle]="{height: searchInput && selectionContainer.clientHeight > 220 || selectionContainer.clientHeight > 260? 260 - (searchInput? 40 : 0) + 'px': 'auto'}">
           <ng-scrollbar style="width: 100%"
                         smoothScroll
                         [visibility]="'hover'"

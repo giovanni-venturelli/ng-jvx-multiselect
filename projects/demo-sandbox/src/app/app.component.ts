@@ -43,12 +43,7 @@ export class AppComponent implements OnInit {
     {value: 2, text: 'text 2'},
     {value: 3, text: 3},
     {value: 4, text: 'text 4'},
-    {value: 5, text: 'text 5'},
-    {value: 6, text: 'text 6'},
-    {value: 7, text: 'text 7'},
-    {value: 8, text: 'text 8'},
-    {value: 9, text: 'text 9'},
-    {value: 10, text: 'text 10'}];
+    {value: 5, text: 'text 5'}];
 
   // public options = [
   //   {group: 'a', nested: {group: 'nested a'}, text: 'value 0', value: 0},

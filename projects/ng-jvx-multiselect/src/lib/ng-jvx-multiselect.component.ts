@@ -383,6 +383,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
           this.selectionContainer.nativeElement.offsetHeight + 'px' : '260px';
         this.listContainerSize.width = this.jvxMultiselect.nativeElement.offsetWidth + 'px';
       }
+      this.changeDetectorRef.detectChanges();
     });
   }
 
