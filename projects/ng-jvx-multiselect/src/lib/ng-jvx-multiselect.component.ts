@@ -329,8 +329,27 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   onChange(e: MatSelectionListChange): void {
-    const vals = e.source.selectedOptions.selected.map(o => o.value);
-    this.value = [...this.selectableOptions.filter(o => vals.includes(o[this.itemValue]))];
+
+    let vals = e.source.selectedOptions.selected.map(o => o.value);
+    vals = this.selectableOptions.filter(o => vals.includes(o[this.itemValue]));
+    console.log(vals);
+    const selectableIds = this.selectableOptions.map(s => s[this.itemValue]);
+    console.log(selectableIds);
+    if (this.multi) {
+      // if search is active, probably some of the already selected values are not included in the selectable options,
+      // so we have to push them in the selected values of the list;
+      for (const v of this.value) {
+        if (!selectableIds.includes(v[this.itemValue])) {
+          vals = [v, ...vals];
+        }
+      }
+    }
+    vals.sort((a, b) => {
+      return typeof a[this.itemValue] === 'string' ?
+        a[this.itemValue].localeCompare(b[this.itemValue]) : a[this.itemValue] - b[this.itemValue];
+    });
+    console.log(vals);
+    this.value = [...vals];
     this.form.get('selectionValue').setValue(this.value.map(v => v[this.itemValue]));
 
     this.valueChange.emit(this.value);
