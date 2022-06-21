@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpHeaders} from '@angular/common/http';
 import {Observable, of, timer} from 'rxjs';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, FormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {NgJvxGroup, NgJvxGroupMapper, NgJvxOptionMapper} from '../../../ng-jvx-multiselect/src/public-api';
 
 @Component({
@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
   } as NgJvxOptionMapper<{ value: number, text: string }>;
   public selectedValue = [{text: 'value 1', value: 1}];
   public loaded = true;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public url = 'https://localhost:3000/jvx-multiselect-test';
   public groupMapper: NgJvxGroupMapper<any> = {
     mapGroup(option: any): Observable<NgJvxGroup<any>> {
@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
   //   {group: 'b', nested: {group: 'nested b'}, text: 'value 16', value: 16}
   // ];
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: UntypedFormBuilder) {
     console.log('selected value: ');
     console.log(this.selectedValue);
     this.form = this.formBuilder.group({

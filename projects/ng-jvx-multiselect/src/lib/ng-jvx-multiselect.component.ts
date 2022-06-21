@@ -10,7 +10,7 @@ import {
   ViewChild, ViewChildren
 } from '@angular/core';
 import {NgJvxOptionsTemplateDirective} from './directives/ng-jvx-options-template.directive';
-import {ControlValueAccessor, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR, NgControl} from '@angular/forms';
+import {ControlValueAccessor, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, NG_VALUE_ACCESSOR, NgControl} from '@angular/forms';
 import {MatSelectionList, MatSelectionListChange} from '@angular/material/list';
 import {NgJvxOptionComponent} from './ng-jvx-option/ng-jvx-option.component';
 import {MatMenuTrigger} from '@angular/material/menu';
@@ -151,7 +151,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   public controlType = 'ng-jvx-multiselect';
   public document = document;
   public window = window;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public isOpen = false;
   public isLoading = false;
   public showList = true;
@@ -163,7 +163,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   public stateChanges = new Subject<void>();
   public currentPage = 0;
   public listContainerSize: { height: string, minHeight: string, width: string } = {height: 'auto', minHeight: '0', width: '100%'};
-  public parts: FormGroup;
+  public parts: UntypedFormGroup;
 
   public touched = false;
 
@@ -182,10 +182,10 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   };
 
 
-  constructor(private formBuilder: FormBuilder, private service: NgJvxMultiselectService,
+  constructor(private formBuilder: UntypedFormBuilder, private service: NgJvxMultiselectService,
               private elementRef: ElementRef,
               private changeDetectorRef: ChangeDetectorRef,
-              @Optional() @Self() public ngControl: NgControl, fb: FormBuilder) {
+              @Optional() @Self() public ngControl: NgControl, fb: UntypedFormBuilder) {
     if (this.ngControl != null) {
       // Setting the value accessor directly (instead of using
       // the providers) to avoid running into a circular import.
@@ -198,7 +198,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       subscriber: '',
     });
     this.form = this.formBuilder.group({
-      selectionValue: new FormControl(this.selectionValue)
+      selectionValue: new UntypedFormControl(this.selectionValue)
     });
   }
 
