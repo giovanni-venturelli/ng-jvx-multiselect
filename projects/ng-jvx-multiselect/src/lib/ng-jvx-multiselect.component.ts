@@ -337,9 +337,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
     let vals = e.source.selectedOptions.selected.map(o => o.value);
     vals = this.selectableOptions.filter(o => vals.includes(o[this.itemValue]));
-    console.log(vals);
     const selectableIds = this.selectableOptions.map(s => s[this.itemValue]);
-    console.log(selectableIds);
     if (this.multi) {
       // if search is active, probably some of the already selected values are not included in the selectable options,
       // so we have to push them in the selected values of the list;
@@ -353,7 +351,6 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       return typeof a[this.itemValue] === 'string' ?
         a[this.itemValue].localeCompare(b[this.itemValue]) : a[this.itemValue] - b[this.itemValue];
     });
-    console.log(vals);
     this.value = [...vals];
     this.form.get('selectionValue').setValue(this.value.map(v => v[this.itemValue]));
 
