@@ -197,6 +197,32 @@ it is possible to write a mapper like this:
   }
 }
 ```
+
+The `multiMapper` property works like the `mapper` property, it implements the interface `NgJvxOptionsMapper<T>`.
+It will expose a method `mapOptions` which accepts all the options to be mapped in the form of an Object and returns an Observable of type `T[]`.
+For example if the request returns an array of objects like this:
+
+```javascript
+{
+  id: number;
+  description: string;
+}
+```
+
+it is possible to write a mapper like this:
+
+```javascript
+ const mapper: NgJvxOptionMultiMapper<{value: number, text: string}> = {
+  mapOption(source: {
+    id: number,
+    description: string
+  }[]): Observable<any> {
+    return of(source.map(s=>{value: s.id, text: s.description}));
+  }
+}
+```
+
+It's useful if the user wants to add any custom option to a server call
 #### Search
 
 If the property `searchInput` is `true`, the user will be able to search a value amongst the options.

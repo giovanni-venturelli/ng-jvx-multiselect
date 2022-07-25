@@ -58,8 +58,6 @@ export class AppComponent implements OnInit {
   // ];
 
   constructor(private formBuilder: UntypedFormBuilder) {
-    console.log('selected value: ');
-    console.log(this.selectedValue);
     this.form = this.formBuilder.group({
       selectionValue: [this.selectedValue, Validators.required],
       testInput: ['', Validators.required]
@@ -67,8 +65,7 @@ export class AppComponent implements OnInit {
 
 
     this.form.valueChanges.subscribe((val) => {
-      console.log('value change');
-      console.log(val);
+
     });
   }
 

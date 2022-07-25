@@ -19,7 +19,7 @@ import {HttpHeaders} from '@angular/common/http';
 import {NgScrollbar} from 'ngx-scrollbar';
 import {debounceTime, distinctUntilChanged, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {combineLatest, forkJoin, from, fromEvent, iif, noop, observable, Observable, of, Subject, timer} from 'rxjs';
-import {NgJvxOptionMapper} from './interfaces/ng-jvx-option-mapper';
+import {NgJvxMultiOptionMapper, NgJvxOptionMapper} from './interfaces/ng-jvx-option-mapper';
 import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
@@ -80,6 +80,11 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @Input() searchProp = 'search';
   @Input() mapper: NgJvxOptionMapper<any> = {
     mapOption(source: any): Observable<any> {
+      return of(source);
+    }
+  };
+  @Input() multiMapper: NgJvxMultiOptionMapper<any> = {
+    mapOptions(source: any[]): Observable<any> {
       return of(source);
     }
   };
@@ -440,7 +445,8 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       search: this.searchValue,
       searchProp: this.searchProp,
       pageSize: this.pageSize
-    }).pipe(switchMap((val) => {
+    }).pipe(
+      switchMap((val) => this.multiMapper.mapOptions(val)), switchMap((val) => {
       let result = [];
       if (this.listProp.length > 0) {
         result = [...val[this.listProp]];

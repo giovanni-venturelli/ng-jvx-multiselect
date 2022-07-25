@@ -6,33 +6,15 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {
-  AfterContentInit,
-  ChangeDetectionStrategy,
-  Component, ContentChild, ContentChildren, Directive,
-  ElementRef, EventEmitter,
-  Inject, Input,
-  NgZone, OnDestroy, OnInit, Output, QueryList, TemplateRef, ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef, Inject, NgZone, ViewEncapsulation,} from '@angular/core';
 import {
   _MatMenuBase,
-  MAT_MENU_CONTENT,
   MAT_MENU_DEFAULT_OPTIONS,
   MAT_MENU_PANEL,
   MatMenu,
-  matMenuAnimations, MatMenuContent,
-  MatMenuDefaultOptions, MatMenuItem, MatMenuPanel, MenuPositionX, MenuPositionY
+  matMenuAnimations,
+  MatMenuDefaultOptions
 } from '@angular/material/menu';
-import {FocusKeyManager, FocusOrigin} from '@angular/cdk/a11y';
-import {startWith, switchMap, take} from 'rxjs/operators';
-import {merge, Observable, Subject, Subscription} from 'rxjs';
-import {MenuCloseReason} from '@angular/material/menu/menu';
-import {coerceBooleanProperty} from '@angular/cdk/coercion';
-import {throwMatMenuInvalidPositionX, throwMatMenuInvalidPositionY} from '@angular/material/menu/menu-errors';
-import {Direction} from '@angular/cdk/bidi';
-
-
 
 
 /** @docs-public MatMenu */
