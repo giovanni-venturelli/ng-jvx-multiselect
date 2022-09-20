@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient, HttpParams} from '@angular/common/http';
+import {setJvxCall} from './utils';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +41,7 @@ export class NgJvxMultiselectService {
     const options = {
       mode: 'no-cors', // cors
       headers: requestHeaders,
+      context: setJvxCall(),
       // withCredentials: true,
       // credentials: 'same-origin', // cache: 'default',
       data,

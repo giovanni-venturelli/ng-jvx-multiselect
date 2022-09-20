@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {HttpHeaders} from '@angular/common/http';
 import {Observable, of, timer} from 'rxjs';
 import {UntypedFormBuilder, FormControl, UntypedFormGroup, Validators} from '@angular/forms';
-import {NgJvxGroup, NgJvxGroupMapper, NgJvxOptionMapper} from '../../../ng-jvx-multiselect/src/public-api';
+import {JVXMULTISELECT, NgJvxGroup, NgJvxGroupMapper, NgJvxOptionMapper} from 'ng-jvx-multiselect';
 
 @Component({
   selector: 'app-root',
@@ -63,7 +63,7 @@ export class AppComponent implements OnInit {
       testInput: ['', Validators.required]
     });
 
-
+    const stocazzo = JVXMULTISELECT;
     this.form.valueChanges.subscribe((val) => {
 
     });

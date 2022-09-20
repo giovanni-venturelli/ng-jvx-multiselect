@@ -135,6 +135,19 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     this.stateChanges.next();
   }
 
+  @Input()
+  get pageSize(): number {
+    return this.intPageSize;
+  }
+
+  set pageSize(val: number) {
+    if (val < 15) {
+      this.intPageSize = 15;
+    } else {
+      this.intPageSize = val;
+    }
+  }
+
   // tslint:disable-next-line:variable-name
   private _disabled = false;
 
@@ -180,9 +193,9 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   private searchValue$ = this.searchValueSubject.asObservable();
   private pValue: any[] = [];
   private shouldLoadMore = true;
-  private pageSize = 15;
   private unsubscribe = new Subject<void>();
   private unsubscribe$ = this.unsubscribe.asObservable();
+  private intPageSize = 15;
   public onTouched = () => {
   };
 
@@ -441,39 +454,39 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       requestHeaders: this.requestHeaders,
       search: this.searchValue,
       searchProp: this.searchProp,
-      pageSize: this.pageSize
+      pageSize: this.intPageSize
     }).pipe(
       switchMap((val) => this.multiMapper.mapOptions(val)), switchMap((val) => {
-      let result = [];
-      if (this.listProp.length > 0) {
-        result = [...val[this.listProp]];
-      } else {
-        result = [...val];
-      }
-
-      if (result.length === 0) {
-        this.shouldLoadMore = false;
-        this.isLoading = false;
-        return forkJoin([]);
-      } else {
-        const newOptions = [];
-
-        for (const opt of result) {
-          const newOption = this.mapper.mapOption(opt);
-          newOptions.push(newOption);
+        let result = [];
+        if (this.listProp.length > 0) {
+          result = [...val[this.listProp]];
+        } else {
+          result = [...val];
         }
-        return forkJoin(newOptions);
-      }
-    }), switchMap((finVal: any) => {
-      this.selectableOptions.push(...finVal);
-      return this.updateOrderedOptions(this.selectableOptions);
-    }), map((val) => {
-      this.isLoading = false;
-      this.trigger.openMenu();
-      this.setSelectionContainerSize();
-      this.changeDetectorRef.markForCheck();
-      return val;
-    }));
+
+        if (result.length === 0) {
+          this.shouldLoadMore = false;
+          this.isLoading = false;
+          return forkJoin([]);
+        } else {
+          const newOptions = [];
+
+          for (const opt of result) {
+            const newOption = this.mapper.mapOption(opt);
+            newOptions.push(newOption);
+          }
+          return forkJoin(newOptions);
+        }
+      }), switchMap((finVal: any) => {
+        this.selectableOptions.push(...finVal);
+        return this.updateOrderedOptions(this.selectableOptions);
+      }), map((val) => {
+        this.isLoading = false;
+        this.trigger.openMenu();
+        this.setSelectionContainerSize();
+        this.changeDetectorRef.markForCheck();
+        return val;
+      }));
   }
 
   onScrolled(e: any): void {

@@ -12,13 +12,12 @@ import {NgJvxPanelComponent} from './ng-jvx-panel/ng-jvx-panel.component';
 import {MatListModule} from '@angular/material/list';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatChipsModule} from '@angular/material/chips';
-import {HttpClientModule} from '@angular/common/http';
 import {NgScrollbarModule} from 'ngx-scrollbar';
 import {SmoothScrollModule} from 'ngx-scrollbar/smooth-scroll';
 import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
 import {NgJvxDisabledOptionDirective} from './directives/ng-jvx-disabled-option.directive';
-import { NgJvxGroupHeaderDirective } from './directives/ng-jvx-group-header.directive';
-import { NgJvxFocusDirective } from './directives/ng-jvx-focus.directive';
+import {NgJvxGroupHeaderDirective} from './directives/ng-jvx-group-header.directive';
+import {NgJvxFocusDirective} from './directives/ng-jvx-focus.directive';
 
 
 @NgModule({
@@ -41,12 +40,16 @@ import { NgJvxFocusDirective } from './directives/ng-jvx-focus.directive';
     MatListModule,
     MatChipsModule,
     ReactiveFormsModule,
-    HttpClientModule,
     NgScrollbarModule,
     SmoothScrollModule,
     FormsModule
   ],
-  exports: [NgJvxMultiselectComponent, NgJvxOptionComponent, NgJvxOptionsTemplateDirective, NgJvxSelectionTemplateDirective, NgJvxDisabledOptionDirective, NgJvxGroupHeaderDirective]
+  exports: [NgJvxMultiselectComponent,
+    NgJvxOptionComponent,
+    NgJvxOptionsTemplateDirective,
+    NgJvxSelectionTemplateDirective,
+    NgJvxDisabledOptionDirective,
+    NgJvxGroupHeaderDirective]
 })
 export class NgJvxMultiselectModule {
 }
