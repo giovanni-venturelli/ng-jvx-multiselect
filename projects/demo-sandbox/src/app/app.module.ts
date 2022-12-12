@@ -13,6 +13,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {MatInputModule} from '@angular/material/input';
 import {NgJvxMultiselectModule} from '../../../ng-jvx-multiselect/src/lib/ng-jvx-multiselect.module';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import {NgJvxMultiselectModule} from '../../../ng-jvx-multiselect/src/lib/ng-jvx
     BrowserModule,
     NgJvxMultiselectModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     CommonModule,
     MatIconModule,
     MatFormFieldModule,

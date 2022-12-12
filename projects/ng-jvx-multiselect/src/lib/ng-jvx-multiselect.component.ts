@@ -224,8 +224,9 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     this.stateChange$.pipe(takeUntil(this.unsubscribe)).subscribe(() => {
       this.changeDetectorRef.markForCheck();
     });
-    this.selectableOptions = [...this.options];
-    this.updateOrderedOptions(this.selectableOptions).subscribe(noop);
+    this.setSelectableOptions(this.options).subscribe(noop);
+    // this.selectableOptions = [...this.options];
+    // this.updateOrderedOptions(this.selectableOptions).subscribe(noop);
     fromEvent(window, 'resize').pipe(takeUntil(this.unsubscribe), debounceTime(100), map(() => {
       return this.listContainerSize.width = this.jvxMultiselect.nativeElement.offsetWidth + 'px';
 
@@ -264,14 +265,23 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     } else {
       obs = of(this.options);
     }
-    return obs.pipe(switchMap((val) => this.searchMapper.mapSearch(this.searchValue, val)), tap((res) => {
-      this.selectableOptions = [];
-      this.selectableOptions.push(...res);
-    }), switchMap(() =>
-      this.updateOrderedOptions(this.selectableOptions)
+    return obs.pipe(switchMap((val) => this.searchMapper.mapSearch(this.searchValue, val)), switchMap((res) => {
+        this.selectableOptions = [];
+        return this.setSelectableOptions(res);
+      }
     ));
   }
 
+  private setSelectableOptions(options: any[]): Observable<any> {
+    const obs = [];
+    for (const option of options) {
+      obs.push(this.mapper.mapOption(option));
+    }
+    return forkJoin(obs).pipe(switchMap((val) => {
+      this.selectableOptions.push(...val);
+      return this.updateOrderedOptions(this.selectableOptions);
+    }));
+  }
   private serverSearch(): Observable<any> {
     this.shouldLoadMore = true;
     this.selectableOptions = [];
@@ -304,8 +314,8 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.options) {
-      this.selectableOptions = [...this.options];
-      this.updateOrderedOptions(this.selectableOptions).subscribe(noop);
+      this.setSelectableOptions(this.options).subscribe(noop);
+      // this.selectableOptions = [...this.options];
     }
   }
 

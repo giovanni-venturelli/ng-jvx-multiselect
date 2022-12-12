@@ -15,8 +15,8 @@ export class AppComponent implements OnInit {
   public mapper = {
     mapOption(source: any): Observable<{ value: number, text: string }> {
       return of({
-        value: source.id,
-        text: source.title
+        value: source.value,
+        text: source.text+'---'
       });
     }
   } as NgJvxOptionMapper<{ value: number, text: string }>;
