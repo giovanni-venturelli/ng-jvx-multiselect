@@ -20,7 +20,9 @@ export class AppComponent implements OnInit {
       });
     }
   } as NgJvxOptionMapper<{ value: number, text: string }>;
-  public selectedValue = [{text: 'value 1', value: 1}];
+  public selectedValue = [
+    {text: 'value 1', value: 1}
+  ];
   public loaded = true;
   public form: UntypedFormGroup;
   public url = 'https://localhost:3000/jvx-multiselect-test';

@@ -4,11 +4,12 @@
        (onMenuClose)="onMenuClose()" (menuClosed)="onMenuClosed()"
        #trigger="matMenuTrigger">
     <mat-menu #menuRef="matMenu" [class]="['jvx-multiselect-panel', panelClass].join(' ')" [formGroup]="form"
-
               [yPosition]="yPosition">
+      <div *ngIf="closeButton" class="closeMenuButton"><mat-icon>close</mat-icon></div>
       <div class="menu-list-container"
            #menuLIstContainer
            [ngStyle]="{'overflow-y': 'hidden', 'width': listContainerSize.width, 'max-height': '260px', 'height': listContainerSize.height, 'min-height': listContainerSize.minHeight}">
+
         <div class="search-input-container" *ngIf="!!searchInput" (click)="onSearchInputClick($event)">
           <input type="text" [placeholder]="searchLabel" [ngModel]="searchValue" [ngModelOptions]="{standalone: true}"
                  [ngJvxFocus]="isOpen"

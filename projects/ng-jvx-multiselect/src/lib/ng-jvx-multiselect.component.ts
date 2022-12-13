@@ -78,6 +78,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @Input() totalRowsProp = '';
   @Input() panelClass = '';
   @Input() searchProp = 'search';
+  @Input() closeButton = false;
   @Input() mapper: NgJvxOptionMapper<any> = {
     mapOption(source: any): Observable<any> {
       return of(source);
@@ -224,9 +225,9 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     this.stateChange$.pipe(takeUntil(this.unsubscribe)).subscribe(() => {
       this.changeDetectorRef.markForCheck();
     });
-    this.setSelectableOptions(this.options).subscribe(noop);
-    // this.selectableOptions = [...this.options];
-    // this.updateOrderedOptions(this.selectableOptions).subscribe(noop);
+    // this.setSelectableOptions(this.options).subscribe(noop);
+    this.selectableOptions = [...this.options];
+    this.updateOrderedOptions(this.selectableOptions).subscribe(noop);
     fromEvent(window, 'resize').pipe(takeUntil(this.unsubscribe), debounceTime(100), map(() => {
       return this.listContainerSize.width = this.jvxMultiselect.nativeElement.offsetWidth + 'px';
 
@@ -266,22 +267,29 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       obs = of(this.options);
     }
     return obs.pipe(switchMap((val) => this.searchMapper.mapSearch(this.searchValue, val)), switchMap((res) => {
+        // return this.setSelectableOptions(res);
         this.selectableOptions = [];
-        return this.setSelectableOptions(res);
+        this.selectableOptions.push(...res);
+        return this.updateOrderedOptions(this.selectableOptions);
       }
     ));
   }
 
   private setSelectableOptions(options: any[]): Observable<any> {
-    const obs = [];
-    for (const option of options) {
-      obs.push(this.mapper.mapOption(option));
-    }
-    return forkJoin(obs).pipe(switchMap((val) => {
+    this.selectableOptions = [];
+    const obs: Observable<any>[] = options.reduce((acc, curr) => {
+      acc.push(this.mapper.mapOption(curr));
+      return acc;
+    }, []);
+
+    // this.mapper.mapOption(option);
+
+    return forkJoin([...obs]).pipe(switchMap((val) => {
       this.selectableOptions.push(...val);
       return this.updateOrderedOptions(this.selectableOptions);
     }));
   }
+
   private serverSearch(): Observable<any> {
     this.shouldLoadMore = true;
     this.selectableOptions = [];
@@ -314,8 +322,8 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.options) {
-      this.setSelectableOptions(this.options).subscribe(noop);
-      // this.selectableOptions = [...this.options];
+      // this.setSelectableOptions(this.options).subscribe(noop);
+      this.selectableOptions = [...this.options];
     }
   }
 

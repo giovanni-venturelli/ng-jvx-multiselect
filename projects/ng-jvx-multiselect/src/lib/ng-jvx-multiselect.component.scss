@@ -177,11 +177,31 @@
     .mat-menu-panel.jvx-multiselect-panel {
       min-width: 100%;
       max-width: 100%;
-
+      position: relative;
+      overflow: visible;
+      .closeMenuButton {
+        height: 22px;
+        width: 22px;
+        background-color: #{$primary};
+        position: absolute;
+        top: -11px;
+        right: 11px;
+        border-radius: 100%;
+        cursor: pointer;
+        color: #fff;
+        z-index: 10;
+        mat-icon{
+          font-size: 15px;
+          height: 100%;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
       .mat-menu-content {
         padding-top: 0 !important;
         padding-bottom: 0 !important;
-
         .menu-list-container {
           ng-scrollbar {
             --scrollbar-color: transparent;
