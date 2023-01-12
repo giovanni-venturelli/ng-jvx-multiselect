@@ -485,7 +485,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
         if (result.length === 0) {
           this.shouldLoadMore = false;
           this.isLoading = false;
-          return forkJoin([]);
+          return of([]);
         } else {
           const newOptions = [];
 
@@ -502,8 +502,9 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
         this.isLoading = false;
         this.trigger.openMenu();
         this.setSelectionContainerSize();
-        this.changeDetectorRef.markForCheck();
         return val;
+      }), tap(() => {
+        this.changeDetectorRef.markForCheck();
       }));
   }
 

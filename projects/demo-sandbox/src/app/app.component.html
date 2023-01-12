@@ -404,10 +404,10 @@
         <ng-jvx-multiselect matInput
                             formControlName="selectionValue"
                             [clearable]="true"
-                            [options]="options"
                             [mapper]="mapper"
                             [multi]="true"
                             [ignorePagination]="true"
+                            [url]="url"
                             [requestType]="'get'">
           <div placeholder>placeholder</div>
           <div *ngJvxGroupHeader="let group" style="padding: 5px 15px">

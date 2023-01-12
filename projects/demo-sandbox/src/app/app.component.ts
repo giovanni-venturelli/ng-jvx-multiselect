@@ -16,12 +16,13 @@ export class AppComponent implements OnInit {
     mapOption(source: any): Observable<{ value: number, text: string }> {
       return of({
         value: source.value,
-        text: source.text+'---'
+        text: source.text
       });
     }
   } as NgJvxOptionMapper<{ value: number, text: string }>;
   public selectedValue = [
-    {text: 'value 1', value: 1}
+    {text: 'value 1', value: 1},
+    {text: 'value 2', value: 2}
   ];
   public loaded = true;
   public form: UntypedFormGroup;
