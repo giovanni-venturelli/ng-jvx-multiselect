@@ -23,9 +23,9 @@ import {
 } from '@angular/core';
 import {NgJvxOptionsTemplateDirective} from './directives/ng-jvx-options-template.directive';
 import {ControlValueAccessor, NgControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
-import {MatSelectionList, MatSelectionListChange} from '@angular/material/list';
+import {MatLegacySelectionList as MatSelectionList, MatLegacySelectionListChange as MatSelectionListChange} from '@angular/material/legacy-list';
 import {NgJvxOptionComponent} from './ng-jvx-option/ng-jvx-option.component';
-import {MatMenuTrigger} from '@angular/material/menu';
+import {MatLegacyMenuTrigger as MatMenuTrigger} from '@angular/material/legacy-menu';
 import {NgJvxMultiselectService} from './ng-jvx-multiselect.service';
 import {HttpHeaders} from '@angular/common/http';
 import {NgScrollbar} from 'ngx-scrollbar';
@@ -33,7 +33,7 @@ import {debounceTime, distinctUntilChanged, map, switchMap, takeUntil, tap} from
 import {forkJoin, fromEvent, noop, Observable, of, Subject, timer} from 'rxjs';
 import {NgJvxMultiOptionMapper, NgJvxOptionMapper} from './interfaces/ng-jvx-option-mapper';
 import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
-import {MatFormFieldControl} from '@angular/material/form-field';
+import {MatLegacyFormFieldControl as MatFormFieldControl} from '@angular/material/legacy-form-field';
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {NgJvxGroupHeaderDirective} from './directives/ng-jvx-group-header.directive';
 import {NgJvxSearchMapper} from './interfaces/ng-jvx-search-mapper';
