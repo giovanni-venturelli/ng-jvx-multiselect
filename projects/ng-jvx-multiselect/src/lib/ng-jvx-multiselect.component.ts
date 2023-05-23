@@ -1,16 +1,28 @@
 import {
-  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef,
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ContentChild,
-  ElementRef, EventEmitter, forwardRef, HostBinding,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  HostBinding,
   Input,
-  OnChanges, OnDestroy,
-  OnInit, Optional, Output, QueryList, Self,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Optional,
+  Output,
+  QueryList,
+  Self,
   SimpleChanges,
-  ViewChild, ViewChildren
+  ViewChild,
+  ViewChildren,
+  ViewEncapsulation
 } from '@angular/core';
 import {NgJvxOptionsTemplateDirective} from './directives/ng-jvx-options-template.directive';
-import {ControlValueAccessor, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, NG_VALUE_ACCESSOR, NgControl} from '@angular/forms';
+import {ControlValueAccessor, NgControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {MatSelectionList, MatSelectionListChange} from '@angular/material/list';
 import {NgJvxOptionComponent} from './ng-jvx-option/ng-jvx-option.component';
 import {MatMenuTrigger} from '@angular/material/menu';
@@ -18,7 +30,7 @@ import {NgJvxMultiselectService} from './ng-jvx-multiselect.service';
 import {HttpHeaders} from '@angular/common/http';
 import {NgScrollbar} from 'ngx-scrollbar';
 import {debounceTime, distinctUntilChanged, map, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {combineLatest, forkJoin, from, fromEvent, iif, noop, observable, Observable, of, Subject, timer} from 'rxjs';
+import {forkJoin, fromEvent, noop, Observable, of, Subject, timer} from 'rxjs';
 import {NgJvxMultiOptionMapper, NgJvxOptionMapper} from './interfaces/ng-jvx-option-mapper';
 import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
 import {MatFormFieldControl} from '@angular/material/form-field';
@@ -33,6 +45,7 @@ import {NgJvxGroup, NgJvxGroupMapper} from './interfaces/ng-jvx-group-mapper';
   templateUrl: './ng-jvx-multiselect.component.html',
   styleUrls: ['./ng-jvx-multiselect.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   providers: [
     {
       provide: MatFormFieldControl,
@@ -40,7 +53,8 @@ import {NgJvxGroup, NgJvxGroupMapper} from './interfaces/ng-jvx-group-mapper';
       multi: true,
     }]
 })
-export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges, MatFormFieldControl<any>, ControlValueAccessor {
+export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges, MatFormFieldControl<any>,
+  ControlValueAccessor {
   static nextId = 0;
   @HostBinding() id = `jvx-multiselect-${NgJvxMultiselectComponent.nextId++}`;
 
