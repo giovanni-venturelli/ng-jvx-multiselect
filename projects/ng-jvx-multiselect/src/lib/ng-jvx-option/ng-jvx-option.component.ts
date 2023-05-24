@@ -1,5 +1,5 @@
 import {AfterViewChecked, Component, ContentChild, DoCheck, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {MatLegacyListOption as MatListOption} from '@angular/material/legacy-list';
+import {MatListOption} from '@angular/material/list';
 
 @Component({
   // tslint:disable-next-line:component-selector

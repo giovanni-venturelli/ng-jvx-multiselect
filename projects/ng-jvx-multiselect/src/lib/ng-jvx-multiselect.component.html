@@ -116,16 +116,16 @@
 </ng-template>
 
 <ng-template #defaultMultiSelectionTemplate let-value>
-  <mat-chip-list #chipList [disabled]="this.disabled">
-    <mat-chip [color]="'primary'" selected *ngFor="let val of value" [selectable]="false"
+  <mat-chip-listbox #chipList [disabled]="this.disabled">
+    <mat-chip-option [color]="'primary'" selected *ngFor="let val of value" [selectable]="false"
               class="ng-jvx-multiselect-chip"
               [removable]="true" (removed)="deselect(val)">
           <span class="chip-content"
                 [ngStyle]="{'max-width': multiContainerWidth - 50 +'px'}">{{val[itemText]}}</span>
 
       <mat-icon matChipRemove>cancel</mat-icon>
-    </mat-chip>
-  </mat-chip-list>
+    </mat-chip-option>
+  </mat-chip-listbox>
 </ng-template>
 <ng-template #defaultGroupHeaderTemplate let-opt>
   <div style="padding-inline: 15px"><strong>{{opt.group}}</strong></div>

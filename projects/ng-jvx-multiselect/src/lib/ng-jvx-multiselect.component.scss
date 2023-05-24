@@ -42,9 +42,10 @@
           max-width: calc(100% - 28px);
           display: flex;
           align-items: center;
-
+          /* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
+          /* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
           .mat-chip-list-wrapper {
-            .mat-standard-chip {
+            .mat-mdc-standard-chip {
               padding: 0 5px 0 7px;
               margin: 4px 5px 0;
 
@@ -160,6 +161,7 @@
       }
     }
   }
+  /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
   .mat-select-test {
     width: 250px;
   }
@@ -174,7 +176,7 @@
     overflow: hidden;
   }
   .cdk-overlay-pane {
-    .mat-menu-panel.jvx-multiselect-panel {
+    .mat-mdc-menu-panel.jvx-multiselect-panel {
       min-width: 100%;
       max-width: 100%;
       position: relative;
@@ -200,7 +202,7 @@
           justify-content: center;
         }
       }
-      .mat-menu-content {
+      .mat-mdc-menu-content {
         padding-top: 0 !important;
         padding-bottom: 0 !important;
         .menu-list-container {
@@ -238,10 +240,10 @@
           }
         }
 
-        .mat-selection-list {
+        .mat-mdc-selection-list {
           padding-top: 0 !important;
           padding-bottom: 0 !important;
-
+          /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
           mat-list-option[aria-selected="true"], mat-list-option[aria-selected="false"] {
             mat-pseudo-checkbox {
               display: none

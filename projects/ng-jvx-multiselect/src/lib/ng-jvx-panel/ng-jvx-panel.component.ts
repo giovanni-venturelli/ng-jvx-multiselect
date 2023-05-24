@@ -8,11 +8,11 @@
 
 import {ChangeDetectionStrategy, Component, ElementRef, Inject, NgZone, ViewEncapsulation,} from '@angular/core';
 import {
-  MAT_LEGACY_MENU_DEFAULT_OPTIONS as MAT_MENU_DEFAULT_OPTIONS,
-  MAT_LEGACY_MENU_PANEL as MAT_MENU_PANEL,
-  matLegacyMenuAnimations as matMenuAnimations,
-  MatLegacyMenuDefaultOptions as MatMenuDefaultOptions
-} from '@angular/material/legacy-menu';
+  MAT_MENU_DEFAULT_OPTIONS,
+  MAT_MENU_PANEL,
+  matMenuAnimations,
+  MatMenuDefaultOptions
+} from '@angular/material/menu';
 import {_MatMenuBase, MatMenu} from '@angular/material/menu';
 
 
