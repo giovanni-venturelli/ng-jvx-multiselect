@@ -10,11 +10,9 @@
     $accent: mat.get-color-from-palette(map.get($theme, accent));
     $warn: mat.get-color-from-palette(map.get($theme, warn));
   }
-  /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-  mat-list-option.mat-mdc-list-item.mat-list-option.ng-jvx-option {
+  .mat-mdc-list-item.mat-mdc-list-option.ng-jvx-option {
     height: auto;
     min-height: 48px;
-    /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
     .mat-list-text {
       min-height: 48px;
       display: flex;

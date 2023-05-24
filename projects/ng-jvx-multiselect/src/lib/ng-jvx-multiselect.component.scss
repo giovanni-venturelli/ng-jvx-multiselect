@@ -181,6 +181,7 @@
       max-width: 100%;
       position: relative;
       overflow: visible;
+
       .closeMenuButton {
         height: 22px;
         width: 22px;
@@ -192,7 +193,8 @@
         cursor: pointer;
         color: #fff;
         z-index: 10;
-        mat-icon{
+
+        mat-icon {
           color: #fff;
           font-size: 15px;
           height: 100%;
@@ -202,9 +204,11 @@
           justify-content: center;
         }
       }
+
       .mat-mdc-menu-content {
         padding-top: 0 !important;
         padding-bottom: 0 !important;
+
         .menu-list-container {
           ng-scrollbar {
             --scrollbar-color: transparent;
@@ -243,11 +247,15 @@
         .mat-mdc-selection-list {
           padding-top: 0 !important;
           padding-bottom: 0 !important;
-          /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-          mat-list-option[aria-selected="true"], mat-list-option[aria-selected="false"] {
-            mat-pseudo-checkbox {
-              display: none
+
+          .mat-mdc-list-option[aria-selected="true"], .mat-mdc-list-option[aria-selected="false"] {
+            .mdc-list-item__end {
+              display: none;
+
             }
+            //.mdc-checkbox {
+            //  display: none
+            //}
           }
         }
 
