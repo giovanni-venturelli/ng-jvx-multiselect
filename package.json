@@ -6,6 +6,7 @@
     "start": "ng serve demo-sandbox --port 4300 --ssl true",
     "build": "ng build ng-jvx-multiselect --watch",
     "build-prod": "ng build ng-jvx-multiselect --configuration production",
+    "publish": "npm run build-prod && npm publish ./dist/ng-jvx-multiselect",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",

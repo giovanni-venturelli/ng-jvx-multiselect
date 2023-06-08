@@ -11,6 +11,7 @@
     $warn: mat.get-color-from-palette(map.get($theme, warn));
   }
   .mat-mdc-list-item.mat-mdc-list-option.ng-jvx-option {
+    padding: 0;
     height: auto;
     min-height: 48px;
     .mat-list-text {
