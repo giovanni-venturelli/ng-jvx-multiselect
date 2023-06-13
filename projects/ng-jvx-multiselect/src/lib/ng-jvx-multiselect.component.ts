@@ -488,10 +488,15 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       searchProp: this.searchProp,
       pageSize: this.intPageSize
     }).pipe(
+      map((val) => {
+        return val ?? [];
+      }),
       switchMap((val) => this.multiMapper.mapOptions(val)), switchMap((val) => {
         let result = [];
-        if (this.listProp.length > 0) {
-          result = [...val[this.listProp]];
+        if (!val) {
+          result = [];
+        } else if (this.listProp.length > 0) {
+          result = [...(val[this.listProp] ?? [])];
         } else {
           result = [...val];
         }
