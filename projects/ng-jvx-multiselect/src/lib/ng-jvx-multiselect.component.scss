@@ -249,6 +249,9 @@
           padding-bottom: 0 !important;
 
           .mat-mdc-list-option[aria-selected="true"], .mat-mdc-list-option[aria-selected="false"] {
+            .ng-jvx-option-wrapper{
+              padding-inline: 10px;
+            }
             .mdc-list-item__end {
               display: none;
 

@@ -5,7 +5,9 @@
        #trigger="matMenuTrigger">
     <mat-menu #menuRef="matMenu" [class]="['jvx-multiselect-panel', panelClass].join(' ')" [formGroup]="form"
               [yPosition]="yPosition">
-      <div *ngIf="closeButton" class="closeMenuButton"><mat-icon >close</mat-icon></div>
+      <div *ngIf="closeButton" class="closeMenuButton">
+        <mat-icon>close</mat-icon>
+      </div>
       <div class="menu-list-container"
            #menuLIstContainer
            [ngStyle]="{'overflow-y': 'hidden', 'width': listContainerSize.width, 'max-height': '260px', 'height': listContainerSize.height, 'min-height': listContainerSize.minHeight}">
@@ -15,7 +17,8 @@
                  [ngJvxFocus]="isOpen"
                  (input)="onSearchValueChange($event)"/>
         </div>
-        <div [ngStyle]="{height: searchInput && selectionContainer.clientHeight > 220 || selectionContainer.clientHeight > 260? 260 - (searchInput? 40 : 0) + 'px': 'auto'}">
+        <div
+          [ngStyle]="{height: searchInput && selectionContainer.clientHeight > 220 || selectionContainer.clientHeight > 260? 260 - (searchInput? 40 : 0) + 'px': 'auto'}">
           <ng-scrollbar style="width: 100%"
                         smoothScroll
                         [visibility]="'hover'"
@@ -31,22 +34,26 @@
                 <ng-content></ng-content>
                 <ng-container *ngIf="!!groupBy">
                   <ng-container *ngFor="let opt of orderedOptions">
-                    <ng-container [ngTemplateOutlet]="groupHeaderTemplate? groupHeaderTemplate.template: defaultGroupHeaderTemplate" [ngTemplateOutletContext]="{$implicit: opt}"></ng-container>
+                    <ng-container
+                      [ngTemplateOutlet]="groupHeaderTemplate? groupHeaderTemplate.template: defaultGroupHeaderTemplate"
+                      [ngTemplateOutletContext]="{$implicit: opt}"></ng-container>
 
                     <ng-jvx-option *ngFor="let option of opt.options" [value]="option[itemValue]">
                       <!--        <ng-container [ngTemplateOutlet]="optionsTemplate" [ngTemplateOutletContext]="{$implicit: option}"></ng-container>-->
-                      <span style="padding-inline: 10px">
+                      <div class="ng-jvx-option-wrapper">
                       <ng-container [ngTemplateOutlet]="optionsTemplate? optionsTemplate.template : defaultTemplate"
                                     [ngTemplateOutletContext]="{$implicit: option}"></ng-container>
-                        </span>
+                        </div>
                     </ng-jvx-option>
                   </ng-container>
                 </ng-container>
                 <ng-container *ngIf="!groupBy || groupBy.length === 0">
                   <ng-jvx-option *ngFor="let option of selectableOptions" [value]="option[itemValue]">
+                    <div class="ng-jvx-option-wrapper">
                     <!--        <ng-container [ngTemplateOutlet]="optionsTemplate" [ngTemplateOutletContext]="{$implicit: option}"></ng-container>-->
                     <ng-container [ngTemplateOutlet]="optionsTemplate? optionsTemplate.template : defaultTemplate"
                                   [ngTemplateOutletContext]="{$implicit: option}"></ng-container>
+                      </div>
                   </ng-jvx-option>
                 </ng-container>
               </mat-selection-list>
@@ -81,8 +88,9 @@
 
     <div class="ng-jvx-multiselect-value single-value-container" *ngIf="!multi">
       <div *ngFor="let val of value" style="width: 100%;">
-          <ng-container [ngTemplateOutlet]="selectionTemplate? selectionTemplate.template : defaultSelectionTemplate"
-                        [ngTemplateOutletContext]="{$implicit: val}"></ng-container></div>
+        <ng-container [ngTemplateOutlet]="selectionTemplate? selectionTemplate.template : defaultSelectionTemplate"
+                      [ngTemplateOutletContext]="{$implicit: val}"></ng-container>
+      </div>
     </div>
     <div class="ng-jvx-multiselect__remove-button" *ngIf="clearable && value.length > 0" (click)="clear($event)">
       <mat-icon style="font-size: 18px;
@@ -118,8 +126,8 @@
 <ng-template #defaultMultiSelectionTemplate let-value>
   <mat-chip-listbox #chipList [disabled]="this.disabled">
     <mat-chip-option [color]="'primary'" selected *ngFor="let val of value" [selectable]="false"
-              class="ng-jvx-multiselect-chip"
-              [removable]="true" (removed)="deselect(val)">
+                     class="ng-jvx-multiselect-chip"
+                     [removable]="true" (removed)="deselect(val)">
           <span class="chip-content"
                 [ngStyle]="{'max-width': multiContainerWidth - 50 +'px'}">{{val[itemText]}}</span>
 
