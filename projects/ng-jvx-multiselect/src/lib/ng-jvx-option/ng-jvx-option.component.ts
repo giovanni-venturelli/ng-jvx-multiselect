@@ -5,7 +5,7 @@ import {MatListOption} from '@angular/material/list';
   // tslint:disable-next-line:component-selector
   selector: 'ng-jvx-option',
   templateUrl: './ng-jvx-option.component.html',
-  styleUrls: ['./ng-jvx-option.component.scss']
+  styleUrls: ['./ng-jvx-option.component.scss'],
 })
 export class NgJvxOptionComponent implements OnInit, DoCheck {
   @ViewChild('listOption', {static: true}) listOption: MatListOption;
