@@ -11,13 +11,19 @@ export class NgJvxDisabledOptionDirective implements OnInit, OnDestroy {
   private originalOpacity = 1;
 
   private unsubs = new Subject<void>();
+  private restore = new Subject<void>();
 
   @Input() set ngJvxDisabledOption(source: boolean) {
     this.isDisabled = source;
     if (this.isDisabled) {
       this.el.nativeElement.style.opacity = this.originalOpacity ? this.originalOpacity / 2 : 0.5;
+      fromEvent(this.el.nativeElement, 'click').pipe(takeUntil(this.restore), takeUntil(this.unsubs)).subscribe((e: MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+      });
     } else {
       this.el.nativeElement.style.opacity = this.originalOpacity;
+      this.restore.next();
     }
   }
 
