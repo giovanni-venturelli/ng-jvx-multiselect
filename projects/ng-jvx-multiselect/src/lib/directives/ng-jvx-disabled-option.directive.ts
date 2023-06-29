@@ -34,15 +34,6 @@ export class NgJvxDisabledOptionDirective implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    fromEvent(this.el.nativeElement.closest('.mat-list-item-content'), 'click', {
-      capture: true,
-    }).pipe(takeUntil(this.unsubs)).subscribe((e: MouseEvent) => {
-      if (this.isDisabled) {
-        e.stopImmediatePropagation();
-        e.stopPropagation();
-        e.preventDefault();
-      }
-    });
   }
 
   ngOnDestroy(): void {
