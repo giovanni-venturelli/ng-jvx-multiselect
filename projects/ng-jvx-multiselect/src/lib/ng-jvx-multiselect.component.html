@@ -30,6 +30,7 @@
                                   *ngIf="showList"
                                   [ngStyle]="{'padding': 0, 'width': listContainerSize.width, 'min-width.px': 112}"
                                   (selectionChange)="onChange($event)"
+                                  ngDefaultControl
                                   formControlName="selectionValue">
                 <ng-content></ng-content>
                 <ng-container *ngIf="!!groupBy">

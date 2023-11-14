@@ -1,17 +1,9 @@
 @use '@angular/material' as  mat;
 @use 'sass:map';
-@import 'ng-jvx-option/ng-jvx-option.component';
 
-@mixin ng-jvx-multiselect-style($theme: null) {
   $primary: var(--jvx-multiselect-primary);
   $accent: var(--jvx-multiselect-accent);
   $warn: var(--jvx-multiselect-warn);
-  @if ($theme) {
-    $primary: mat.get-color-from-palette(map.get($theme, primary));
-    $accent: mat.get-color-from-palette(map.get($theme, accent));
-    $warn: mat.get-color-from-palette(map.get($theme, warn));
-  }
-  @include ng-jvx-option-style($theme);
   ng-jvx-multiselect {
     display: flex;
     align-items: center;
@@ -264,5 +256,5 @@
 
       }
     }
-  }
+
 }
