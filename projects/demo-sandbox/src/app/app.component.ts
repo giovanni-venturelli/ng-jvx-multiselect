@@ -66,7 +66,6 @@ export class AppComponent implements OnInit {
       testInput: ['', Validators.required]
     });
 
-    const stocazzo = JVXMULTISELECT;
     this.form.valueChanges.subscribe((val) => {
 
     });

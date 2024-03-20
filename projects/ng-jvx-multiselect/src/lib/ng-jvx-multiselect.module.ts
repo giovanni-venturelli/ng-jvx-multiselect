@@ -8,24 +8,21 @@ import {NgJvxOptionComponent} from './ng-jvx-option/ng-jvx-option.component';
 import {MatMenuModule} from '@angular/material/menu';
 import {NgJvxOptionsTemplateDirective} from './directives/ng-jvx-options-template.directive';
 import {MatIconModule} from '@angular/material/icon';
-import {NgJvxPanelComponent} from './ng-jvx-panel/ng-jvx-panel.component';
 import {MatListModule} from '@angular/material/list';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatChipsModule} from '@angular/material/chips';
 import {NgScrollbarModule} from 'ngx-scrollbar';
-import {SmoothScrollModule} from 'ngx-scrollbar/smooth-scroll';
+import {SmoothScroll} from 'ngx-scrollbar/smooth-scroll';
 import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
 import {NgJvxDisabledOptionDirective} from './directives/ng-jvx-disabled-option.directive';
 import {NgJvxGroupHeaderDirective} from './directives/ng-jvx-group-header.directive';
 import {NgJvxFocusDirective} from './directives/ng-jvx-focus.directive';
-
 
 @NgModule({
   declarations: [
     NgJvxMultiselectComponent,
     NgJvxOptionComponent,
     NgJvxOptionsTemplateDirective,
-    NgJvxPanelComponent,
     NgJvxSelectionTemplateDirective,
     NgJvxDisabledOptionDirective,
     NgJvxGroupHeaderDirective,
@@ -41,7 +38,7 @@ import {NgJvxFocusDirective} from './directives/ng-jvx-focus.directive';
     MatChipsModule,
     ReactiveFormsModule,
     NgScrollbarModule,
-    SmoothScrollModule,
+    SmoothScroll,
     FormsModule
   ],
   exports: [NgJvxMultiselectComponent,
