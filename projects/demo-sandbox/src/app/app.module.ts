@@ -34,13 +34,7 @@ import {HttpClientModule} from '@angular/common/http';
     ReactiveFormsModule,
     MatInputModule
   ],
-  providers: [
-    {
-      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
-      useValue: {
-        appearance: 'fill',
-      }
-    }],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {

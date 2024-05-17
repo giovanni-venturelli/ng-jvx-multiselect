@@ -60,7 +60,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   @HostBinding('class.floating')
   get shouldLabelFloat(): boolean {
-    return this.focused || !this.empty;
+    return this.focused || !this.empty || this.value.length > 0 || (this.placeholder && this.placeholder.length > 0);
   }
 
   @ViewChild('jvxMultiselect', {static: true}) jvxMultiselect: ElementRef;
@@ -212,7 +212,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   private unsubscribe$ = this.unsubscribe.asObservable();
   private intPageSize = 15;
   public onTouched = () => {
-  };
+  }
 
 
   constructor(private formBuilder: UntypedFormBuilder, private service: NgJvxMultiselectService,
@@ -615,4 +615,5 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   public closeMenu(): void {
     this.trigger.closeMenu();
   }
+
 }
