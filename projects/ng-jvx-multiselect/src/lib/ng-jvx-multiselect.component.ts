@@ -3,7 +3,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ContentChild,
+  ContentChild, DoCheck,
   ElementRef,
   EventEmitter,
   forwardRef,
@@ -29,8 +29,8 @@ import {MatMenuTrigger} from '@angular/material/menu';
 import {NgJvxMultiselectService} from './ng-jvx-multiselect.service';
 import {HttpHeaders} from '@angular/common/http';
 import {NgScrollbar} from 'ngx-scrollbar';
-import {debounceTime, distinctUntilChanged, map, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {forkJoin, fromEvent, noop, Observable, of, Subject, timer} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map, switchMap, takeUntil, tap, throttleTime} from 'rxjs/operators';
+import {BehaviorSubject, forkJoin, fromEvent, noop, Observable, of, Subject, timer} from 'rxjs';
 import {NgJvxMultiOptionMapper, NgJvxOptionMapper} from './interfaces/ng-jvx-option-mapper';
 import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
 import {MatFormFieldControl} from '@angular/material/form-field';
@@ -53,22 +53,24 @@ import {NgJvxGroup, NgJvxGroupMapper} from './interfaces/ng-jvx-group-mapper';
       multi: true,
     }]
 })
-export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges, MatFormFieldControl<any>,
+export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, AfterViewInit, OnChanges, MatFormFieldControl<any>,
   ControlValueAccessor {
   static nextId = 0;
   @HostBinding() id = `jvx-multiselect-${NgJvxMultiselectComponent.nextId++}`;
 
   @HostBinding('class.floating')
   get shouldLabelFloat(): boolean {
-    return this.focused || !this.empty || this.value.length > 0 || (this.placeholder && this.placeholder.length > 0);
+    return this.focused || !this.empty || this.value.length > 0 || !!this.isPlaceholderActive;
   }
 
   @ViewChild('jvxMultiselect', {static: true}) jvxMultiselect: ElementRef;
+  @ViewChild('valueContainer', {static: true}) valueContainer: ElementRef;
   @ViewChild('selectionContainer', {static: false}) selectionContainer: ElementRef;
   @ViewChild('selection', {static: true}) selection: MatSelectionList;
   @ViewChild('trigger', {static: true}) trigger: MatMenuTrigger;
   @ViewChild('scrollbar', {static: false}) scrollbar: NgScrollbar;
   @ViewChild('multiContainer', {static: false}) multiContainer: ElementRef;
+  @ViewChild('placeholderContainer', {static: false}) placeholderContainer: ElementRef;
   @ViewChildren(NgJvxOptionComponent) optionComp: QueryList<NgJvxOptionComponent>;
   @ContentChild(NgJvxOptionsTemplateDirective) optionsTemplate: NgJvxOptionsTemplateDirective | null = null;
   @ContentChild(NgJvxSelectionTemplateDirective) selectionTemplate: NgJvxSelectionTemplateDirective | null = null;
@@ -203,7 +205,8 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   public placeholder: string;
   public focused = false;
   public multiContainerWidth = 100;
-
+  private isPlaceholderActiveSubject = new BehaviorSubject<boolean>(false);
+  private isPlaceholderActive = false;
   private searchValueSubject = new Subject<string>();
   private searchValue$ = this.searchValueSubject.asObservable();
   private pValue: any[] = [];
@@ -212,7 +215,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   private unsubscribe$ = this.unsubscribe.asObservable();
   private intPageSize = 15;
   public onTouched = () => {
-  }
+  };
 
 
   constructor(private formBuilder: UntypedFormBuilder, private service: NgJvxMultiselectService,
@@ -224,7 +227,10 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       // the providers) to avoid running into a circular import.
       this.ngControl.valueAccessor = this;
     }
-
+    this.isPlaceholderActiveSubject.pipe(takeUntil(this.unsubscribe), debounceTime(0)).subscribe((v) => {
+      this.isPlaceholderActive = v;
+      this.stateChanges.next();
+    });
     this.parts = fb.group({
       area: '',
       exchange: '',
@@ -233,6 +239,10 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     this.form = this.formBuilder.group({
       selectionValue: new UntypedFormControl(this.selectionValue)
     });
+  }
+
+  ngDoCheck(): void {
+    this.isPlaceholderActiveSubject.next(this.placeholderContainer?.nativeElement?.hasChildNodes());
   }
 
   ngOnInit(): void {
@@ -350,7 +360,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   get empty(): boolean {
     const n = this.parts.value;
-    return !n.area && !n.exchange && !n.subscriber;
+    return !n.area && !n.exchange && !n.subscriber && !this.isPlaceholderActive;
   }
 
   onCLickOnMenu(e: MouseEvent): void {
