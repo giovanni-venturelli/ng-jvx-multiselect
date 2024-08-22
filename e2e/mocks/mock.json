@@ -1,0 +1,14 @@
+{
+  "basic": {
+    "data": [
+      {
+        "text": "test",
+        "value": 1
+      },
+      {
+        "text": "playwright",
+        "value": 2
+      }
+    ]
+  }
+}

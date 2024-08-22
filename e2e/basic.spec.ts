@@ -1,19 +1,31 @@
-import { test, expect } from '@playwright/test';
+import {test, expect} from '@playwright/test';
+import * as mock from './mocks/mock.json';
 
-test('test deselection', async ({ page }) => {
+test.beforeEach(async ({page}) => {
+  await page.route('**/jvx-multiselect-test*', (route: any) => {
+    console.log('data: ', JSON.stringify(mock.basic.data));
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(mock.basic.data)
+    });
+  });
+
   await page.goto('https://localhost:4200/');
-  await page.getByText('value').click();
-  const selection = page.getByText('testo: value 1', { exact: true });
-  await selection.click();
-  await selection.waitFor({state: 'hidden'});
 });
 
-test('get started link', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
-
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click();
-
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
+/**
+ * Se dopo aver ricercato clicco su un opzione della vecchia lista,
+ * la selezione verrà deselezionata e verrà proposta la nuova lista di opzioni da cui scegliere.
+ */
+test('clean selection after search response', async ({page}) => {
+  const keyword = 'Playwright';
+  await page.getByTestId('selector').click();
+  await page.getByPlaceholder('search').click();
+  await page.getByPlaceholder('search').fill(keyword);
+  const response = page.waitForResponse('**/jvx-multiselect-test*');
+  await page.getByText(keyword).click();
+  await response.then(async () => {
+    await expect(page.getByRole('option').filter({hasText: keyword})).toBeVisible();
+  });
 });

@@ -402,7 +402,9 @@
       <mat-form-field style="width: 500px;">
 <mat-label>questa è la label</mat-label>
         <ng-jvx-multiselect
+          data-testid="selector"
                             formControlName="selectionValue"
+                            [searchInput]="true"
                             [clearable]="true"
                             [mapper]="mapper"
                             [multi]="false"
@@ -421,11 +423,6 @@
                [ngJvxDisabledOption]="option.text.includes('0')">
             <div style="padding: 5px 0">
               <div>testo: {{option.text}}</div>
-              <div>valore: {{option.value}}</div>
-              <div>valore: {{option.value}}</div>
-              <div>valore: {{option.value}}</div>
-              <div>valore: {{option.value}}</div>
-              <div>valore: {{option.value}}</div>
               <div>valore: {{option.value}}</div>
             </div>
           </div>

@@ -10,6 +10,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "playwright": "npx playwright test",
+    "playwright:ui": "npx playwright test --ui",
     "build-lib-watch-styles": "scss-bundle -e \"./projects/ng-jvx-multiselect/src/lib/ng-jvx-multiselect.component.scss\" -o \"./dist/ng-jvx-multiselect/ng-jvx-multiselect.scss\" -p \"./\" -w true --rootDir \"./projects/ng-jvx-multiselect/src/lib\"",
     "build-lib-prod-styles": "scss-bundle -e \"./projects/ng-jvx-multiselect/src/lib/ng-jvx-multiselect.component.scss\" -o \"./dist/ng-jvx-multiselect/ng-jvx-multiselect.scss\" -p \"./\""
   },
