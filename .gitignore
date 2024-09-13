@@ -45,3 +45,8 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+/playwright-report
+/package-lock.json
+
+/test-results/basic-clean-selection-after-search-response-chromium/trace.zip
+/test-results/basic-test-deselection-chromium/trace.zip
