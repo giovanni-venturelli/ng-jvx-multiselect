@@ -1,168 +1,171 @@
 @use 'sass:map';
 
-  $primary: var(--jvx-multiselect-primary);
-  $accent: var(--jvx-multiselect-accent);
-  $warn: var(--jvx-multiselect-warn);
-  ng-jvx-multiselect {
+$primary: var(--jvx-multiselect-primary);
+$accent: var(--jvx-multiselect-accent);
+$warn: var(--jvx-multiselect-warn);
+ng-jvx-multiselect {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  .ng-jvx-multiselect {
+    width: 100%;
     display: flex;
     align-items: center;
-    width: 100%;
 
-    .ng-jvx-multiselect {
+    .ng-jvx-multiselect-value-container {
       width: 100%;
       display: flex;
+      cursor: pointer;
+      position: relative;
+      justify-content: space-between;
       align-items: center;
 
-      .ng-jvx-multiselect-value-container {
-        width: 100%;
-        display: flex;
-        cursor: pointer;
-        position: relative;
-        justify-content: space-between;
-        align-items: center;
-
-        .ng-jvx-multiselect__placeholder {
-          height: 100%;
-          display: flex;
-          align-items: center;
-          position: absolute;
-        }
-
-        .ng-jvx-multiselect-value {
-          flex: 1 1 100%;
-          max-width: calc(100% - 28px);
-          display: flex;
-          align-items: center;
-        }
-
-
-        .ng-jvx-multiselect__remove-button {
-          display: flex;
-          height: 100%;
-          align-items: center;
-        }
-
-        .ng-jvx-multiselect-arrow {
-          width: 24px;
-          padding-right: 4px;
-          display: flex;
-          align-items: center;
-
-          svg {
-            transition: transform 0.3s ease-in-out;
-          }
-
-          @keyframes lds-ring {
-            0% {
-              transform: rotate(0deg);
-            }
-            100% {
-              transform: rotate(360deg);
-            }
-          }
-
-          .lds-ring {
-            display: inline-block;
-            position: relative;
-            width: 24px;
-            height: 24px;
-
-            div {
-              box-sizing: border-box;
-              display: block;
-              position: absolute;
-              width: 6px;
-              height: 16px;
-              margin: 4px;
-              border: 2px solid;
-              border-radius: 50%;
-              animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-              border-color: #{$accent} transparent transparent transparent;
-
-              &:nth-child(1) {
-                animation-delay: -0.45s;
-              }
-
-              &:nth-child(2) {
-                animation-delay: -0.3s;
-              }
-
-              &:nth-child(3) {
-                animation-delay: -0.15s;
-              }
-            }
-          }
-        }
-
-        &.is-open {
-          .ng-jvx-multiselect-arrow {
-            svg {
-              transform: rotate(180deg);
-            }
-          }
-        }
-
-      }
-
-      &.disabled {
-        pointer-events: none;
-
-        .ng-jvx-multiselect-arrow {
-          svg {
-            opacity: 0.3;
-          }
-        }
-      }
-
-      &.has-errors {
-        color: red;
-
-        .ng-jvx-multiselect-value {
-          &.single-value-container {
-            color: red;
-          }
-
-          &.multi-value-container {
-            width: 100%;
-          }
-        }
-
-        .ng-jvx-multiselect-arrow {
-          svg {
-            color: red;
-          }
-        }
-      }
-    }
-  }
-
-  .menu-list-container {
-    max-height: 300px;
-    display: flex;
-    flex-direction: column;
-  }
-  .menu-footer {
-    max-height: 30px;
-    overflow: hidden;
-  }
-  .cdk-overlay-pane {
-    .closeMenuButton {
-      height: 22px;
-      width: 22px;
-      background-color: #{$primary};
-      position: absolute;
-      top: -11px;
-      right: 11px;
-      border-radius: 100%;
-      cursor: pointer;
-      color: #fff;
-      z-index: 10;
-
-      svg {
-        fill: var(--jvx-multiselect-on-primary);
-        font-size: 15px;
+      .ng-jvx-multiselect__placeholder {
         height: 100%;
-        width: 100%;
+        display: flex;
+        align-items: center;
+        position: absolute;
+      }
+
+      .ng-jvx-multiselect-value {
+        flex: 1 1 100%;
+        max-width: calc(100% - 28px);
+        display: flex;
+        align-items: center;
+      }
+
+
+      .ng-jvx-multiselect__remove-button {
+        display: flex;
+        height: 100%;
+        align-items: center;
+      }
+
+      .ng-jvx-multiselect-arrow {
+        width: 24px;
+        padding-right: 4px;
+        display: flex;
+        align-items: center;
+        height: 24px;
+
+        svg {
+          transition: transform 0.3s ease-in-out;
+        }
+
+        @keyframes lds-ring {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+
+        .lds-ring {
+          display: inline-block;
+          position: relative;
+          width: 24px;
+          height: 24px;
+
+          div {
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            width: 6px;
+            height: 16px;
+            margin: 4px;
+            border: 2px solid;
+            border-radius: 50%;
+            animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            border-color: #{$accent} transparent transparent transparent;
+
+            &:nth-child(1) {
+              animation-delay: -0.45s;
+            }
+
+            &:nth-child(2) {
+              animation-delay: -0.3s;
+            }
+
+            &:nth-child(3) {
+              animation-delay: -0.15s;
+            }
+          }
+        }
+      }
+
+      &.is-open {
+        .ng-jvx-multiselect-arrow {
+          svg {
+            transform: rotate(180deg);
+          }
+        }
+      }
+
+    }
+
+    &.disabled {
+      pointer-events: none;
+
+      .ng-jvx-multiselect-arrow {
+        svg {
+          opacity: 0.3;
+        }
       }
     }
+
+    &.has-errors {
+      color: red;
+
+      .ng-jvx-multiselect-value {
+        &.single-value-container {
+          color: red;
+        }
+
+        &.multi-value-container {
+          width: 100%;
+        }
+      }
+
+      .ng-jvx-multiselect-arrow {
+        svg {
+          color: red;
+        }
+      }
+    }
+  }
+}
+
+.menu-list-container {
+  max-height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-footer {
+  max-height: 30px;
+  overflow: hidden;
+}
+
+.cdk-overlay-pane {
+  .closeMenuButton {
+    height: 22px;
+    width: 22px;
+    background-color: #{$primary};
+    position: absolute;
+    top: -11px;
+    right: 11px;
+    border-radius: 100%;
+    cursor: pointer;
+    color: #fff;
+    z-index: 10;
+
+    svg {
+      fill: var(--jvx-multiselect-on-primary);
+      font-size: 15px;
+      height: 100%;
+      width: 100%;
+    }
+  }
 }
