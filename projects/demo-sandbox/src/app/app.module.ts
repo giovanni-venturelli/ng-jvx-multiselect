@@ -13,29 +13,22 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {MatInputModule} from '@angular/material/input';
 import {NgJvxMultiselectModule} from '../../../ng-jvx-multiselect/src/lib/ng-jvx-multiselect.module';
-import {HttpClientModule} from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
-@NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    NgJvxMultiselectModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    CommonModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatButtonModule,
-    MatListModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatInputModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        NgJvxMultiselectModule,
+        BrowserAnimationsModule,
+        CommonModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatButtonModule,
+        MatListModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatInputModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {
 }

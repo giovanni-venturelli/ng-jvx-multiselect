@@ -55,17 +55,20 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "stylePreprocessorOptions": {
               "includePaths": [
                 "projects/ng-jvx-multiselect"
               ]
             },
-            "outputPath": "dist/demo-sandbox",
+            "outputPath": {
+              "base": "dist/demo-sandbox"
+            },
             "index": "projects/demo-sandbox/src/index.html",
-            "main": "projects/demo-sandbox/src/main.ts",
-            "polyfills": "projects/demo-sandbox/src/polyfills.ts",
+            "polyfills": [
+              "projects/demo-sandbox/src/polyfills.ts"
+            ],
             "tsConfig": "projects/demo-sandbox/tsconfig.app.json",
             "assets": [
               "projects/demo-sandbox/src/favicon.ico",
@@ -75,12 +78,11 @@
               "projects/demo-sandbox/src/styles.scss"
             ],
             "scripts": [],
-            "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "browser": "projects/demo-sandbox/src/main.ts"
           },
           "configurations": {
             "production": {
@@ -95,8 +97,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",

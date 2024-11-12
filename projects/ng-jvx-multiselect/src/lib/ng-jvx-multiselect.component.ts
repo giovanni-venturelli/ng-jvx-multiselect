@@ -27,7 +27,7 @@ import {MatSelectionList, MatSelectionListChange} from '@angular/material/list';
 import {NgJvxOptionComponent} from './ng-jvx-option/ng-jvx-option.component';
 import {MatMenuTrigger} from '@angular/material/menu';
 import {NgJvxMultiselectService} from './ng-jvx-multiselect.service';
-import {HttpHeaders} from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import {NgScrollbar} from 'ngx-scrollbar';
 import {debounceTime, distinctUntilChanged, map, switchMap, takeUntil, tap, throttleTime} from 'rxjs/operators';
 import {BehaviorSubject, forkJoin, fromEvent, noop, Observable, of, Subject, timer} from 'rxjs';
@@ -219,7 +219,7 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
 
 
   constructor(private formBuilder: UntypedFormBuilder, private service: NgJvxMultiselectService,
-              private elementRef: ElementRef,
+              private elementRef: ElementRef, 
               private changeDetectorRef: ChangeDetectorRef,
               @Optional() @Self() public ngControl: NgControl, fb: UntypedFormBuilder) {
     if (this.ngControl != null) {
