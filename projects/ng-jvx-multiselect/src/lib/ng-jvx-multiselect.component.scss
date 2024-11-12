@@ -1,4 +1,3 @@
-@use '@angular/material' as  mat;
 @use 'sass:map';
 
   $primary: var(--jvx-multiselect-primary);
@@ -34,23 +33,6 @@
           max-width: calc(100% - 28px);
           display: flex;
           align-items: center;
-          /* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
-          /* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
-          .mat-chip-list-wrapper {
-            .mat-mdc-standard-chip {
-              padding: 0 5px 0 7px;
-              margin: 4px 5px 0;
-
-              .chip-content {
-                margin-left: 4px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: inline-block;
-              }
-            }
-          }
-
         }
 
 
@@ -66,7 +48,7 @@
           display: flex;
           align-items: center;
 
-          mat-icon {
+          svg {
             transition: transform 0.3s ease-in-out;
           }
 
@@ -114,7 +96,7 @@
 
         &.is-open {
           .ng-jvx-multiselect-arrow {
-            mat-icon {
+            svg {
               transform: rotate(180deg);
             }
           }
@@ -126,7 +108,7 @@
         pointer-events: none;
 
         .ng-jvx-multiselect-arrow {
-          mat-icon {
+          svg {
             opacity: 0.3;
           }
         }
@@ -146,16 +128,12 @@
         }
 
         .ng-jvx-multiselect-arrow {
-          mat-icon {
+          svg {
             color: red;
           }
         }
       }
     }
-  }
-  /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
-  .mat-select-test {
-    width: 250px;
   }
 
   .menu-list-container {
@@ -168,93 +146,23 @@
     overflow: hidden;
   }
   .cdk-overlay-pane {
-    .mat-mdc-menu-panel.jvx-multiselect-panel {
-      //min-width: 100%;
-      max-width: 100%;
-      position: relative;
-      overflow: visible;
+    .closeMenuButton {
+      height: 22px;
+      width: 22px;
+      background-color: #{$primary};
+      position: absolute;
+      top: -11px;
+      right: 11px;
+      border-radius: 100%;
+      cursor: pointer;
+      color: #fff;
+      z-index: 10;
 
-      .closeMenuButton {
-        height: 22px;
-        width: 22px;
-        background-color: #{$primary};
-        position: absolute;
-        top: -11px;
-        right: 11px;
-        border-radius: 100%;
-        cursor: pointer;
-        color: #fff;
-        z-index: 10;
-
-        mat-icon {
-          color: #fff;
-          font-size: 15px;
-          height: 100%;
-          width: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-      }
-
-      .mat-mdc-menu-content {
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-
-        .menu-list-container {
-          ng-scrollbar {
-            --scrollbar-color: transparent;
-            --scrollbar-container-color: transparent;
-            --scrollbar-thumb-color: #{$accent};
-            --scrollbar-thumb-hover-color: #{$accent};
-            --scrollbar-border-radius: 4px;
-            --scrollbar-size: 6px;
-            --scrollbar-padding: 8px;
-            --scroll-view-margin: 0;
-            --scroll-view-color: transparent;
-          }
-        }
-
-        .search-input-container {
-          height: 40px;
-          display: flex;
-          align-items: center;
-          padding: 10px;
-
-          input {
-            width: 100%;
-            outline: none;
-            border: none;
-
-            &:focus {
-              outline: none;
-            }
-
-            &:active {
-              outline: none
-            }
-          }
-        }
-
-        .mat-mdc-selection-list {
-          padding-top: 0 !important;
-          padding-bottom: 0 !important;
-
-          .mat-mdc-list-option[aria-selected="true"], .mat-mdc-list-option[aria-selected="false"] {
-            .ng-jvx-option-wrapper{
-              padding-inline: 10px;
-            }
-            .mdc-list-item__end {
-              display: none;
-
-            }
-            //.mdc-checkbox {
-            //  display: none
-            //}
-          }
-        }
-
+      svg {
+        fill: var(--jvx-multiselect-on-primary);
+        font-size: 15px;
+        height: 100%;
+        width: 100%;
       }
     }
-
 }

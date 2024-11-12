@@ -1,25 +1,17 @@
-@use '@angular/material' as mat;
 @use 'sass:map';
 
 $primary: var(--jvx-multiselect-primary);
 $accent: var(--jvx-multiselect-accent);
 $warn: var(--jvx-multiselect-warn);
 ng-jvx-option {
-  .mat-mdc-list-item.mat-mdc-list-option.ng-jvx-option {
+  .ng-jvx-option {
     padding: 0;
     height: auto;
     min-height: 48px;
+    cursor: pointer;
+    position: relative;
 
-
-    .mat-list-text {
-      min-height: 48px;
-      display: flex;
-      justify-content: center;
-    }
-
-    &[aria-selected="true"] {
-
-      color: #{$primary};
+    &.ng-jvx-single-selected-option {
 
       .list-option-background {
         position: absolute;
@@ -29,7 +21,8 @@ ng-jvx-option {
         opacity: 0.45;
         height: 100%;
         width: 100%;
-        background: #{$primary};
+        background-color: #{$primary};
+        background-opacity: .3;
       }
     }
   }

@@ -1,6 +1,6 @@
 # NgJvxMultiselect
 
-ng-jvx-multiselect is a select based on angular material. It handles both single and multiple selections and allows to
+ng-jvx-multiselect is a select based on angular. It handles both single and multiple selections and allows to
 retrieves the options via asynchronous calls.
 
 ## Install ng-jvx-multiselect
@@ -24,34 +24,17 @@ import {NgJvxMultiselectModule} from 'ng-jvx-multiselect';
 In <b>styles.scss</b>
 
 ```scss
-@use '@angular/material' as mat;
 @use 'index' as ng-jvx-multiselect;
-@import '@angular/material/theming';
-// Plus imports for other components in your app.
 
-// Include the common styles for Angular Material.
-@include mat-core();
-
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). 
-$candy-app-primary: mat-palette($mat-indigo);
-$candy-app-accent: mat-palette($mat-pink, A200, A100, A400);
-
-// The warn palette is optional (defaults to red).
-$candy-app-warn: mat-palette($mat-red);
-
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as `color` or `typography`.
-$candy-app-theme: mat-light-theme((
-  color: (
-    primary: $candy-app-primary,
-    accent: $candy-app-accent,
-    warn: $candy-app-warn,
-  )
-));
-
-@include angular-material-theme($candy-app-theme);
-@include ng-jvx-multiselect-style($candy-app-theme);
+:root {
+  --jvx-multiselect-primary: #008000;
+  --jvx-multiselect-accent: #0000FF;
+  --jvx-multiselect-warn: #FF0000;
+  --jvx-multiselect-on-primary: #ffffff;
+  --jvx-multiselect-on-accent: currentcolor;
+  --jvx-multiselect-on-warn: currentcolor;
+  --jvx-multiselect-panel-bg: #FFFFFF
+}
 ```
 In <b>example.component.html</b>
 

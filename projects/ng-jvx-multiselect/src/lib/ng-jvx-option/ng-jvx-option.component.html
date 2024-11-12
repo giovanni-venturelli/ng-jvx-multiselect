@@ -1,4 +1,7 @@
-<mat-list-option [value]="value" [ngClass]="{'ng-jvx-option': true, 'mat-list-single-selected-option': isSelected}" #listOption>
-  <ng-content></ng-content>
+<div class="option" [ngClass]="{'ng-jvx-option': true, 'ng-jvx-single-selected-option': isSelected()}" #listOption
+(click)="clickOnOption.emit()">
+  <div class="option-content">
+    <ng-content></ng-content>
+  </div>
   <div class="list-option-background"></div>
-</mat-list-option>
+</div>

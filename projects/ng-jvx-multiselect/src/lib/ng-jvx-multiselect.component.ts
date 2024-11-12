@@ -23,21 +23,19 @@ import {
 } from '@angular/core';
 import {NgJvxOptionsTemplateDirective} from './directives/ng-jvx-options-template.directive';
 import {ControlValueAccessor, NgControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
-import {MatSelectionList, MatSelectionListChange} from '@angular/material/list';
 import {NgJvxOptionComponent} from './ng-jvx-option/ng-jvx-option.component';
-import {MatMenuTrigger} from '@angular/material/menu';
 import {NgJvxMultiselectService} from './ng-jvx-multiselect.service';
-import { HttpHeaders } from '@angular/common/http';
+import {HttpHeaders} from '@angular/common/http';
 import {NgScrollbar} from 'ngx-scrollbar';
 import {debounceTime, distinctUntilChanged, map, switchMap, takeUntil, tap, throttleTime} from 'rxjs/operators';
 import {BehaviorSubject, forkJoin, fromEvent, noop, Observable, of, Subject, timer} from 'rxjs';
 import {NgJvxMultiOptionMapper, NgJvxOptionMapper} from './interfaces/ng-jvx-option-mapper';
 import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
-import {MatFormFieldControl} from '@angular/material/form-field';
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {NgJvxGroupHeaderDirective} from './directives/ng-jvx-group-header.directive';
 import {NgJvxSearchMapper} from './interfaces/ng-jvx-search-mapper';
 import {NgJvxGroup, NgJvxGroupMapper} from './interfaces/ng-jvx-group-mapper';
+import {MenuTriggerDirective} from './panel/menu-trigger/menu-trigger.directive';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -47,13 +45,14 @@ import {NgJvxGroup, NgJvxGroupMapper} from './interfaces/ng-jvx-group-mapper';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   providers: [
-    {
-      provide: MatFormFieldControl,
-      useExisting: forwardRef(() => NgJvxMultiselectComponent),
-      multi: true,
-    }]
+    // {
+    //   provide: MatFormFieldControl,
+    //   useExisting: forwardRef(() => NgJvxMultiselectComponent),
+    //   multi: true,
+    // }
+  ]
 })
-export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, AfterViewInit, OnChanges, MatFormFieldControl<any>,
+export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, AfterViewInit, OnChanges,
   ControlValueAccessor {
   static nextId = 0;
   @HostBinding() id = `jvx-multiselect-${NgJvxMultiselectComponent.nextId++}`;
@@ -66,8 +65,8 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
   @ViewChild('jvxMultiselect', {static: true}) jvxMultiselect: ElementRef;
   @ViewChild('valueContainer', {static: true}) valueContainer: ElementRef;
   @ViewChild('selectionContainer', {static: false}) selectionContainer: ElementRef;
-  @ViewChild('selection', {static: true}) selection: MatSelectionList;
-  @ViewChild('trigger', {static: true}) trigger: MatMenuTrigger;
+  // @ViewChild('selection', {static: true}) selection: MatSelectionList;
+  @ViewChild(MenuTriggerDirective, {static: true}) trigger: MenuTriggerDirective;
   @ViewChild('scrollbar', {static: false}) scrollbar: NgScrollbar;
   @ViewChild('multiContainer', {static: false}) multiContainer: ElementRef;
   @ViewChild('placeholderContainer', {static: false}) placeholderContainer: ElementRef;
@@ -219,7 +218,7 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
 
 
   constructor(private formBuilder: UntypedFormBuilder, private service: NgJvxMultiselectService,
-              private elementRef: ElementRef, 
+              private elementRef: ElementRef,
               private changeDetectorRef: ChangeDetectorRef,
               @Optional() @Self() public ngControl: NgControl, fb: UntypedFormBuilder) {
     if (this.ngControl != null) {
@@ -388,7 +387,8 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
     this.onTouched = fn;
   }
 
-  onChange(e: MatSelectionListChange): void {
+  onChange(e: any): void {
+    // onChange(e: MatSelectionListChange): void {
 
     let vals = e.source.selectedOptions.selected.map(o => o.value);
     vals = this.selectableOptions.filter(o => vals.includes(o[this.itemValue]));
@@ -626,4 +626,38 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
     this.trigger.closeMenu();
   }
 
+  isOptionSelected(option: any): boolean {
+    return this.form.get('selectionValue').value.includes(option[this.itemValue]);
+  }
+
+  clickOnOption(option: any): void {
+    if (this.isOptionSelected(option)) {
+      this.deselect(option);
+    } else {
+      this.select(option);
+    }
+  }
+
+  select(option: any): void {
+    if (!this.multi) {
+      this.form.get('selectionValue').reset([]);
+      this.value = [];
+    }
+    this.value.push(option);
+
+    this.value.sort((a, b) => {
+      return typeof a[this.itemValue] === 'string' ?
+        a[this.itemValue].localeCompare(b[this.itemValue]) : a[this.itemValue] - b[this.itemValue];
+    });
+    const val = this.form.get('selectionValue').value.concat([option[this.itemValue]]);
+    val.sort((a, b) => {
+      return typeof a[this.itemValue] === 'string' ?
+        a[this.itemValue].localeCompare(b[this.itemValue]) : a[this.itemValue] - b[this.itemValue];
+    });
+    this.form.get('selectionValue').setValue(val);
+    this.propagateChange(this.value);
+    this.valueChange.emit(this.value);
+    this.changeDetectorRef.markForCheck();
+    console.log(this.form.get('selectionValue').value);
+  }
 }
