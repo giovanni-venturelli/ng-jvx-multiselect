@@ -146,5 +146,23 @@
     overflow: hidden;
   }
   .cdk-overlay-pane {
+    .closeMenuButton {
+      height: 22px;
+      width: 22px;
+      background-color: #{$primary};
+      position: absolute;
+      top: -11px;
+      right: 11px;
+      border-radius: 100%;
+      cursor: pointer;
+      color: #fff;
+      z-index: 10;
 
+      svg {
+        fill: var(--jvx-multiselect-on-primary);
+        font-size: 15px;
+        height: 100%;
+        width: 100%;
+      }
+    }
 }
