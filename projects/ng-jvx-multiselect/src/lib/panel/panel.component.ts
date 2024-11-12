@@ -23,7 +23,7 @@ import {animate, style, transition, trigger} from '@angular/animations';
     CdkConnectedOverlay
   ],
   templateUrl: './panel.component.html',
-  styleUrl: './panel.component.css',
+  styleUrl: './panel.component.scss',
   encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('animation', [

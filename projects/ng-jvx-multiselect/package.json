@@ -1,6 +1,6 @@
 {
   "name": "ng-jvx-multiselect",
-  "version": "18.0.1",
+  "version": "18.0.2",
   "license" : "MIT",
   "description": "ng-jvx-multiselect is a select based on angular material. It handles both single and multiple selections and allows to retrieves the options via asynchronous calls.",
   "exports": {
@@ -11,8 +11,8 @@
   "peerDependencies": {
     "@angular/common": "^18.0.5",
     "@angular/core": "^18.0.5",
-    "@angular/material": "^18.0.5",
-    "ngx-scrollbar": "^13.0.3"
+    "ngx-scrollbar": "^13.0.3",
+    "@angular/cdk": "^18.0.5"
   },
   "dependencies": {
     "tslib": "^2.0.0"
