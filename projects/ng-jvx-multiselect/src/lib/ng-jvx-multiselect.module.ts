@@ -1,25 +1,22 @@
 import {NgModule} from '@angular/core';
 import {NgJvxMultiselectComponent} from './ng-jvx-multiselect.component';
-import {MatButtonModule} from '@angular/material/button';
-import {MatOptionModule} from '@angular/material/core';
-import {MatSelectModule} from '@angular/material/select';
 import {CommonModule} from '@angular/common';
 import {NgJvxOptionComponent} from './ng-jvx-option/ng-jvx-option.component';
-import {MatMenuModule} from '@angular/material/menu';
 import {NgJvxOptionsTemplateDirective} from './directives/ng-jvx-options-template.directive';
-import {MatIconModule} from '@angular/material/icon';
-import {MatListModule} from '@angular/material/list';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatChipsModule} from '@angular/material/chips';
 import {NgScrollbarModule} from 'ngx-scrollbar';
 import {SmoothScroll} from 'ngx-scrollbar/smooth-scroll';
 import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
 import {NgJvxDisabledOptionDirective} from './directives/ng-jvx-disabled-option.directive';
 import {NgJvxGroupHeaderDirective} from './directives/ng-jvx-group-header.directive';
 import {NgJvxFocusDirective} from './directives/ng-jvx-focus.directive';
+import {MenuTriggerDirective} from './panel/menu-trigger/menu-trigger.directive';
+import {PanelComponent} from './panel/panel.component';
+import {ChipComponent} from './chiplist/chip/chip.component';
 
 @NgModule({
   declarations: [
+    MenuTriggerDirective,
     NgJvxMultiselectComponent,
     NgJvxOptionComponent,
     NgJvxOptionsTemplateDirective,
@@ -28,18 +25,13 @@ import {NgJvxFocusDirective} from './directives/ng-jvx-focus.directive';
     NgJvxGroupHeaderDirective,
     NgJvxFocusDirective],
   imports: [
-    MatButtonModule,
-    MatOptionModule,
-    MatSelectModule,
-    MatMenuModule,
     CommonModule,
-    MatIconModule,
-    MatListModule,
-    MatChipsModule,
     ReactiveFormsModule,
     NgScrollbarModule,
     SmoothScroll,
-    FormsModule
+    FormsModule,
+    PanelComponent,
+    ChipComponent
   ],
   exports: [NgJvxMultiselectComponent,
     NgJvxOptionComponent,
