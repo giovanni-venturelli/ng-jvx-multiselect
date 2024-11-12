@@ -1,0 +1,32 @@
+lib-chip{
+  > div{
+    padding: 0 .2rem;
+    height: 1.8rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    border-radius: 1rem;
+    width: auto;
+    background-color: var(--jvx-multiselect-primary);
+    color: var(--jvx-multiselect-on-primary);
+    display: flex;
+    align-items: center;
+    .chip-text{
+      flex: 1 1 100%;
+      padding-inline: .5rem;
+    }
+    .remove-button{
+      cursor: pointer;
+      color: var(--jvx-multiselect-on-primary);
+    }
+    &.disabled{
+      background-color: #c2c3c4;
+      color: currentColor;
+      .chip-text {
+        pointer-events: none;
+      }
+      .remove-button{
+        color: currentColor;
+      }
+    }
+  }
+}
