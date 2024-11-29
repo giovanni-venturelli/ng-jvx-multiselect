@@ -57,7 +57,7 @@
                 <ng-container *ngIf="!groupBy || groupBy.length === 0">
                   <ng-jvx-option *ngFor="let option of selectableOptions" [value]="option[itemValue]"
                                  [isSelected]="isOptionSelected(option)" (click)="clickOnOption(option)">
-                    <div class="ng-jvx-option-wrapper">
+                    <div class="ng-jvx-option-wrapper" style="min-height:48px">
                       <!--        <ng-container [ngTemplateOutlet]="optionsTemplate" [ngTemplateOutletContext]="{$implicit: option}"></ng-container>-->
                       <ng-container [ngTemplateOutlet]="optionsTemplate? optionsTemplate.template : defaultTemplate"
                                     [ngTemplateOutletContext]="{$implicit: option}"></ng-container>
