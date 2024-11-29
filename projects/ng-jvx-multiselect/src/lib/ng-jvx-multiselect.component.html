@@ -6,13 +6,13 @@
   >
     <lib-panel #menuRef [class]="['jvx-multiselect-panel', panelClass].join(' ')" [formGroup]="form"
                [yPosition]="yPosition">
-      @if(closeButton){
-      <div  class="closeMenuButton">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-          <path
-            d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path>
-        </svg>
-      </div>
+      @if (closeButton) {
+        <div class="closeMenuButton">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+            <path
+              d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path>
+          </svg>
+        </div>
       }
       <div class="menu-list-container"
            #menuLIstContainer
@@ -33,10 +33,10 @@
                         [autoHeightDisabled]="false" #scrollbar>
             <div #selectionContainer (click)="onCLickOnMenu($event)">
               <div #selection
-                                  *ngIf="showList"
-                                  [ngStyle]="{'padding': 0, 'width': listContainerSize.width, 'min-width.px': 112}"
-                                  ngDefaultControl
-                                  formControlName="selectionValue">
+                   *ngIf="showList"
+                   [ngStyle]="{'padding': 0, 'width': listContainerSize.width, 'min-width.px': 112}"
+                   ngDefaultControl
+                   formControlName="selectionValue">
                 <ng-content></ng-content>
                 <ng-container *ngIf="!!groupBy">
                   <ng-container *ngFor="let opt of orderedOptions">
@@ -44,9 +44,10 @@
                       [ngTemplateOutlet]="groupHeaderTemplate? groupHeaderTemplate.template: defaultGroupHeaderTemplate"
                       [ngTemplateOutletContext]="{$implicit: opt}"></ng-container>
 
-                    <ng-jvx-option *ngFor="let option of opt.options" [value]="option[itemValue]" [isSelected]="isOptionSelected(option)" (click)="clickOnOption(option)">
+                    <ng-jvx-option *ngFor="let option of opt.options" [value]="option[itemValue]"
+                                   [isSelected]="isOptionSelected(option)" (click)="clickOnOption(option)">
                       <!--        <ng-container [ngTemplateOutlet]="optionsTemplate" [ngTemplateOutletContext]="{$implicit: option}"></ng-container>-->
-                      <div class="ng-jvx-option-wrapper">
+                      <div class="ng-jvx-option-wrapper" style="min-height:48px">
                         <ng-container [ngTemplateOutlet]="optionsTemplate? optionsTemplate.template : defaultTemplate"
                                       [ngTemplateOutletContext]="{$implicit: option}"></ng-container>
                       </div>
@@ -54,7 +55,8 @@
                   </ng-container>
                 </ng-container>
                 <ng-container *ngIf="!groupBy || groupBy.length === 0">
-                  <ng-jvx-option *ngFor="let option of selectableOptions" [value]="option[itemValue]"  [isSelected]="isOptionSelected(option)" (click)="clickOnOption(option)">
+                  <ng-jvx-option *ngFor="let option of selectableOptions" [value]="option[itemValue]"
+                                 [isSelected]="isOptionSelected(option)" (click)="clickOnOption(option)">
                     <div class="ng-jvx-option-wrapper">
                       <!--        <ng-container [ngTemplateOutlet]="optionsTemplate" [ngTemplateOutletContext]="{$implicit: option}"></ng-container>-->
                       <ng-container [ngTemplateOutlet]="optionsTemplate? optionsTemplate.template : defaultTemplate"
@@ -125,11 +127,13 @@
   <!-- END INPUT -->
 </div>
 <ng-template #defaultTemplate let-option>
-  <div style="max-width: 100%;
+  <div style="height: 100%; display: flex; align-items: center">
+    <div style="max-width: 100%;
   padding-inline: .3rem;
      white-space: nowrap;
      overflow: hidden;
      text-overflow: ellipsis;">{{ option[itemText] }}
+    </div>
   </div>
 </ng-template>
 

@@ -1,8 +1,8 @@
 {
   "name": "ng-jvx-multiselect",
-  "version": "18.0.2",
+  "version": "18.0.4",
   "license" : "MIT",
-  "description": "ng-jvx-multiselect is a select based on angular material. It handles both single and multiple selections and allows to retrieves the options via asynchronous calls.",
+  "description": "ng-jvx-multiselect is a select for angular projects. It handles both single and multiple selections and allows to retrieves the options via asynchronous calls.",
   "exports": {
     ".": {
       "sass": "./_index.scss"

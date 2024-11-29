@@ -4,6 +4,9 @@ $primary: var(--jvx-multiselect-primary);
 $accent: var(--jvx-multiselect-accent);
 $warn: var(--jvx-multiselect-warn);
 ng-jvx-option {
+  .option-content{
+    min-height: 48px;
+  }
   .ng-jvx-option {
     padding: 0;
     height: auto;
