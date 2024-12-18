@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve demo-sandbox --port 4200 --ssl true",
+    "start": "ng serve demo-sandbox --port 4300 --ssl true",
     "build": "ng build ng-jvx-multiselect --watch",
     "build-prod": "ng build ng-jvx-multiselect --configuration production",
     "publish": "npm run build-prod && npm publish ./dist/ng-jvx-multiselect",

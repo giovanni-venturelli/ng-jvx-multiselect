@@ -28,6 +28,8 @@
   <!--      </mat-select>-->
   <!--    </mat-form-field>-->
   <!--  </div>-->
+  <div style="display: flex; width: 100%; height: 100%">
+    <div style="flex: 1 1 100%"></div>
   <div [ngStyle]="{'width.px': width}">
 
     <!--      <ng-jvx-multiselect-->
@@ -50,13 +52,13 @@
 
 
             <ng-jvx-multiselect style="width: 100%"
+                                formControlName="selectionValue"
+                                (valueChange)="onValueChange($event)"
                                 [options]="options"
                                 [searchInput]="true"
+                                [multi]="true"
                                 [searchMode]="'client'"
                                 >
-              <div *ngJvxSelectionTemplate="let option">
-                ciao {{option.text}}
-              </div>
             </ng-jvx-multiselect>
 
 
@@ -65,9 +67,8 @@
 <!--        <input formControlName="testInput" matInput/>-->
 <!--      </mat-form-field>-->
       <div style="width: 500px;">
-<label>questa è la label</label>
+        <label>questa è la label</label>
         <ng-jvx-multiselect
-                            formControlName="selectionValue"
                             [clearable]="true"
                             [mapper]="mapper"
                             [multi]="true"
@@ -123,6 +124,7 @@
     <!--  &lt;!&ndash;      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>&ndash;&gt;-->
     <!--  &lt;!&ndash;    </div>&ndash;&gt;-->
     <!--    </ng-jvx-multiselect>-->
+  </div>
   </div>
 <!--  <div style="width: 250px;">-->
 

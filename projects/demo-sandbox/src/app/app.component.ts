@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { HttpHeaders } from '@angular/common/http';
+import {HttpHeaders} from '@angular/common/http';
 import {Observable, of, timer} from 'rxjs';
 import {UntypedFormBuilder, FormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {JVXMULTISELECT, NgJvxGroup, NgJvxGroupMapper, NgJvxOptionMapper} from 'ng-jvx-multiselect';
@@ -66,8 +66,11 @@ export class AppComponent implements OnInit {
       testInput: ['', Validators.required]
     });
 
-    this.form.valueChanges.subscribe((val) => {
+    this.form.controls.selectionValue.valueChanges.subscribe((val) => {
 
+      if (!!val.some(v => v.value === 5) && val.length > 1) {
+        this.form.controls.selectionValue.setValue([val.find(v => v.value === 5)]);
+      }
     });
   }
 
@@ -103,5 +106,10 @@ export class AppComponent implements OnInit {
     timer(500).subscribe(() => {
       this.width = 257;
     });
+  }
+
+  onValueChange(e: any[]) {
+    console.log(e);
+    console.log(this.form.controls.selectionValue.getRawValue());
   }
 }

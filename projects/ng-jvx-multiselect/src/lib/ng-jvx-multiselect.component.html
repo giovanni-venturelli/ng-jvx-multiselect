@@ -1,10 +1,11 @@
+{{multi}}
 <div class="ng-jvx-multiselect" [ngClass]="{'disabled': disabled, 'has-errors': hasErrors}" #jvxMultiselect>
   <!-- START MENU -->
   <div [libMenuTriggerFor]="menuRef" (onMenuOpen)="onMenuOpen()" (menuOpened)="onMenuOpened()"
        #trigger
        (onMenuClose)="onMenuClose()" (menuClosed)="onMenuClosed()"
   >
-    <lib-panel #menuRef [class]="['jvx-multiselect-panel', panelClass].join(' ')" [formGroup]="form"
+    <lib-panel #menuRef [class]="['jvx-multiselect-panel', panelClass].join(' ')" [multi]="multi" [formGroup]="form"
                [yPosition]="yPosition">
       @if (closeButton) {
         <div class="closeMenuButton">
@@ -87,10 +88,8 @@
       </div>
     }
     <div class="ng-jvx-multiselect-value multi-value-container" *ngIf="multi" #multiContainer>
-
       <ng-container [ngTemplateOutlet]="selectionTemplate? selectionTemplate.template : defaultMultiSelectionTemplate"
                     [ngTemplateOutletContext]="{$implicit: value}"></ng-container>
-
 
     </div>
 

@@ -60,7 +60,7 @@ import {animate, style, transition, trigger} from '@angular/animations';
     ]),
   ]
 })
-export class PanelComponent  implements OnDestroy {
+export class PanelComponent implements OnDestroy {
   // -----------------------------------------------------------------------------------------------------
   // @ Accessors
   // -----------------------------------------------------------------------------------------------------
@@ -68,7 +68,7 @@ export class PanelComponent  implements OnDestroy {
   // -----------------------------------------------------------------------------------------------------
   // @ Refs
   // -----------------------------------------------------------------------------------------------------
-  @ViewChild('menuTemplate', { static: true })
+  @ViewChild('menuTemplate', {static: true})
   menuTemplate!: TemplateRef<any>;
 
   protected isOpen = signal(false);
@@ -79,7 +79,7 @@ export class PanelComponent  implements OnDestroy {
   // -----------------------------------------------------------------------------------------------------
   @Input() trigger!: ElementRef<any>;
   @Input() yPosition: 'above' | 'below' = 'above';
-
+  multi = input.required<boolean>();
   // -----------------------------------------------------------------------------------------------------
   // @ Outputs
   // -----------------------------------------------------------------------------------------------------
@@ -98,10 +98,11 @@ export class PanelComponent  implements OnDestroy {
       });
   }
 
-  ngOnDestroy(): void  {
+  ngOnDestroy(): void {
     this.unsubscribe.next();
     this.unsubscribe.complete();
   }
+
   // -----------------------------------------------------------------------------------------------------
   // @ Public Methods
   // -----------------------------------------------------------------------------------------------------
@@ -125,7 +126,9 @@ export class PanelComponent  implements OnDestroy {
   // @ protected Methods
   // -----------------------------------------------------------------------------------------------------
   protected clickOnMenu(): void {
+    if (!this.multi()) {
       this.close();
+    }
   }
 
   // -----------------------------------------------------------------------------------------------------
