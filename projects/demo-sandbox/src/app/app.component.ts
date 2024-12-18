@@ -21,8 +21,7 @@ export class AppComponent implements OnInit {
     }
   } as NgJvxOptionMapper<{ value: number, text: string }>;
   public selectedValue = [
-    {text: 'value 1', value: 1},
-    {text: 'value 2', value: 2}
+    {text: 'value 1', value: 1}
   ];
   public loaded = true;
   public form: UntypedFormGroup;
@@ -62,7 +61,7 @@ export class AppComponent implements OnInit {
 
   constructor(private formBuilder: UntypedFormBuilder) {
     this.form = this.formBuilder.group({
-      selectionValue: [this.selectedValue, Validators.required],
+      selectionValue: [this.selectedValue],
       testInput: ['', Validators.required]
     });
 
@@ -103,6 +102,9 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     timer(500).subscribe(() => {
       this.width = 257;
+    });
+    timer(5000).subscribe(() => {
+      this.form.get('selectionValue').setValue([{value: 4, text: 'text 4'}]);
     });
   }
 }

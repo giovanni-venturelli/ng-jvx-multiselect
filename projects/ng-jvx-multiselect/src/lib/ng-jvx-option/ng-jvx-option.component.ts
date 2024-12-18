@@ -11,7 +11,8 @@ import {MatListOption} from '@angular/material/list';
 export class NgJvxOptionComponent implements OnInit, DoCheck {
   @ViewChild('listOption', {static: true}) listOption: MatListOption;
   @Input() value: any;
-  public isSelected = false;
+  @Input() isSelected = false;
+  // public isSelected = false;
 
   constructor() {
   }
@@ -21,9 +22,9 @@ export class NgJvxOptionComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck(): void {
-    if (this.isSelected !== this.listOption.selected) {
-      this.isSelected = this.listOption.selected;
-    }
+    // if (this.isSelected !== this.listOption.selected) {
+    //   this.isSelected = this.listOption.selected;
+    // }
   }
 
   deselect(): void{

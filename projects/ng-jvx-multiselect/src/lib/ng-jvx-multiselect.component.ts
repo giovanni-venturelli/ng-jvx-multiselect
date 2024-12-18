@@ -615,4 +615,8 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   public closeMenu(): void {
     this.trigger.closeMenu();
   }
+
+  public optionsIsSelected(option: any): boolean {
+    return this.form.get('selectionValue').value.some(s => s === option[this.itemValue]);
+  }
 }

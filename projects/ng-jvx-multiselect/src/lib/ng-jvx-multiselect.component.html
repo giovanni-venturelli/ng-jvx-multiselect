@@ -32,6 +32,7 @@
                                   (selectionChange)="onChange($event)"
                                   ngDefaultControl
                                   formControlName="selectionValue">
+
                 <ng-content></ng-content>
                 <ng-container *ngIf="!!groupBy">
                   <ng-container *ngFor="let opt of orderedOptions">
@@ -39,7 +40,7 @@
                       [ngTemplateOutlet]="groupHeaderTemplate? groupHeaderTemplate.template: defaultGroupHeaderTemplate"
                       [ngTemplateOutletContext]="{$implicit: opt}"></ng-container>
 
-                    <ng-jvx-option *ngFor="let option of opt.options" [value]="option[itemValue]">
+                    <ng-jvx-option *ngFor="let option of opt.options" [value]="option[itemValue]" [isSelected]="optionsIsSelected(option)">
                       <!--        <ng-container [ngTemplateOutlet]="optionsTemplate" [ngTemplateOutletContext]="{$implicit: option}"></ng-container>-->
                       <div class="ng-jvx-option-wrapper">
                       <ng-container [ngTemplateOutlet]="optionsTemplate? optionsTemplate.template : defaultTemplate"
@@ -49,7 +50,7 @@
                   </ng-container>
                 </ng-container>
                 <ng-container *ngIf="!groupBy || groupBy.length === 0">
-                  <ng-jvx-option *ngFor="let option of selectableOptions" [value]="option[itemValue]">
+                  <ng-jvx-option *ngFor="let option of selectableOptions" [value]="option[itemValue]" [isSelected]="optionsIsSelected(option)">
                     <div class="ng-jvx-option-wrapper">
                     <!--        <ng-container [ngTemplateOutlet]="optionsTemplate" [ngTemplateOutletContext]="{$implicit: option}"></ng-container>-->
                     <ng-container [ngTemplateOutlet]="optionsTemplate? optionsTemplate.template : defaultTemplate"
