@@ -49,14 +49,11 @@
 
 
             <ng-jvx-multiselect style="width: 100%"
-                                [options]="options"
-                                [formControlName]="'selectionValue'"
-                                [searchInput]="true"
-                                [searchMode]="'client'"
+                                [options]="optionsEM"
+                                [multi]="true"
+                                [value]="selectedValueEM"
+                                (valueChange)="jvxValueChange($event)"
                                 >
-              <div *ngJvxSelectionTemplate="let option">
-                {{option.text}}
-              </div>
             </ng-jvx-multiselect>
 
 
