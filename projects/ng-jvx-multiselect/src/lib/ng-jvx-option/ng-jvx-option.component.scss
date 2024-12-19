@@ -17,7 +17,7 @@ ng-jvx-option {
       justify-content: center;
     }
 
-    &[aria-selected="true"] {
+    &.mat-list-single-selected-option {
 
       color: #{$primary};
 

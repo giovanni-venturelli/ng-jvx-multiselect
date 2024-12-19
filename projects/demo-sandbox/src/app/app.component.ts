@@ -21,8 +21,10 @@ export class AppComponent implements OnInit {
     }
   } as NgJvxOptionMapper<{ value: number, text: string }>;
   public selectedValue = [
-    {text: 'value 1', value: 1},
-    {text: 'value 2', value: 2}
+    {text: 'value 1', value: 1}
+  ];
+  public selectedValueEM = [
+    {value: 'All', text: 'All'}
   ];
   public loaded = true;
   public form: UntypedFormGroup;
@@ -36,10 +38,15 @@ export class AppComponent implements OnInit {
   public options = [
     {value: 1, text: 'text 1'},
     {value: 2, text: 'text 2'},
-    {value: 3, text: 3},
+    {value: 3, text: 'text 3'},
     {value: 4, text: 'text 4'},
     {value: 5, text: 'text 5'}];
-
+  public optionsEM = [
+    {value: 'TN010', text: 'DIP'},
+    {value: 'TN020', text: 'INT'},
+    {value: 'TN030', text: 'VIS'},
+    {value: 'TN040', text: 'BAR'},
+    {value: 'All', text: 'All'}];
   // public options = [
   //   {group: 'a', nested: {group: 'nested a'}, text: 'value 0', value: 0},
   //   {group: 'a', nested: {group: 'nested a'}, text: 'value 1', value: 1},
@@ -62,7 +69,7 @@ export class AppComponent implements OnInit {
 
   constructor(private formBuilder: UntypedFormBuilder) {
     this.form = this.formBuilder.group({
-      selectionValue: [this.selectedValue, Validators.required],
+      selectionValue: [this.selectedValue],
       testInput: ['', Validators.required]
     });
 
@@ -103,5 +110,55 @@ export class AppComponent implements OnInit {
     timer(500).subscribe(() => {
       this.width = 257;
     });
+    timer(5000).subscribe(() => {
+      this.form.get('selectionValue').setValue([{value: 4, text: 'text 4'}]);
+    });
+  }
+
+  // tslint:disable-next-line:typedef
+  public jvxValueChange($event: any[]) {
+    console.log($event, 'NewSelect');
+    if ($event.length === 0) {
+      return;
+    }
+    // Prima di fare il confronto, verifichiamo se c'è "All" e in caso filtriamo l'array
+    const processedEvent = this.processAllSelection($event);
+    this.selectedValueEM = processedEvent;
+    console.log(this.selectedValueEM, 'FINAL SELECT');
+  }
+  private processAllSelection(newSelection: { value: string, text: string }[]): { value: string, text: string }[] {
+    const areSelectionsEqual =
+      newSelection.length === this.selectedValueEM.length &&
+      newSelection.every(newItem =>
+        this.selectedValueEM.some(selectedItem =>
+          selectedItem.value === newItem.value
+        )
+      );
+
+    if (areSelectionsEqual) {
+      return this.selectedValueEM;
+    }
+    // Verifica se "All" è presente nella nuova selezione
+    const hasAllInNewSelection = newSelection.some(item => item.value === 'All');
+
+    // Verifica se "All" era già selezionato precedentemente
+    const hadAllPreviously = this.selectedValueEM.some(item => item.value === 'All');
+
+    let result: { value: string, text: string }[];
+
+    // Se la nuova selezione contiene "All" e prima non c'era allora lo aggiungo
+    if (hasAllInNewSelection && !hadAllPreviously) {
+      result = newSelection.filter(item => item.value === 'All');
+    }
+    // Se la nuova selezione contiene "All" e altre selezioni e All era già presente allora lo tolgo
+    else if (hasAllInNewSelection && hadAllPreviously) {
+      result = newSelection.filter(item => item.value !== 'All');
+    }
+    // Se la nuova selezione non contiene "All"
+    else {
+      result = newSelection;
+    }
+
+    return result;
   }
 }

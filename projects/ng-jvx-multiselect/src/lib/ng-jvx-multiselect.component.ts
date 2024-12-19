@@ -113,13 +113,18 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
   @Input() groupBy: NgJvxGroupMapper<any> | string | null;
 
   @Input() set value(value: any[]) {
-    this.pValue = value ?? [];
-    if (value) {
-      this.form.get('selectionValue').setValue(this.pValue.map(v => v[this.itemValue]));
-    } else {
-      this.form.get('selectionValue').setValue(value);
+    if (!this.areArraysEqual(value, this.pValue)) {
+      this.pValue = value ?? [];
+      this.showList = !this.showList;
+      if (value) {
+        this.form.get('selectionValue').setValue(this.pValue.map(v => v[this.itemValue]));
+      } else {
+        this.form.get('selectionValue').setValue(value);
+      }
+      this.changeDetectorRef.detectChanges();
+      this.showList = !this.showList;
+      this.stateChanges.next();
     }
-    this.stateChanges.next();
   }
 
   get value(): any[] {
@@ -215,7 +220,7 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
   private unsubscribe$ = this.unsubscribe.asObservable();
   private intPageSize = 15;
   public onTouched = () => {
-  };
+  }
 
 
   constructor(private formBuilder: UntypedFormBuilder, private service: NgJvxMultiselectService,
@@ -277,7 +282,35 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
       this.changeDetectorRef.markForCheck();
     });
   }
+  private areArraysEqual(arr1: any[] | null, arr2: any[] | null): boolean {
+    // Se entrambi sono null o undefined, sono uguali
+    if (!arr1 && !arr2) { return true; }
+    // Se solo uno dei due è null/undefined, sono diversi
+    if (!arr1 || !arr2) { return false; }
+    // Se hanno lunghezza diversa, sono diversi
+    if (arr1.length !== arr2.length) { return false; }
 
+    // Verifica che ogni elemento di arr1 abbia una corrispondenza in arr2
+    return arr1.every(item1 => {
+        return arr2.some(item2 => {
+          if (typeof item1 === 'object' && item1 !== null) {
+            // Se gli elementi sono oggetti, confronta i valori itemValue
+            return item1[this.itemValue] === item2[this.itemValue];
+          }
+          // Altrimenti confronta direttamente i valori
+          return item1 === item2;
+        });
+      }) &&
+      // Verifica anche il contrario per assicurarsi che non ci siano elementi extra
+      arr2.every(item2 => {
+        return arr1.some(item1 => {
+          if (typeof item2 === 'object' && item2 !== null) {
+            return item2[this.itemValue] === item1[this.itemValue];
+          }
+          return item2 === item1;
+        });
+      });
+  }
   private clientSearch(): Observable<any> {
     let obs: Observable<any>;
     if (this.url && this.url.length > 0) {
@@ -626,4 +659,7 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
     this.trigger.closeMenu();
   }
 
+  public optionsIsSelected(option: any): boolean {
+    return this.form.get('selectionValue').value.some(s => s === option[this.itemValue]);
+  }
 }
