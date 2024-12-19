@@ -8,6 +8,7 @@ import {JVXMULTISELECT, NgJvxGroup, NgJvxGroupMapper, NgJvxOptionMapper} from 'n
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
+
 })
 export class AppComponent implements OnInit {
   width = 0;

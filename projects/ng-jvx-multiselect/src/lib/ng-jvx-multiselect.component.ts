@@ -659,12 +659,12 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
     this.trigger.closeMenu();
   }
 
-  public optionsIsSelected(option: any): boolean {
+  public isOptionSelected(option: any): boolean {
     return this.form.get('selectionValue').value.some(s => s === option[this.itemValue]);
   }
 
   clickOnOption(option: any): void {
-    if (this.optionsIsSelected(option)) {
+    if (this.isOptionSelected(option)) {
       this.deselect(option);
     } else {
       this.select(option);
