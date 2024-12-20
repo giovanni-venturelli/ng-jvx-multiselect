@@ -29,8 +29,8 @@ import {MatMenuTrigger} from '@angular/material/menu';
 import {NgJvxMultiselectService} from './ng-jvx-multiselect.service';
 import {HttpHeaders} from '@angular/common/http';
 import {NgScrollbar} from 'ngx-scrollbar';
-import {debounceTime, distinctUntilChanged, map, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {forkJoin, fromEvent, noop, Observable, of, Subject, timer} from 'rxjs';
+import {catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {forkJoin, fromEvent, noop, Observable, of, Subject, throwError, timer} from 'rxjs';
 import {NgJvxMultiOptionMapper, NgJvxOptionMapper} from './interfaces/ng-jvx-option-mapper';
 import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
 import {MatFormFieldControl} from '@angular/material/form-field';
@@ -487,7 +487,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   clickOnMenuTrigger(e: MouseEvent): void {
-    if (!this.disabled) {
+    if (!this.disabled && !this.isLoading) {
       this.showList = false;
       this.shouldLoadMore = true;
       timer(0).subscribe(() => {
@@ -555,9 +555,16 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
         this.trigger.openMenu();
         this.setSelectionContainerSize();
         return val;
-      }), tap(() => {
+      }),
+      tap(() => {
         this.changeDetectorRef.markForCheck();
-      }));
+      }),
+      catchError((error) => {
+        this.isLoading = false;
+        this.changeDetectorRef.markForCheck();
+        return throwError(() => error);
+      })
+    );
   }
 
   onScrolled(e: any): void {
