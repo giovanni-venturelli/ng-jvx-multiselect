@@ -699,6 +699,5 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
     this.propagateChange(this.value);
     this.valueChange.emit(this.value);
     this.changeDetectorRef.markForCheck();
-    console.log(this.form.get('selectionValue').value);
   }
 }
