@@ -2,14 +2,13 @@ import {Component, EventEmitter, input, Input, Output, ViewEncapsulation} from '
 import {NgClass} from '@angular/common';
 
 @Component({
-  selector: 'lib-chip',
-  standalone: true,
-  imports: [
-    NgClass
-  ],
-  templateUrl: './chip.component.html',
-  styleUrl: './chip.component.scss',
-  encapsulation: ViewEncapsulation.None
+    selector: 'lib-chip',
+    imports: [
+        NgClass
+    ],
+    templateUrl: './chip.component.html',
+    styleUrl: './chip.component.scss',
+    encapsulation: ViewEncapsulation.None
 })
 export class ChipComponent {
   @Output() removed = new EventEmitter();

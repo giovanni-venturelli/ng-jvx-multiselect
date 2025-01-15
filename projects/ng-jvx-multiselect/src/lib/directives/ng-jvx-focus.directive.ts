@@ -2,8 +2,9 @@ import {AfterContentInit, Directive, ElementRef, Input, OnChanges, OnInit, Simpl
 import {timer} from 'rxjs';
 
 @Directive({
-  // tslint:disable-next-line:directive-selector
-  selector: '[ngJvxFocus]'
+    // tslint:disable-next-line:directive-selector
+    selector: '[ngJvxFocus]',
+    standalone: false
 })
 export class NgJvxFocusDirective implements OnInit, OnChanges {
   @Input() ngJvxFocus: boolean;

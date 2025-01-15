@@ -17,48 +17,41 @@ import {takeUntil} from 'rxjs/operators';
 import {animate, style, transition, trigger} from '@angular/animations';
 
 @Component({
-  selector: 'lib-panel',
-  standalone: true,
-  imports: [
-    CdkConnectedOverlay
-  ],
-  templateUrl: './panel.component.html',
-  styleUrl: './panel.component.scss',
-  encapsulation: ViewEncapsulation.None,
-  animations: [
-    trigger('animation', [
-      transition(':enter', [
-        style({
-          opacity: 0,
-          transform: 'scaleY(0.8)',
-          transformOrigin: 'top',
-        }),
-        animate(
-          '0.08s ease-in-out',
-          style({
-            opacity: 1,
-            transform: 'scaleY(1)',
-            transformOrigin: 'top',
-          })
-        ),
-      ]),
-      transition(':leave', [
-        style({
-          opacity: 1,
-          transform: 'scaleY(1)',
-          transformOrigin: 'top'
-        }),
-        animate(
-          '.08s ease-in-out',
-          style({
-            opacity: 0,
-            transform: 'scaleY(0.8)',
-            transformOrigin: 'top'
-          })
-        ),
-      ]),
-    ]),
-  ]
+    selector: 'lib-panel',
+    imports: [
+        CdkConnectedOverlay
+    ],
+    templateUrl: './panel.component.html',
+    styleUrl: './panel.component.scss',
+    encapsulation: ViewEncapsulation.None,
+    animations: [
+        trigger('animation', [
+            transition(':enter', [
+                style({
+                    opacity: 0,
+                    transform: 'scaleY(0.8)',
+                    transformOrigin: 'top',
+                }),
+                animate('0.08s ease-in-out', style({
+                    opacity: 1,
+                    transform: 'scaleY(1)',
+                    transformOrigin: 'top',
+                })),
+            ]),
+            transition(':leave', [
+                style({
+                    opacity: 1,
+                    transform: 'scaleY(1)',
+                    transformOrigin: 'top'
+                }),
+                animate('.08s ease-in-out', style({
+                    opacity: 0,
+                    transform: 'scaleY(0.8)',
+                    transformOrigin: 'top'
+                })),
+            ]),
+        ]),
+    ]
 })
 export class PanelComponent implements OnDestroy {
   // -----------------------------------------------------------------------------------------------------

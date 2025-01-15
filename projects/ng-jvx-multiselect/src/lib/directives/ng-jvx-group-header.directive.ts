@@ -1,8 +1,9 @@
 import {Directive, Input, TemplateRef, ViewContainerRef} from '@angular/core';
 
 @Directive({
-  // tslint:disable-next-line:directive-selector
-  selector: '[ngJvxGroupHeader]'
+    // tslint:disable-next-line:directive-selector
+    selector: '[ngJvxGroupHeader]',
+    standalone: false
 })
 export class NgJvxGroupHeaderDirective {
 

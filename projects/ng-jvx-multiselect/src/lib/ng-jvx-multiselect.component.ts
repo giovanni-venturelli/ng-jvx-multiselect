@@ -38,19 +38,20 @@ import {NgJvxGroup, NgJvxGroupMapper} from './interfaces/ng-jvx-group-mapper';
 import {MenuTriggerDirective} from './panel/menu-trigger/menu-trigger.directive';
 
 @Component({
-  // tslint:disable-next-line:component-selector
-  selector: 'ng-jvx-multiselect',
-  templateUrl: './ng-jvx-multiselect.component.html',
-  styleUrls: ['./ng-jvx-multiselect.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  providers: [
+    // tslint:disable-next-line:component-selector
+    selector: 'ng-jvx-multiselect',
+    templateUrl: './ng-jvx-multiselect.component.html',
+    styleUrls: ['./ng-jvx-multiselect.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None,
+    providers: [
     // {
     //   provide: MatFormFieldControl,
     //   useExisting: forwardRef(() => NgJvxMultiselectComponent),
     //   multi: true,
     // }
-  ]
+    ],
+    standalone: false
 })
 export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, AfterViewInit, OnChanges,
   ControlValueAccessor {
