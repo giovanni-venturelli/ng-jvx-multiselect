@@ -13,6 +13,8 @@ import {JVXMULTISELECT, NgJvxGroup, NgJvxGroupMapper, NgJvxOptionMapper} from 'n
 export class AppComponent implements OnInit {
   width = 0;
   title = 'demo-sandbox';
+  public postPayload = {name: 'nome', lastName: 'cognome'};
+
   public mapper = {
     mapOption(source: any): Observable<{ value: number, text: string }> {
       return of({

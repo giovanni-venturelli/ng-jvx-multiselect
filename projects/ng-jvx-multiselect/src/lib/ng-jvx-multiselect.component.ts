@@ -7,7 +7,7 @@ import {
   ElementRef,
   EventEmitter,
   forwardRef,
-  HostBinding,
+  HostBinding, input,
   Input,
   OnChanges,
   OnDestroy,
@@ -38,20 +38,20 @@ import {NgJvxGroup, NgJvxGroupMapper} from './interfaces/ng-jvx-group-mapper';
 import {MenuTriggerDirective} from './panel/menu-trigger/menu-trigger.directive';
 
 @Component({
-    // tslint:disable-next-line:component-selector
-    selector: 'ng-jvx-multiselect',
-    templateUrl: './ng-jvx-multiselect.component.html',
-    styleUrls: ['./ng-jvx-multiselect.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    encapsulation: ViewEncapsulation.None,
-    providers: [
+  // tslint:disable-next-line:component-selector
+  selector: 'ng-jvx-multiselect',
+  templateUrl: './ng-jvx-multiselect.component.html',
+  styleUrls: ['./ng-jvx-multiselect.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  providers: [
     // {
     //   provide: MatFormFieldControl,
     //   useExisting: forwardRef(() => NgJvxMultiselectComponent),
     //   multi: true,
     // }
-    ],
-    standalone: false
+  ],
+  standalone: false
 })
 export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, AfterViewInit, OnChanges,
   ControlValueAccessor {
@@ -137,12 +137,12 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
   get required(): boolean {
     return this._required;
   }
-
   set required(req) {
     this._required = coerceBooleanProperty(req);
     this.stateChanges.next();
   }
 
+  postPayload = input<object>();
   // tslint:disable-next-line:variable-name
   private _required = false;
 
@@ -220,7 +220,7 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
   private unsubscribe$ = this.unsubscribe.asObservable();
   private intPageSize = 15;
   public onTouched = () => {
-  }
+  };
 
 
   constructor(private formBuilder: UntypedFormBuilder, private service: NgJvxMultiselectService,
@@ -282,13 +282,20 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
       this.changeDetectorRef.markForCheck();
     });
   }
+
   private areArraysEqual(arr1: any[] | null, arr2: any[] | null): boolean {
     // Se entrambi sono null o undefined, sono uguali
-    if (!arr1 && !arr2) { return true; }
+    if (!arr1 && !arr2) {
+      return true;
+    }
     // Se solo uno dei due è null/undefined, sono diversi
-    if (!arr1 || !arr2) { return false; }
+    if (!arr1 || !arr2) {
+      return false;
+    }
     // Se hanno lunghezza diversa, sono diversi
-    if (arr1.length !== arr2.length) { return false; }
+    if (arr1.length !== arr2.length) {
+      return false;
+    }
 
     // Verifica che ogni elemento di arr1 abbia una corrispondenza in arr2
     return arr1.every(item1 => {
@@ -311,6 +318,7 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
         });
       });
   }
+
   private clientSearch(): Observable<any> {
     let obs: Observable<any>;
     if (this.url && this.url.length > 0) {
@@ -524,7 +532,7 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
     return this.service.getList({
       url: this.url,
       requestType: this.requestType,
-      data: {},
+      data: this.postPayload()??{},
       currentPage: ++this.currentPage,
       ignorePagination: this.ignorePagination,
       requestHeaders: this.requestHeaders,
