@@ -110,7 +110,7 @@ export class PanelComponent implements OnDestroy {
   close(): void {
     this.isOpen.set(false);
     this.onClose.emit();
-    timer(800).subscribe(() => {
+    timer(200).subscribe(() => {
       this.onClosed.emit();
     });
   }
