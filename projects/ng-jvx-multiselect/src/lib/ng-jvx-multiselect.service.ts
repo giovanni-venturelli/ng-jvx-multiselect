@@ -56,8 +56,20 @@ export class NgJvxMultiselectService {
         // withCredentials: true,
         // credentials: 'same-origin', // cache: 'default',
       };
+      const postParams = {
+        [searchProp]: params.get('smartSearch'),
+        paging: ['page', 'size', 'sort', 'ignorePagination'].reduce((obj, key) => {
+          obj[key] = params.get(key);
+          if (key === 'sort' && !params.get(key)) {
+            obj[key] = '';
+          } else if (key === 'ignorePagination' && !params.get(key)) {
+            obj[key] = false;
+          }
+          return obj;
+        }, {})
+      };
       const payload = {
-        ...params,
+        ...postParams,
         ...data
       };
       return this.http.post(url, payload, options);
