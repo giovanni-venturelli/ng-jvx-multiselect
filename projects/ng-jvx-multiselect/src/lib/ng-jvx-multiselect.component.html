@@ -16,7 +16,7 @@
       }
       <div class="menu-list-container"
            #menuLIstContainer
-           [ngStyle]="{'overflow-y': 'hidden', 'width': listContainerSize.width, 'min-width.px': 112, 'max-height': '260px', 'height': listContainerSize.height, 'min-height': listContainerSize.minHeight}">
+           [ngStyle]="{'overflow-y': 'hidden', 'width': listContainerSize.width, 'min-width.px': 112, 'max-height': (260 - menuFooter.offsetHeight)+'px', 'height': listContainerSize.height, 'min-height': listContainerSize.minHeight}">
 
         <div class="search-input-container" *ngIf="!!searchInput" (click)="onSearchInputClick($event)">
           <input type="text" [placeholder]="searchLabel" [ngModel]="searchValue" [ngModelOptions]="{standalone: true}"
@@ -24,7 +24,7 @@
                  (input)="onSearchValueChange($event)"/>
         </div>
         <div
-          [ngStyle]="{height: searchInput && selectionContainer.clientHeight > 220 || selectionContainer.clientHeight > 260? 260 - (searchInput? 40 : 0) + 'px': 'auto'}">
+          [ngStyle]="{height: searchInput && selectionContainer.clientHeight > 220 || selectionContainer.clientHeight > 260? 260 - (searchInput? 40 : 0) - menuFooter.offsetHeight + 'px': 'auto'}">
           <ng-scrollbar style="width: 100%"
                         smoothScroll
                         [visibility]="'hover'"
@@ -70,7 +70,7 @@
         </div>
 
       </div>
-      <div class="menu-footer">
+      <div class="menu-footer" #menuFooter>
         <ng-content select="[ng-jvx-footer]"></ng-content>
       </div>
 

@@ -66,6 +66,7 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
   @ViewChild('jvxMultiselect', {static: true}) jvxMultiselect: ElementRef;
   @ViewChild('valueContainer', {static: true}) valueContainer: ElementRef;
   @ViewChild('selectionContainer', {static: false}) selectionContainer: ElementRef;
+  @ViewChild('menuFooter', {static: false}) menuFooter: ElementRef;
   // @ViewChild('selection', {static: true}) selection: MatSelectionList;
   @ViewChild(MenuTriggerDirective, {static: true}) trigger: MenuTriggerDirective;
   @ViewChild('scrollbar', {static: false}) scrollbar: NgScrollbar;
@@ -497,8 +498,8 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
     timer(0).subscribe(() => {
       if (this.selectionContainer) {
         this.listContainerSize.height = this.selectionContainer.nativeElement.offsetHeight > 260 ? '260px' : 'auto';
-        this.listContainerSize.minHeight = this.selectionContainer.nativeElement.offsetHeight <= 260 ?
-          this.selectionContainer.nativeElement.offsetHeight + 'px' : '260px';
+        this.listContainerSize.minHeight = ((this.selectionContainer.nativeElement.offsetHeight <= 260 ?
+          this.selectionContainer.nativeElement.offsetHeight : 260) - this.menuFooter.nativeElement.offsetHeight) + 'px';
         this.listContainerSize.width = this.jvxMultiselect.nativeElement.offsetWidth + 'px';
       }
       this.changeDetectorRef.detectChanges();
