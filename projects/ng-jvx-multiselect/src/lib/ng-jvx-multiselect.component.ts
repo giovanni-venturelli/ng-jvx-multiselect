@@ -498,8 +498,8 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
     timer(0).subscribe(() => {
       if (this.selectionContainer) {
         this.listContainerSize.height = this.selectionContainer.nativeElement.offsetHeight > 260 ? '260px' : 'auto';
-        this.listContainerSize.minHeight = ((this.selectionContainer.nativeElement.offsetHeight <= 260 ?
-          this.selectionContainer.nativeElement.offsetHeight : 260) - this.menuFooter.nativeElement.offsetHeight) + 'px';
+        this.listContainerSize.minHeight = this.selectionContainer.nativeElement.offsetHeight <= 260 ?
+          this.selectionContainer.nativeElement.offsetHeight + 'px' : '260px';
         this.listContainerSize.width = this.jvxMultiselect.nativeElement.offsetWidth + 'px';
       }
       this.changeDetectorRef.detectChanges();
@@ -588,7 +588,7 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
   }
 
   onScrolled(e: any): void {
-    if (e.target.scrollTop + 220 + ((this.searchInput ? 0 : 1) * 40) === this.selectionContainer.nativeElement.offsetHeight
+    if (e.target.scrollTop + 220 + ((this.searchInput ? 0 : 1) * 40) - this.menuFooter.nativeElement.offsetHeight === this.selectionContainer.nativeElement.offsetHeight
       && !this.isLoading) {
       this.scrollEnd.emit();
       if (this.url && this.url.length > 0 && !this.ignorePagination && this.shouldLoadMore) {

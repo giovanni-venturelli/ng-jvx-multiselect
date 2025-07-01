@@ -14,9 +14,11 @@
           </svg>
         </div>
       }
+      <div style="display: flex; flex-direction: column"
+           [ngStyle]="{'overflow-y': 'hidden', 'width': listContainerSize.width, 'min-width.px': 112, 'max-height': '260px', 'height': listContainerSize.height, 'min-height': listContainerSize.minHeight}">
       <div class="menu-list-container"
            #menuLIstContainer
-           [ngStyle]="{'overflow-y': 'hidden', 'width': listContainerSize.width, 'min-width.px': 112, 'max-height': (260 - menuFooter.offsetHeight)+'px', 'height': listContainerSize.height, 'min-height': listContainerSize.minHeight}">
+           >
 
         <div class="search-input-container" *ngIf="!!searchInput" (click)="onSearchInputClick($event)">
           <input type="text" [placeholder]="searchLabel" [ngModel]="searchValue" [ngModelOptions]="{standalone: true}"
@@ -73,7 +75,7 @@
       <div class="menu-footer" #menuFooter>
         <ng-content select="[ng-jvx-footer]"></ng-content>
       </div>
-
+      </div>
     </lib-panel>
   </div>
   <!-- END MENU -->
