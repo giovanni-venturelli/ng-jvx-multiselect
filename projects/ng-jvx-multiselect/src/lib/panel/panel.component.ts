@@ -3,7 +3,7 @@ import {
   ElementRef,
   EventEmitter,
   input,
-  Input,
+  Input, InputSignal,
   OnDestroy,
   Output,
   signal,
@@ -71,7 +71,7 @@ export class PanelComponent implements OnDestroy {
   // @ Inputs
   // -----------------------------------------------------------------------------------------------------
   @Input() trigger!: ElementRef<any>;
-  @Input() yPosition: 'above' | 'below' = 'above';
+  yPosition: InputSignal<'above' | 'below'> = input('above');
   multi = input.required<boolean>();
   // -----------------------------------------------------------------------------------------------------
   // @ Outputs

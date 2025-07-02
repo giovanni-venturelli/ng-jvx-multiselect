@@ -1,5 +1,13 @@
 <ng-template #menuTemplate  cdkConnectedOverlay
              (backdropClick)="close()"
+             [cdkConnectedOverlayPositions]="[
+             {
+             originX: 'start',
+             originY: yPosition() === 'below'? 'center': 'top',
+             overlayX: 'start',
+             overlayY: yPosition() === 'below'? 'top': 'bottom'
+             }
+             ]"
              [cdkConnectedOverlayOrigin]="trigger"
              [cdkConnectedOverlayPanelClass]="'ng-jvx-multiselect-panel'"
              [cdkConnectedOverlayDisposeOnNavigation]="true"

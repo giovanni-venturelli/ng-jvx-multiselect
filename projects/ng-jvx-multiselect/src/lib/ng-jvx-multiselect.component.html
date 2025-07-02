@@ -1,3 +1,4 @@
+
 <div class="ng-jvx-multiselect" [ngClass]="{'disabled': disabled, 'has-errors': hasErrors}" #jvxMultiselect>
   <!-- START MENU -->
   <div [libMenuTriggerFor]="menuRef" (onMenuOpen)="onMenuOpen()" (menuOpened)="onMenuOpened()"
@@ -5,7 +6,7 @@
        (onMenuClose)="onMenuClose()" (menuClosed)="onMenuClosed()"
   >
     <lib-panel #menuRef [class]="['jvx-multiselect-panel', panelClass].join(' ')" [multi]="multi" [formGroup]="form"
-               [yPosition]="yPosition">
+               [yPosition]="yPosition()">
       @if (closeButton) {
         <div class="closeMenuButton">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
@@ -15,18 +16,18 @@
         </div>
       }
       <div style="display: flex; flex-direction: column"
-           [ngStyle]="{'overflow-y': 'hidden', 'width': listContainerSize.width, 'min-width.px': 112, 'max-height': '260px', 'height': listContainerSize.height, 'min-height': listContainerSize.minHeight}">
+           [ngStyle]="{'overflow-y': 'hidden', 'width': listContainerSize().width, 'min-width.px': 112, 'max-height': '300px', 'height': listContainerSize().height, 'min-height': listContainerSize().minHeight}">
       <div class="menu-list-container"
+           [style.height]="'calc(100% - '+menuFooter.offsetHeight+'px)'"
            #menuLIstContainer
            >
-
         <div class="search-input-container" *ngIf="!!searchInput" (click)="onSearchInputClick($event)">
           <input type="text" [placeholder]="searchLabel" [ngModel]="searchValue" [ngModelOptions]="{standalone: true}"
                  [ngJvxFocus]="isOpen"
                  (input)="onSearchValueChange($event)"/>
         </div>
         <div
-          [ngStyle]="{height: searchInput && selectionContainer.clientHeight > 220 || selectionContainer.clientHeight > 260? 260 - (searchInput? 40 : 0) - menuFooter.offsetHeight + 'px': 'auto'}">
+          [ngStyle]="{height: searchInput && selectionContainer.clientHeight > 220 || selectionContainer.clientHeight > 300? 300 - (searchInput? 40 : 0) - menuFooter.offsetHeight + 'px': 'auto'}">
           <ng-scrollbar style="width: 100%"
                         smoothScroll
                         [visibility]="'hover'"
@@ -36,7 +37,7 @@
             <div #selectionContainer (click)="onCLickOnMenu($event)">
               <div #selection
                    *ngIf="showList"
-                   [ngStyle]="{'padding': 0, 'width': listContainerSize.width, 'min-width.px': 112}"
+                   [ngStyle]="{'padding': 0, 'width': listContainerSize().width, 'min-width.px': 112}"
                    ngDefaultControl
                    formControlName="selectionValue">
                 <ng-content></ng-content>

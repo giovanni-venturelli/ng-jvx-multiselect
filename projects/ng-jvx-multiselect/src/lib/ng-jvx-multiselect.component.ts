@@ -2,7 +2,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component,
+  Component, computed,
   ContentChild, DoCheck,
   ElementRef,
   EventEmitter,
@@ -15,8 +15,8 @@ import {
   Optional,
   Output,
   QueryList,
-  Self,
-  SimpleChanges,
+  Self, Signal, signal,
+  SimpleChanges, viewChild,
   ViewChild,
   ViewChildren,
   ViewEncapsulation
@@ -27,8 +27,8 @@ import {NgJvxOptionComponent} from './ng-jvx-option/ng-jvx-option.component';
 import {NgJvxMultiselectService} from './ng-jvx-multiselect.service';
 import {HttpHeaders} from '@angular/common/http';
 import {NgScrollbar} from 'ngx-scrollbar';
-import {catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil, tap, throttleTime} from 'rxjs/operators';
-import {BehaviorSubject, forkJoin, fromEvent, noop, Observable, of, Subject, throwError, timer} from 'rxjs';
+import {catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap, takeUntil, tap, throttleTime} from 'rxjs/operators';
+import {BehaviorSubject, forkJoin, fromEvent, lastValueFrom, noop, Observable, of, Subject, throwError, timer} from 'rxjs';
 import {NgJvxMultiOptionMapper, NgJvxOptionMapper} from './interfaces/ng-jvx-option-mapper';
 import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
@@ -36,6 +36,7 @@ import {NgJvxGroupHeaderDirective} from './directives/ng-jvx-group-header.direct
 import {NgJvxSearchMapper} from './interfaces/ng-jvx-search-mapper';
 import {NgJvxGroup, NgJvxGroupMapper} from './interfaces/ng-jvx-group-mapper';
 import {MenuTriggerDirective} from './panel/menu-trigger/menu-trigger.directive';
+import {toSignal} from '@angular/core/rxjs-interop';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -63,14 +64,14 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
     return this.focused || !this.empty || this.value.length > 0 || !!this.isPlaceholderActive;
   }
 
-  @ViewChild('jvxMultiselect', {static: true}) jvxMultiselect: ElementRef;
+  jvxMultiselect = viewChild.required<ElementRef>('jvxMultiselect');
   @ViewChild('valueContainer', {static: true}) valueContainer: ElementRef;
-  @ViewChild('selectionContainer', {static: false}) selectionContainer: ElementRef;
+  selectionContainer = viewChild.required<ElementRef>('selectionContainer');
   @ViewChild('menuFooter', {static: false}) menuFooter: ElementRef;
   // @ViewChild('selection', {static: true}) selection: MatSelectionList;
   @ViewChild(MenuTriggerDirective, {static: true}) trigger: MenuTriggerDirective;
   @ViewChild('scrollbar', {static: false}) scrollbar: NgScrollbar;
-  @ViewChild('multiContainer', {static: false}) multiContainer: ElementRef;
+  multiContainer = viewChild.required<ElementRef>('multiContainer');
   @ViewChild('placeholderContainer', {static: false}) placeholderContainer: ElementRef;
   @ViewChildren(NgJvxOptionComponent) optionComp: QueryList<NgJvxOptionComponent>;
   @ContentChild(NgJvxOptionsTemplateDirective) optionsTemplate: NgJvxOptionsTemplateDirective | null = null;
@@ -138,6 +139,7 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
   get required(): boolean {
     return this._required;
   }
+
   set required(req) {
     this._required = coerceBooleanProperty(req);
     this.stateChanges.next();
@@ -146,6 +148,7 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
   postPayload = input<object>();
   // tslint:disable-next-line:variable-name
   private _required = false;
+  private _jvxWidth = signal(0);
 
   @Input()
   get disabled(): boolean {
@@ -200,17 +203,34 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
   public selectableOptions = [];
   public orderedOptions: { group: any, options: any[] }[] = [];
   public searchValue = '';
-  public yPosition: 'above' | 'below' = 'above';
+  public yPosition: Signal<'above' | 'below'> = toSignal(timer(0).pipe(switchMap(() =>
+    fromEvent(window, 'resize').pipe(
+      map(() => {
+        return window.innerHeight - this.jvxMultiselect()?.nativeElement?.getBoundingClientRect()?.top < 300 ? 'above' : 'below';
+      }),
+      startWith(window.innerHeight - this.jvxMultiselect()?.nativeElement?.getBoundingClientRect()?.top < 300 ? 'above' : 'below'))))
+  ) as Signal<'above' | 'below'>;
+
   public stateChanges = new Subject<void>();
   public currentPage = 0;
-  public listContainerSize: { height: string, minHeight: string, width: string } = {height: 'auto', minHeight: '0', width: '100%'};
+
+  public listContainerSize = computed(() => {
+    return {
+      height: this.selectionContainer().nativeElement.offsetHeight > 300 ? '300px' : 'auto',
+      minHeight: this.selectionContainer().nativeElement.offsetHeight <= 300 ?
+        this.selectionContainer().nativeElement.offsetHeight + 'px' : '300px',
+      width: this._jvxWidth() + 'px'
+    };
+  });
   public parts: UntypedFormGroup;
 
   public touched = false;
 
   public placeholder: string;
   public focused = false;
-  public multiContainerWidth = 100;
+  public multiContainerWidth = computed(() => {
+    return this.multiContainer()?.nativeElement?.offsetWidth ?? 100;
+  });
   private isPlaceholderActiveSubject = new BehaviorSubject<boolean>(false);
   private isPlaceholderActive = false;
   private searchValueSubject = new Subject<string>();
@@ -258,14 +278,6 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
     // this.setSelectableOptions(this.options).subscribe(noop);
     this.selectableOptions = [...this.options];
     this.updateOrderedOptions(this.selectableOptions).subscribe(noop);
-    fromEvent(window, 'resize').pipe(takeUntil(this.unsubscribe), debounceTime(100), map(() => {
-      return this.listContainerSize.width = this.jvxMultiselect.nativeElement.offsetWidth + 'px';
-
-    }), switchMap(() => timer(100)), tap(() => {
-      this.multiContainerWidth = this.multiContainer?.nativeElement?.offsetWidth ?? 100;
-      this.yPosition = window.innerHeight - this.jvxMultiselect.nativeElement?.getBoundingClientRect()?.top < 260 ? 'above' : 'below';
-      this.changeDetectorRef.markForCheck();
-    })).subscribe(noop);
 
     this.searchValue$.pipe(takeUntil(this.unsubscribe), debounceTime(300), distinctUntilChanged((prev, curr) => {
         return curr === this.searchValue;
@@ -370,18 +382,12 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
   }
 
   ngAfterViewInit(): void {
-    timer(0).subscribe(() => {
-      this.listContainerSize.width = this.jvxMultiselect.nativeElement.offsetWidth + 'px';
-    });
-
     if (this.scrollbar) {
       this.scrollbar.scrolled.pipe(takeUntil(this.unsubscribe$)).subscribe((e: any) => {
         this.onScrolled(e);
       });
     }
-    timer(0).pipe(tap(() => {
-      this.multiContainerWidth = this.multiContainer?.nativeElement?.offsetWidth ?? 100;
-      this.yPosition = window.innerHeight - this.jvxMultiselect.nativeElement?.getBoundingClientRect()?.top < 260 ? 'above' : 'below';
+    timer(300).pipe(tap(() => {
       this.changeDetectorRef.markForCheck();
     })).subscribe(noop);
   }
@@ -475,8 +481,8 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
   }
 
   onMenuOpen(): void {
+    this._jvxWidth.set(this.jvxMultiselect().nativeElement.offsetWidth);
     this.isOpen = true;
-
     this.jvxMultiselectOpen.emit();
   }
 
@@ -495,15 +501,7 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
   }
 
   private setSelectionContainerSize(): void {
-    timer(0).subscribe(() => {
-      if (this.selectionContainer) {
-        this.listContainerSize.height = this.selectionContainer.nativeElement.offsetHeight > 260 ? '260px' : 'auto';
-        this.listContainerSize.minHeight = this.selectionContainer.nativeElement.offsetHeight <= 260 ?
-          this.selectionContainer.nativeElement.offsetHeight + 'px' : '260px';
-        this.listContainerSize.width = this.jvxMultiselect.nativeElement.offsetWidth + 'px';
-      }
-      this.changeDetectorRef.detectChanges();
-    });
+
   }
 
   clickOnMenuTrigger(e: MouseEvent): void {
@@ -533,7 +531,7 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
     return this.service.getList({
       url: this.url,
       requestType: this.requestType,
-      data: this.postPayload()??{},
+      data: this.postPayload() ?? {},
       currentPage: ++this.currentPage,
       ignorePagination: this.ignorePagination,
       requestHeaders: this.requestHeaders,
@@ -588,7 +586,7 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
   }
 
   onScrolled(e: any): void {
-    if (e.target.scrollTop + 220 + ((this.searchInput ? 0 : 1) * 40) - this.menuFooter.nativeElement.offsetHeight === this.selectionContainer.nativeElement.offsetHeight
+    if (e.target.scrollTop + 220 + ((this.searchInput ? 0 : 1) * 40) - this.menuFooter.nativeElement.offsetHeight === this.selectionContainer().nativeElement.offsetHeight
       && !this.isLoading) {
       this.scrollEnd.emit();
       if (this.url && this.url.length > 0 && !this.ignorePagination && this.shouldLoadMore) {
