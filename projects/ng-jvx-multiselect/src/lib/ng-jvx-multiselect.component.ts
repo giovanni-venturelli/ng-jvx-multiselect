@@ -28,7 +28,7 @@ import {NgJvxMultiselectService} from './ng-jvx-multiselect.service';
 import {HttpHeaders} from '@angular/common/http';
 import {NgScrollbar} from 'ngx-scrollbar';
 import {catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap, takeUntil, tap, throttleTime} from 'rxjs/operators';
-import {BehaviorSubject, forkJoin, fromEvent, lastValueFrom, noop, Observable, of, Subject, throwError, timer} from 'rxjs';
+import {BehaviorSubject, forkJoin, fromEvent, interval, lastValueFrom, noop, Observable, of, Subject, throwError, timer} from 'rxjs';
 import {NgJvxMultiOptionMapper, NgJvxOptionMapper} from './interfaces/ng-jvx-option-mapper';
 import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
@@ -67,7 +67,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   jvxMultiselect = viewChild.required<ElementRef>('jvxMultiselect');
   @ViewChild('valueContainer', {static: true}) valueContainer: ElementRef;
   selectionContainer = viewChild.required<ElementRef>('selectionContainer');
-  @ViewChild('menuFooter', {static: false}) menuFooter: ElementRef;
+  menuFooter = viewChild<ElementRef>('menuFooter');
   // @ViewChild('selection', {static: true}) selection: MatSelectionList;
   @ViewChild(MenuTriggerDirective, {static: true}) trigger: MenuTriggerDirective;
   @ViewChild('scrollbar', {static: false}) scrollbar: NgScrollbar;
@@ -79,18 +79,19 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @ContentChild(NgJvxGroupHeaderDirective) groupHeaderTemplate: NgJvxGroupHeaderDirective | null = null;
   // @ContentChild(NgJvxOptionComponent) optionComp: NgJvxOptionComponent;
   // @ContentChild(TemplateRef) optionsTemplate: TemplateRef<any> | null = null;
-  @Input() set options(v: any[]){
-    if(v) {
+  @Input() set options(v: any[]) {
+    if (v) {
       this.selectableOptions = [...v];
-    }
-    else {
+    } else {
       this.selectableOptions = [];
     }
     this._options = v;
-  };
-  get options(): any[]{
+  }
+
+  get options(): any[] {
     return this._options;
   }
+
   @Input() multi = false;
   @Input() url = '';
   @Input() requestType: 'get' | 'post' = 'get';
@@ -207,7 +208,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   public document = document;
   public window = window;
   public form: UntypedFormGroup;
-  public isOpen = false;
+  public isOpen = signal(false);
   public isLoading = false;
   public showList = true;
   public asyncOptions: any = [];
@@ -226,12 +227,20 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   public currentPage = 0;
 
   public listContainerSize = computed(() => {
-    return {
-      height: this.selectionContainer().nativeElement.offsetHeight > 300 ? '300px' : 'auto',
-      minHeight: this.selectionContainer().nativeElement.offsetHeight <= 300 ?
-        this.selectionContainer().nativeElement.offsetHeight + 'px' : '300px',
-      width: this._jvxWidth() + 'px'
-    };
+    if (this.isOpen() && this.menuFooter() && this.menuFooter().nativeElement) {
+      return {
+        height: this.selectionContainer().nativeElement.offsetHeight > 300 ? '300px' : 'auto',
+        minHeight: this.selectionContainer().nativeElement.offsetHeight <= 300 ?
+          this.selectionContainer().nativeElement.offsetHeight + 'px' : '300px',
+        width: this._jvxWidth() + 'px'
+      };
+    } else {
+      return {
+        height: 'auto',
+        minHeight: '300px',
+        width: this._jvxWidth() + 'px'
+      };
+    }
   });
   public parts: UntypedFormGroup;
 
@@ -252,7 +261,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   private unsubscribe$ = this.unsubscribe.asObservable();
   private intPageSize = 15;
   public onTouched = () => {
-  };
+  }
 
 
   constructor(private formBuilder: UntypedFormBuilder, private service: NgJvxMultiselectService,
@@ -493,12 +502,19 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   onMenuOpen(): void {
     this._jvxWidth.set(this.jvxMultiselect().nativeElement.offsetWidth);
-    this.isOpen = true;
+    this.isOpen.set(true);
     this.jvxMultiselectOpen.emit();
+    const stopInterval = new Subject<void>();
+    interval(50).pipe(takeUntil(stopInterval)).subscribe(() => {
+      this.changeDetectorRef.detectChanges();
+    });
+    timer(200).subscribe(() => {
+      stopInterval.next();
+    });
   }
 
   onMenuClose(): void {
-    this.isOpen = false;
+    this.isOpen.set(false);
     this.jvxMultiselectClose.emit();
   }
 
@@ -597,7 +613,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   onScrolled(e: any): void {
-    if (e.target.scrollTop + 220 + ((this.searchInput ? 0 : 1) * 40) - this.menuFooter.nativeElement.offsetHeight === this.selectionContainer().nativeElement.offsetHeight
+    if (e.target.scrollTop + 220 + ((this.searchInput ? 0 : 1) * 40) - this.menuFooter().nativeElement.offsetHeight === this.selectionContainer().nativeElement.offsetHeight
       && !this.isLoading) {
       this.scrollEnd.emit();
       if (this.url && this.url.length > 0 && !this.ignorePagination && this.shouldLoadMore) {

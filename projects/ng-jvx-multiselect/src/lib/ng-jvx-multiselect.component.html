@@ -18,12 +18,12 @@
       <div style="display: flex; flex-direction: column"
            [ngStyle]="{'overflow-y': 'hidden', 'width': listContainerSize().width, 'min-width.px': 112, 'max-height': '300px', 'height': listContainerSize().height, 'min-height': listContainerSize().minHeight}">
       <div class="menu-list-container"
-           [style.height]="'calc(100% - '+menuFooter.offsetHeight+'px)'"
+           [style.flex]="'1 1 0'"
            #menuLIstContainer
            >
         <div class="search-input-container" *ngIf="!!searchInput" (click)="onSearchInputClick($event)">
           <input type="text" [placeholder]="searchLabel" [ngModel]="searchValue" [ngModelOptions]="{standalone: true}"
-                 [ngJvxFocus]="isOpen"
+                 [ngJvxFocus]="isOpen()"
                  (input)="onSearchValueChange($event)"/>
         </div>
         <div
@@ -81,7 +81,7 @@
   </div>
   <!-- END MENU -->
   <!-- START INPUT -->
-  <div [ngClass]="{'ng-jvx-multiselect-value-container': true, 'is-open': isOpen}"
+  <div [ngClass]="{'ng-jvx-multiselect-value-container': true, 'is-open': isOpen()}"
        (click)="clickOnMenuTrigger($event)"
        #valueContainer>
     @if (value.length === 0) {
