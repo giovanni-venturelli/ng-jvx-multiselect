@@ -54,7 +54,7 @@ import {toSignal} from '@angular/core/rxjs-interop';
   ],
   standalone: false
 })
-export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, AfterViewInit, OnChanges,
+export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewInit,
   ControlValueAccessor {
   static nextId = 0;
   @HostBinding() id = `jvx-multiselect-${NgJvxMultiselectComponent.nextId++}`;
@@ -79,7 +79,18 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
   @ContentChild(NgJvxGroupHeaderDirective) groupHeaderTemplate: NgJvxGroupHeaderDirective | null = null;
   // @ContentChild(NgJvxOptionComponent) optionComp: NgJvxOptionComponent;
   // @ContentChild(TemplateRef) optionsTemplate: TemplateRef<any> | null = null;
-  @Input() options: any[] = [];
+  @Input() set options(v: any[]){
+    if(v) {
+      this.selectableOptions = [...v];
+    }
+    else {
+      this.selectableOptions = [];
+    }
+    this._options = v;
+  };
+  get options(): any[]{
+    return this._options;
+  }
   @Input() multi = false;
   @Input() url = '';
   @Input() requestType: 'get' | 'post' = 'get';
@@ -191,7 +202,7 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
   @Output() jvxMultiselectClose: EventEmitter<void> = new EventEmitter<void>();
   @Output() jvxMultiselectClosed: EventEmitter<void> = new EventEmitter<void>();
   @Output() scrollEnd: EventEmitter<void> = new EventEmitter<void>();
-
+  private _options = [];
   public controlType = 'ng-jvx-multiselect';
   public document = document;
   public window = window;
@@ -267,9 +278,9 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
     });
   }
 
-  ngDoCheck(): void {
-    this.isPlaceholderActiveSubject.next(this.placeholderContainer?.nativeElement?.hasChildNodes());
-  }
+  // ngDoCheck(): void {
+  //   this.isPlaceholderActiveSubject.next(this.placeholderContainer?.nativeElement?.hasChildNodes());
+  // }
 
   ngOnInit(): void {
     this.stateChange$.pipe(takeUntil(this.unsubscribe)).subscribe(() => {
@@ -392,12 +403,12 @@ export class NgJvxMultiselectComponent implements OnInit, DoCheck, OnDestroy, Af
     })).subscribe(noop);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.options) {
-      // this.setSelectableOptions(this.options).subscribe(noop);
-      this.selectableOptions = [...this.options];
-    }
-  }
+  // ngOnChanges(changes: SimpleChanges): void {
+  //   if (changes.options) {
+  //     // this.setSelectableOptions(this.options).subscribe(noop);
+  //     this.selectableOptions = [...this.options];
+  //   }
+  // }
 
 
   get selectionValue(): any[] {
