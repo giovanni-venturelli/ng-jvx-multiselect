@@ -16,7 +16,7 @@ import {
 import {CdkConnectedOverlay} from '@angular/cdk/overlay';
 import {fromEvent, Subject, timer} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {animate, style, transition, trigger} from '@angular/animations';
+import {animate, query, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'lib-panel',
@@ -30,29 +30,54 @@ import {animate, style, transition, trigger} from '@angular/animations';
   animations: [
     trigger('animation', [
       transition(':enter', [
-        style({
-          opacity: 0,
-          transform: 'scaleY(0.8)',
-          transformOrigin: 'top',
-        }),
-        animate('0.08s ease-in-out', style({
-          opacity: 1,
-          transform: 'scaleY(1)',
-          transformOrigin: 'top',
-        })),
+        query('.ng-jvx-panel.below-panel', [
+          style({
+            opacity: 0,
+            transform: 'scaleY(0.8)',
+            transformOrigin: 'top',
+          }),
+          animate('0.08s ease-in-out', style({
+            opacity: 1,
+            transform: 'scaleY(1)',
+            transformOrigin: 'top',
+          }))], {optional: true}),
+        query('.ng-jvx-panel.above-panel', [
+          style({
+            opacity: 0,
+            transform: 'scaleY(0.8)',
+            transformOrigin: 'bottom',
+          }),
+          animate('0.08s ease-in-out', style({
+            opacity: 1,
+            transform: 'scaleY(1)',
+            transformOrigin: 'bottom',
+          }))], {optional: true})
       ]),
       transition(':leave', [
-        style({
-          opacity: 1,
-          transform: 'scaleY(1)',
-          transformOrigin: 'top'
-        }),
-        animate('.08s ease-in-out', style({
-          opacity: 0,
-          transform: 'scaleY(0.8)',
-          transformOrigin: 'top'
-        })),
-      ]),
+        query('.ng-jvx-panel.below-panel', [
+          style({
+            opacity: 1,
+            transform: 'scaleY(1)',
+            transformOrigin: 'top'
+          }),
+          animate('.08s ease-in-out', style({
+            opacity: 0,
+            transform: 'scaleY(0.8)',
+            transformOrigin: 'top'
+          })),
+        ], {optional: true}),
+        query('.ng-jvx-panel.above-panel', [
+          style({
+            opacity: 1,
+            transform: 'scaleY(1)',
+            transformOrigin: 'bottom'
+          }),
+          animate('.08s ease-in-out', style({
+            opacity: 0,
+            transform: 'scaleY(0.8)',
+            transformOrigin: 'bottom'
+          })),
+        ], {optional: true})])
     ]),
   ]
 })

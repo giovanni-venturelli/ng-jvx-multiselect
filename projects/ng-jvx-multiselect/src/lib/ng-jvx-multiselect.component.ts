@@ -209,7 +209,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   public window = window;
   public form: UntypedFormGroup;
   public isOpen = signal(false);
-  public isLoading = false;
+  public isLoading = signal(false);
   public showList = true;
   public asyncOptions: any = [];
   public selectableOptions = [];
@@ -532,7 +532,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   clickOnMenuTrigger(e: MouseEvent): void {
-    if (!this.disabled && !this.isLoading) {
+    if (!this.disabled && !this.isLoading()) {
       this.showList = false;
       this.shouldLoadMore = true;
       timer(0).subscribe(() => {
@@ -554,7 +554,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   private getList(): Observable<any> {
-    this.isLoading = true;
+    this.isLoading.set(true);
     return this.service.getList({
       url: this.url,
       requestType: this.requestType,
@@ -581,7 +581,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
         if (result.length === 0) {
           this.shouldLoadMore = false;
-          this.isLoading = false;
+          this.isLoading.set(false);
           return of([]);
         } else {
           const newOptions = [];
@@ -596,7 +596,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
         this.selectableOptions.push(...finVal);
         return this.updateOrderedOptions(this.selectableOptions);
       }), map((val) => {
-        this.isLoading = false;
+        this.isLoading.set(false);
         this.trigger.openMenu();
         this.setSelectionContainerSize();
         return val;
@@ -605,7 +605,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
         this.changeDetectorRef.markForCheck();
       }),
       catchError((error) => {
-        this.isLoading = false;
+        this.isLoading.set(false);
         this.changeDetectorRef.markForCheck();
         return throwError(() => error);
       })
@@ -614,7 +614,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   onScrolled(e: any): void {
     if (e.target.scrollTop + 220 + ((this.searchInput ? 0 : 1) * 40) - this.menuFooter().nativeElement.offsetHeight === this.selectionContainer().nativeElement.offsetHeight
-      && !this.isLoading) {
+      && !this.isLoading()) {
       this.scrollEnd.emit();
       if (this.url && this.url.length > 0 && !this.ignorePagination && this.shouldLoadMore) {
         this.getList().subscribe(noop);
