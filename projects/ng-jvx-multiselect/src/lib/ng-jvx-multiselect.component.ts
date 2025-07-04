@@ -505,7 +505,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     this.isOpen.set(true);
     this.jvxMultiselectOpen.emit();
     const stopInterval = new Subject<void>();
-    interval(50).pipe(takeUntil(stopInterval)).subscribe(() => {
+    interval(10).pipe(takeUntil(stopInterval)).subscribe(() => {
       this.changeDetectorRef.detectChanges();
     });
     timer(200).subscribe(() => {
@@ -521,7 +521,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   deselect(val: any): void {
     this.value = [...this.value.filter(v => v[this.itemValue] !== val[this.itemValue])];
     // this.value.splice(this.value.findIndex(v => v[this.itemValue] === val[this.itemValue]), 1);
-    this.form.get('selectionValue').setValue(this.value.map(m => m.value));
+    this.form.get('selectionValue').setValue(this.value.map(m => m[this.itemValue]));
     this.valueChange.emit(this.value);
     this.propagateChange(this.value);
     this.changeDetectorRef.markForCheck();
@@ -613,7 +613,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   onScrolled(e: any): void {
-    if (e.target.scrollTop + 220 + ((this.searchInput ? 0 : 1) * 40) - this.menuFooter().nativeElement.offsetHeight === this.selectionContainer().nativeElement.offsetHeight
+    if (e.target.scrollTop + 260 + ((this.searchInput ? 0 : 1) * 40) - this.menuFooter().nativeElement.offsetHeight === this.selectionContainer().nativeElement.offsetHeight
       && !this.isLoading()) {
       this.scrollEnd.emit();
       if (this.url && this.url.length > 0 && !this.ignorePagination && this.shouldLoadMore) {

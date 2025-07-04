@@ -78,10 +78,11 @@ export class AppComponent implements OnInit {
 
     this.form.controls.selectionValue.valueChanges.subscribe((val) => {
 
-      if (!!val.some(v => v.value === 5) && val.length > 1) {
-        this.form.controls.selectionValue.setValue([val.find(v => v.value === 5)]);
-      }
+
+      console.log(this.form.controls.selectionValue.getRawValue());
+
     });
+
   }
 
   getUrl(): string {
@@ -115,9 +116,6 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     timer(500).subscribe(() => {
       this.width = 257;
-    });
-    timer(5000).subscribe(() => {
-      this.form.get('selectionValue').setValue([{value: 4, text: 'text 4'}]);
     });
   }
 
@@ -169,7 +167,9 @@ export class AppComponent implements OnInit {
   }
 
   onValueChange(e: any[]) {
+    console.log('=============================== VALUE CHANGE ===============================');
     console.log(e);
-    console.log(this.form.controls.selectionValue.getRawValue());
+    console.log('===========================================================================================================================');
+    // console.log(this.form.controls.selectionValue.getRawValue());
   }
 }
