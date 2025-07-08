@@ -19,7 +19,7 @@ import {
   SimpleChanges, viewChild,
   ViewChild,
   ViewChildren,
-  ViewEncapsulation
+  ViewEncapsulation, WritableSignal
 } from '@angular/core';
 import {NgJvxOptionsTemplateDirective} from './directives/ng-jvx-options-template.directive';
 import {ControlValueAccessor, NgControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
@@ -215,13 +215,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   public selectableOptions = [];
   public orderedOptions: { group: any, options: any[] }[] = [];
   public searchValue = '';
-  public yPosition: Signal<'above' | 'below'> = toSignal(timer(0).pipe(switchMap(() =>
-    fromEvent(window, 'resize').pipe(
-      map(() => {
-        return window.innerHeight - this.jvxMultiselect()?.nativeElement?.getBoundingClientRect()?.top < 300 ? 'above' : 'below';
-      }),
-      startWith(window.innerHeight - this.jvxMultiselect()?.nativeElement?.getBoundingClientRect()?.top < 300 ? 'above' : 'below'))))
-  ) as Signal<'above' | 'below'>;
+  public yPosition: WritableSignal<'above' | 'below'> = signal('below');
 
   public stateChanges = new Subject<void>();
   public currentPage = 0;
@@ -261,7 +255,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   private unsubscribe$ = this.unsubscribe.asObservable();
   private intPageSize = 15;
   public onTouched = () => {
-  }
+  };
 
 
   constructor(private formBuilder: UntypedFormBuilder, private service: NgJvxMultiselectService,
@@ -285,7 +279,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     this.form = this.formBuilder.group({
       selectionValue: new UntypedFormControl(this.selectionValue)
     });
-  }
+      }
 
   // ngDoCheck(): void {
   //   this.isPlaceholderActiveSubject.next(this.placeholderContainer?.nativeElement?.hasChildNodes());
@@ -402,6 +396,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   ngAfterViewInit(): void {
+
     if (this.scrollbar) {
       this.scrollbar.scrolled.pipe(takeUntil(this.unsubscribe$)).subscribe((e: any) => {
         this.onScrolled(e);
@@ -501,6 +496,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   onMenuOpen(): void {
+    this.yPosition.set(window.innerHeight - this.jvxMultiselect()?.nativeElement?.getBoundingClientRect()?.top < 300 ? 'above' : 'below');
     this._jvxWidth.set(this.jvxMultiselect().nativeElement.offsetWidth);
     this.isOpen.set(true);
     this.jvxMultiselectOpen.emit();
@@ -519,8 +515,8 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   deselect(val: any): void {
-    this.value = [...this.value.filter(v => v[this.itemValue] !== val[this.itemValue])];
-    // this.value.splice(this.value.findIndex(v => v[this.itemValue] === val[this.itemValue]), 1);
+    // this.value = [...this.value.filter(v => v[this.itemValue] !== val[this.itemValue])];
+    this.value.splice(this.value.findIndex(v => v[this.itemValue] === val[this.itemValue]), 1);
     this.form.get('selectionValue').setValue(this.value.map(m => m[this.itemValue]));
     this.valueChange.emit(this.value);
     this.propagateChange(this.value);

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {HttpHeaders} from '@angular/common/http';
 import {Observable, of, timer} from 'rxjs';
 import {UntypedFormBuilder, FormControl, UntypedFormGroup, Validators} from '@angular/forms';
@@ -14,7 +14,6 @@ export class AppComponent implements OnInit {
   width = 0;
   title = 'demo-sandbox';
   public postPayload = {name: 'nome', lastName: 'cognome'};
-
   public mapper = {
     mapOption(source: any): Observable<{ value: number, text: string }> {
       return of({
@@ -76,12 +75,7 @@ export class AppComponent implements OnInit {
       testInput: ['', Validators.required]
     });
 
-    this.form.controls.selectionValue.valueChanges.subscribe((val) => {
 
-
-      console.log(this.form.controls.selectionValue.getRawValue());
-
-    });
 
   }
 
