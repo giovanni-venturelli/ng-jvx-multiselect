@@ -58,7 +58,9 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   ControlValueAccessor {
   static nextId = 0;
   @HostBinding() id = `jvx-multiselect-${NgJvxMultiselectComponent.nextId++}`;
-
+  @HostBinding('class.has-errors')
+  get invalid(): boolean {
+    return this.errorState; }
   @HostBinding('class.floating')
   get shouldLabelFloat(): boolean {
     return this.focused || !this.empty || this.value.length > 0 || !!this.isPlaceholderActive;
