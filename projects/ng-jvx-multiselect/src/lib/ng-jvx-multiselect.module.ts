@@ -12,7 +12,7 @@ import {NgJvxGroupHeaderDirective} from './directives/ng-jvx-group-header.direct
 import {NgJvxFocusDirective} from './directives/ng-jvx-focus.directive';
 import {MenuTriggerDirective} from './panel/menu-trigger/menu-trigger.directive';
 import {PanelComponent} from './panel/panel.component';
-import {ChipComponent} from './chiplist/chip/chip.component';
+import {NgJvxMultisectChipComponent} from './chiplist/chip/chip.component';
 
 @NgModule({
   declarations: [
@@ -31,13 +31,14 @@ import {ChipComponent} from './chiplist/chip/chip.component';
     SmoothScroll,
     FormsModule,
     PanelComponent,
-    ChipComponent
+    NgJvxMultisectChipComponent
   ],
   exports: [NgJvxMultiselectComponent,
     NgJvxOptionComponent,
     NgJvxOptionsTemplateDirective,
     NgJvxSelectionTemplateDirective,
     NgJvxDisabledOptionDirective,
+    NgJvxMultisectChipComponent,
     NgJvxGroupHeaderDirective]
 })
 export class NgJvxMultiselectModule {

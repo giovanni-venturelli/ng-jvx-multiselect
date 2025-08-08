@@ -3,7 +3,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component, computed,
-  ContentChild, DoCheck,
+  ContentChild, contentChildren, DoCheck, effect,
   ElementRef,
   EventEmitter,
   forwardRef,
@@ -16,7 +16,7 @@ import {
   Output,
   QueryList,
   Self, Signal, signal,
-  SimpleChanges, viewChild,
+  SimpleChanges, viewChild, viewChildren,
   ViewChild,
   ViewChildren,
   ViewEncapsulation, WritableSignal
@@ -37,6 +37,7 @@ import {NgJvxSearchMapper} from './interfaces/ng-jvx-search-mapper';
 import {NgJvxGroup, NgJvxGroupMapper} from './interfaces/ng-jvx-group-mapper';
 import {MenuTriggerDirective} from './panel/menu-trigger/menu-trigger.directive';
 import {toSignal} from '@angular/core/rxjs-interop';
+import {NgJvxMultisectChipComponent} from './chiplist/chip/chip.component';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -58,9 +59,12 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   ControlValueAccessor {
   static nextId = 0;
   @HostBinding() id = `jvx-multiselect-${NgJvxMultiselectComponent.nextId++}`;
+
   @HostBinding('class.has-errors')
   get invalid(): boolean {
-    return this.errorState; }
+    return this.errorState;
+  }
+
   @HostBinding('class.floating')
   get shouldLabelFloat(): boolean {
     return this.focused || !this.empty || this.value.length > 0 || !!this.isPlaceholderActive;
@@ -79,6 +83,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @ContentChild(NgJvxOptionsTemplateDirective) optionsTemplate: NgJvxOptionsTemplateDirective | null = null;
   @ContentChild(NgJvxSelectionTemplateDirective) selectionTemplate: NgJvxSelectionTemplateDirective | null = null;
   @ContentChild(NgJvxGroupHeaderDirective) groupHeaderTemplate: NgJvxGroupHeaderDirective | null = null;
+  chips = viewChildren(NgJvxMultisectChipComponent);
   // @ContentChild(NgJvxOptionComponent) optionComp: NgJvxOptionComponent;
   // @ContentChild(TemplateRef) optionsTemplate: TemplateRef<any> | null = null;
   @Input() set options(v: any[]) {
@@ -166,12 +171,12 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   @Input()
   get disabled(): boolean {
-    return this._disabled;
+    return this._disabled();
   }
 
   set disabled(value: boolean) {
-    this._disabled = coerceBooleanProperty(value);
-    this._disabled ? this.parts.disable() : this.parts.enable();
+    this._disabled.set(coerceBooleanProperty(value));
+    this._disabled() ? this.parts.disable() : this.parts.enable();
     this.stateChanges.next();
   }
 
@@ -189,7 +194,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   // tslint:disable-next-line:variable-name
-  private _disabled = false;
+  private _disabled = signal(false);
 
   get errorState(): boolean {
     if (this.ngControl != null) {
@@ -264,6 +269,19 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
               private elementRef: ElementRef,
               private changeDetectorRef: ChangeDetectorRef,
               @Optional() @Self() public ngControl: NgControl, fb: UntypedFormBuilder) {
+    effect((onCleanup) => {
+      if (!this._disabled()) {
+        const subs: any[] = [];
+        const chips = this.chips();
+        for (const chip of chips) {
+          const sub = chip.removed.subscribe((v: any) => {
+            this.deselect(v);
+          });
+          subs.push(sub);
+        }
+        onCleanup(() => subs.forEach(s => s.unsubscribe?.()));
+      }
+    });
     if (this.ngControl != null) {
       // Setting the value accessor directly (instead of using
       // the providers) to avoid running into a circular import.
@@ -281,7 +299,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     this.form = this.formBuilder.group({
       selectionValue: new UntypedFormControl(this.selectionValue)
     });
-      }
+  }
 
   // ngDoCheck(): void {
   //   this.isPlaceholderActiveSubject.next(this.placeholderContainer?.nativeElement?.hasChildNodes());

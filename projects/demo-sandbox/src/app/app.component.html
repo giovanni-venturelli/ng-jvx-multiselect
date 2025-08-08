@@ -29,7 +29,6 @@
   <!--    </mat-form-field>-->
   <!--  </div>-->
   <div style=" width: 100%; height: 300px; overflow: auto">
-    <div style="height: 1000px"></div>
   <div [ngStyle]="{'width.px': width}">
     <!--      <ng-jvx-multiselect-->
     <!--                          style="width: 100%"-->
@@ -48,8 +47,6 @@
     <!--        </div>-->
     <!--      </ng-jvx-multiselect>-->
     <form [formGroup]="form" [ngStyle]="{'width.px': width}">
-
-
             <ng-jvx-multiselect style="width: 100%"
                                 formControlName="selectionValue"
                                 (valueChange)="onValueChange($event)"

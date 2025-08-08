@@ -1,5 +1,5 @@
 
-<div class="ng-jvx-multiselect" [ngClass]="{'disabled': disabled, 'has-errors': hasErrors}" #jvxMultiselect>
+<div class="ng-jvx-multiselect" [class.disabled]="disabled" [class.has-errors]="hasErrors" #jvxMultiselect>
   <!-- START MENU -->
   <div [libMenuTriggerFor]="menuRef" (onMenuOpen)="onMenuOpen()" (menuOpened)="onMenuOpened()"
        #trigger
@@ -57,7 +57,7 @@
                     </ng-jvx-option>
                   </ng-container>
                 </ng-container>
-                <ng-container *ngIf="!groupBy || groupBy.length === 0">
+                <ng-container *ngIf="!groupBy || ( typeof groupBy === 'string' && groupBy.length === 0)">
                   <ng-jvx-option *ngFor="let option of selectableOptions" [value]="option[itemValue]"
                                  [isSelected]="isOptionSelected(option)" (click)="clickOnOption(option)">
                     <div class="ng-jvx-option-wrapper" style="min-height:48px">
@@ -145,9 +145,9 @@
 <ng-template #defaultMultiSelectionTemplate let-value>
   <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
     @for (val of value; track val[itemValue]) {
-      <lib-chip class="ng-jvx-multiselect-chip" [disabled]="this.disabled" (removed)="deselect(val)">
+      <ng-jvx-multiselect-chip [value]="val" class="ng-jvx-multiselect-chip" [disabled]="this.disabled" >
         {{ val[itemText] }}
-      </lib-chip>
+      </ng-jvx-multiselect-chip>
     }
   </div>
 </ng-template>
