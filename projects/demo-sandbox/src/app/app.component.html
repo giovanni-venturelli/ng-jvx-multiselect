@@ -56,6 +56,15 @@
                                 [searchMode]="'client'"
                                 [postPayload]="postPayload"
                                 >
+              <ng-container *ngJvxSelectionTemplate="let options">
+                <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
+                  @for (option of options; track option.value+ '-'+option.text) {
+                    <ng-jvx-multiselect-chip
+                      [value]="option">ciao {{option.text}}
+                    </ng-jvx-multiselect-chip>
+                  }
+                </div>
+              </ng-container>
               <div ng-jvx-footer> <div style="height: 40px; display: flex; align-items: center; padding: .25rem;">footer</div></div>
             </ng-jvx-multiselect>
 

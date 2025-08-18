@@ -272,6 +272,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     effect((onCleanup) => {
       if (!this._disabled()) {
         const subs: any[] = [];
+        debugger;
         const chips = this.chips();
         for (const chip of chips) {
           const sub = chip.removed.subscribe((v: any) => {
