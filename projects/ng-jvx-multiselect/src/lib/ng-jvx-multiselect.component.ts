@@ -83,7 +83,6 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @ContentChild(NgJvxOptionsTemplateDirective) optionsTemplate: NgJvxOptionsTemplateDirective | null = null;
   @ContentChild(NgJvxSelectionTemplateDirective) selectionTemplate: NgJvxSelectionTemplateDirective | null = null;
   @ContentChild(NgJvxGroupHeaderDirective) groupHeaderTemplate: NgJvxGroupHeaderDirective | null = null;
-  chips = viewChildren(NgJvxMultisectChipComponent);
   // @ContentChild(NgJvxOptionComponent) optionComp: NgJvxOptionComponent;
   // @ContentChild(TemplateRef) optionsTemplate: TemplateRef<any> | null = null;
   @Input() set options(v: any[]) {
@@ -269,20 +268,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
               private elementRef: ElementRef,
               private changeDetectorRef: ChangeDetectorRef,
               @Optional() @Self() public ngControl: NgControl, fb: UntypedFormBuilder) {
-    effect((onCleanup) => {
-      if (!this._disabled()) {
-        const subs: any[] = [];
-        debugger;
-        const chips = this.chips();
-        for (const chip of chips) {
-          const sub = chip.removed.subscribe((v: any) => {
-            this.deselect(v);
-          });
-          subs.push(sub);
-        }
-        onCleanup(() => subs.forEach(s => s.unsubscribe?.()));
-      }
-    });
+
     if (this.ngControl != null) {
       // Setting the value accessor directly (instead of using
       // the providers) to avoid running into a circular import.

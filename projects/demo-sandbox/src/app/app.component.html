@@ -60,7 +60,7 @@
                 <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
                   @for (option of options; track option.value+ '-'+option.text) {
                     <ng-jvx-multiselect-chip
-                      [value]="option">ciao {{option.text}}
+                      [value]="option">{{option.text}}
                     </ng-jvx-multiselect-chip>
                   }
                 </div>

@@ -24,15 +24,15 @@ import {NgJvxMultisectChipComponent} from './chiplist/chip/chip.component';
     NgJvxDisabledOptionDirective,
     NgJvxGroupHeaderDirective,
     NgJvxFocusDirective],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    NgScrollbarModule,
-    SmoothScroll,
-    FormsModule,
-    PanelComponent,
-    NgJvxMultisectChipComponent
-  ],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        NgScrollbarModule,
+        SmoothScroll,
+        FormsModule,
+        PanelComponent,
+        NgJvxMultisectChipComponent
+    ],
   exports: [NgJvxMultiselectComponent,
     NgJvxOptionComponent,
     NgJvxOptionsTemplateDirective,
