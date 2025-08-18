@@ -12,8 +12,7 @@ import {fromEvent, noop, Subject, takeUntil, tap} from 'rxjs';
 import {PanelComponent} from '../panel.component';
 
 @Directive({
-    selector: '[lib-menu-trigger-for], [libMenuTriggerFor]',
-    standalone: false
+  selector: '[lib-menu-trigger-for], [libMenuTriggerFor]'
 })
 export class MenuTriggerDirective implements OnDestroy, AfterViewInit {
   private unsubscribe = new Subject<void>();

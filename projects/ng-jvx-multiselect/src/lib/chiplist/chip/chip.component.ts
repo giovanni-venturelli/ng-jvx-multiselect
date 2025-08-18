@@ -1,13 +1,11 @@
-import {Component, inject, input, output, ViewEncapsulation} from '@angular/core';
+import {Component, forwardRef, inject, input, output, ViewEncapsulation} from '@angular/core';
 import {NgJvxMultiselectComponent} from '../../ng-jvx-multiselect.component';
 
 @Component({
     selector: 'ng-jvx-multiselect-chip',
-    imports: [
-    ],
     templateUrl: './chip.component.html',
     styleUrl: './chip.component.scss',
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
 })
 export class NgJvxMultisectChipComponent {
   removed = output<any>();

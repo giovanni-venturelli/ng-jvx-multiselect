@@ -2,33 +2,43 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component, computed,
-  ContentChild, contentChildren, DoCheck, effect,
+  Component,
+  computed,
+  ContentChild,
   ElementRef,
   EventEmitter,
-  forwardRef,
-  HostBinding, input,
+  HostBinding,
+  input,
   Input,
-  OnChanges,
   OnDestroy,
   OnInit,
   Optional,
   Output,
   QueryList,
-  Self, Signal, signal,
-  SimpleChanges, viewChild, viewChildren,
+  Self,
+  signal,
+  viewChild,
   ViewChild,
   ViewChildren,
-  ViewEncapsulation, WritableSignal
+  ViewEncapsulation,
+  WritableSignal
 } from '@angular/core';
 import {NgJvxOptionsTemplateDirective} from './directives/ng-jvx-options-template.directive';
-import {ControlValueAccessor, NgControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormsModule,
+  NgControl,
+  ReactiveFormsModule,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup
+} from '@angular/forms';
 import {NgJvxOptionComponent} from './ng-jvx-option/ng-jvx-option.component';
 import {NgJvxMultiselectService} from './ng-jvx-multiselect.service';
 import {HttpHeaders} from '@angular/common/http';
 import {NgScrollbar} from 'ngx-scrollbar';
-import {catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap, takeUntil, tap, throttleTime} from 'rxjs/operators';
-import {BehaviorSubject, forkJoin, fromEvent, interval, lastValueFrom, noop, Observable, of, Subject, throwError, timer} from 'rxjs';
+import {catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {BehaviorSubject, forkJoin, interval, noop, Observable, of, Subject, throwError, timer} from 'rxjs';
 import {NgJvxMultiOptionMapper, NgJvxOptionMapper} from './interfaces/ng-jvx-option-mapper';
 import {NgJvxSelectionTemplateDirective} from './directives/ng-jvx-selection-template.directive';
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
@@ -36,8 +46,10 @@ import {NgJvxGroupHeaderDirective} from './directives/ng-jvx-group-header.direct
 import {NgJvxSearchMapper} from './interfaces/ng-jvx-search-mapper';
 import {NgJvxGroup, NgJvxGroupMapper} from './interfaces/ng-jvx-group-mapper';
 import {MenuTriggerDirective} from './panel/menu-trigger/menu-trigger.directive';
-import {toSignal} from '@angular/core/rxjs-interop';
 import {NgJvxMultisectChipComponent} from './chiplist/chip/chip.component';
+import {CommonModule} from '@angular/common';
+import {PanelComponent} from './panel/panel.component';
+import {NgJvxFocusDirective} from './directives/ng-jvx-focus.directive';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -53,7 +65,18 @@ import {NgJvxMultisectChipComponent} from './chiplist/chip/chip.component';
     //   multi: true,
     // }
   ],
-  standalone: false
+  imports: [
+    CommonModule,
+    NgJvxMultisectChipComponent,
+    NgScrollbar,
+    PanelComponent,
+    ReactiveFormsModule,
+    MenuTriggerDirective,
+    NgJvxOptionComponent,
+    NgJvxFocusDirective,
+    FormsModule
+  ],
+  standalone: true
 })
 export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewInit,
   ControlValueAccessor {

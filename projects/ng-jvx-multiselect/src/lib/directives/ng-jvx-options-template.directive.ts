@@ -1,9 +1,8 @@
 import {Directive, ElementRef, HostListener, Input, TemplateRef, ViewContainerRef} from '@angular/core';
 
 @Directive({
-    // tslint:disable-next-line:directive-selector
-    selector: '[ngJvxOptionsTemplate]',
-    standalone: false
+  // tslint:disable-next-line:directive-selector
+  selector: '[ngJvxOptionsTemplate]'
 })
 export class NgJvxOptionsTemplateDirective {
 

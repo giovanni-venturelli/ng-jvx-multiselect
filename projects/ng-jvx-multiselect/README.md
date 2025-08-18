@@ -3,23 +3,16 @@
 ng-jvx-multiselect is a select based on angular. It handles both single and multiple selections and allows to
 retrieves the options via asynchronous calls.
 
+<h2 style="color:red">IMPORTANT</h2>
+ng-jvx-multiselect now follows the standalone components paradigm. 
+You must import NgJvxMultiselectComponent and any related directives directly within the consuming component.
+
 ## Install ng-jvx-multiselect
 
 ```
 npm install ng-jvx-multiselect --save
 ```
 
-In <b>app.module.ts</b>
-
-```typescript
-import {NgJvxMultiselectModule} from 'ng-jvx-multiselect';
-
-@NgModule({
-  imports: [
-    NgJvxMultiselectModule
-  ]
-})
-```
 
 In <b>styles.scss</b>
 

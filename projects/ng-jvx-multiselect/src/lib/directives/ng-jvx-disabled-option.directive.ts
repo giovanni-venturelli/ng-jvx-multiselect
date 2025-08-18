@@ -3,9 +3,8 @@ import {fromEvent, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 @Directive({
-    // tslint:disable-next-line:directive-selector
-    selector: '[ngJvxDisabledOption]',
-    standalone: false
+  // tslint:disable-next-line:directive-selector
+  selector: '[ngJvxDisabledOption]'
 })
 export class NgJvxDisabledOptionDirective implements OnInit, OnDestroy {
   private isDisabled = false;
