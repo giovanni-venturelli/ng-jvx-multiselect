@@ -17,7 +17,7 @@ export class NgJvxMultisectChipComponent {
     e.stopPropagation();
     e.preventDefault();
     if (this.container && !this.container.disabled){
-      this.container.deselect(this.value);
+      this.container.deselect(this.value());
     }
   }
 }
