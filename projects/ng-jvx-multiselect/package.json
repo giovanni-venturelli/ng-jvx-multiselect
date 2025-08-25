@@ -1,6 +1,6 @@
 {
   "name": "ng-jvx-multiselect",
-  "version": "19.0.37",
+  "version": "19.0.38",
   "license" : "MIT",
   "description": "ng-jvx-multiselect is a select for angular projects. It handles both single and multiple selections and allows to retrieves the options via asynchronous calls.",
   "exports": {
