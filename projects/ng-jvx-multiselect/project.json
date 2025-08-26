@@ -1,0 +1,44 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "ng-jvx-multiselect",
+  "projectType": "library",
+  "sourceRoot": "projects/ng-jvx-multiselect/src",
+  "prefix": "lib",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:ng-packagr",
+      "options": {
+        "tsConfig": "projects/ng-jvx-multiselect/tsconfig.lib.json",
+        "project": "projects/ng-jvx-multiselect/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "projects/ng-jvx-multiselect/tsconfig.lib.prod.json"
+        }
+      },
+      "outputs": [
+        "{workspaceRoot}/dist/ng-jvx-multiselect"
+      ]
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "options": {
+        "main": "projects/ng-jvx-multiselect/src/test.ts",
+        "tsConfig": "projects/ng-jvx-multiselect/tsconfig.spec.json",
+        "karmaConfig": "projects/ng-jvx-multiselect/karma.conf.js"
+      }
+    },
+    "lint": {
+      "executor": "@angular-devkit/build-angular:tslint",
+      "options": {
+        "tsConfig": [
+          "projects/ng-jvx-multiselect/tsconfig.lib.json",
+          "projects/ng-jvx-multiselect/tsconfig.spec.json"
+        ],
+        "exclude": [
+          "**/node_modules/**"
+        ]
+      }
+    }
+  }
+}

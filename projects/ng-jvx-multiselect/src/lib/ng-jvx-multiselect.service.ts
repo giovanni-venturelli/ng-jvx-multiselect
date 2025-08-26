@@ -40,7 +40,7 @@ export class NgJvxMultiselectService {
     }
     if (requestType === 'get') {
       const options = {
-        mode: 'no-cors', // cors
+        mode: 'no-cors' as RequestMode, // cors
         headers: requestHeaders,
         context: setJvxCall(),
         // withCredentials: true,
@@ -50,7 +50,7 @@ export class NgJvxMultiselectService {
       return this.http.get(url, options);
     } else {
       const options = {
-        mode: 'no-cors', // cors
+        mode: 'no-cors' as RequestMode, // cors
         headers: requestHeaders,
         context: setJvxCall(),
         // withCredentials: true,
