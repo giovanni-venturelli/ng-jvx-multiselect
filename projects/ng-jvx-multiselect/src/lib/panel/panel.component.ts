@@ -1,9 +1,11 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   EventEmitter,
   input,
   Input,
+  InputSignal,
   OnDestroy,
   Output,
   signal,
@@ -14,49 +16,68 @@ import {
 import {CdkConnectedOverlay} from '@angular/cdk/overlay';
 import {fromEvent, Subject, timer} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {animate, style, transition, trigger} from '@angular/animations';
+import {animate, query, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'lib-panel',
-  standalone: true,
   imports: [
     CdkConnectedOverlay
   ],
   templateUrl: './panel.component.html',
   styleUrl: './panel.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('animation', [
       transition(':enter', [
-        style({
-          opacity: 0,
-          transform: 'scaleY(0.8)',
-          transformOrigin: 'top',
-        }),
-        animate(
-          '0.08s ease-in-out',
-          style({
-            opacity: 1,
-            transform: 'scaleY(1)',
-            transformOrigin: 'top',
-          })
-        ),
-      ]),
-      transition(':leave', [
-        style({
-          opacity: 1,
-          transform: 'scaleY(1)',
-          transformOrigin: 'top'
-        }),
-        animate(
-          '.08s ease-in-out',
+        query('.ng-jvx-panel.below-panel', [
           style({
             opacity: 0,
             transform: 'scaleY(0.8)',
-            transformOrigin: 'top'
-          })
-        ),
+            transformOrigin: 'top',
+          }),
+          animate('0.08s ease-in-out', style({
+            opacity: 1,
+            transform: 'scaleY(1)',
+            transformOrigin: 'top',
+          }))], {optional: true}),
+        query('.ng-jvx-panel.above-panel', [
+          style({
+            opacity: 0,
+            transform: 'scaleY(0.8)',
+            transformOrigin: 'bottom',
+          }),
+          animate('0.08s ease-in-out', style({
+            opacity: 1,
+            transform: 'scaleY(1)',
+            transformOrigin: 'bottom',
+          }))], {optional: true})
       ]),
+      transition(':leave', [
+        query('.ng-jvx-panel.below-panel', [
+          style({
+            opacity: 1,
+            transform: 'scaleY(1)',
+            transformOrigin: 'top'
+          }),
+          animate('.08s ease-in-out', style({
+            opacity: 0,
+            transform: 'scaleY(0.8)',
+            transformOrigin: 'top'
+          })),
+        ], {optional: true}),
+        query('.ng-jvx-panel.above-panel', [
+          style({
+            opacity: 1,
+            transform: 'scaleY(1)',
+            transformOrigin: 'bottom'
+          }),
+          animate('.08s ease-in-out', style({
+            opacity: 0,
+            transform: 'scaleY(0.8)',
+            transformOrigin: 'bottom'
+          })),
+        ], {optional: true})])
     ]),
   ]
 })
@@ -78,7 +99,7 @@ export class PanelComponent implements OnDestroy {
   // @ Inputs
   // -----------------------------------------------------------------------------------------------------
   @Input() trigger!: ElementRef<any>;
-  @Input() yPosition: 'above' | 'below' = 'above';
+  yPosition: InputSignal<'above' | 'below'> = input('above');
   multi = input.required<boolean>();
   // -----------------------------------------------------------------------------------------------------
   // @ Outputs
@@ -117,7 +138,7 @@ export class PanelComponent implements OnDestroy {
   close(): void {
     this.isOpen.set(false);
     this.onClose.emit();
-    timer(800).subscribe(() => {
+    timer(200).subscribe(() => {
       this.onClosed.emit();
     });
   }

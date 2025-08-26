@@ -28,10 +28,8 @@
   <!--      </mat-select>-->
   <!--    </mat-form-field>-->
   <!--  </div>-->
-  <div style="display: flex; width: 100%; height: 100%">
-    <div style="flex: 1 1 100%"></div>
+  <div style=" width: 100%; height: 300px; overflow: auto">
   <div [ngStyle]="{'width.px': width}">
-
     <!--      <ng-jvx-multiselect-->
     <!--                          style="width: 100%"-->
     <!--                          [options]="[{value: 1, text: 'text 1'}, {value: 2, text: 'text 2'}, {value: 3, text: 'text 3'}, {value: 4, text: 'text 4'},{value: 5, text: 'text 5'},{value: 6, text: 'text 6'},{value: 7, text: 'text 7'},{value: 8, text: 'text 8'},{value: 9, text: 'text 9'},{value: 10, text: 'text 10'}]"-->
@@ -49,8 +47,6 @@
     <!--        </div>-->
     <!--      </ng-jvx-multiselect>-->
     <form [formGroup]="form" [ngStyle]="{'width.px': width}">
-
-
             <ng-jvx-multiselect style="width: 100%"
                                 formControlName="selectionValue"
                                 (valueChange)="onValueChange($event)"
@@ -58,7 +54,18 @@
                                 [searchInput]="true"
                                 [multi]="true"
                                 [searchMode]="'client'"
+                                [postPayload]="postPayload"
                                 >
+              <ng-container *ngJvxSelectionTemplate="let options">
+                <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
+                  @for (option of options; track option.value+ '-'+option.text) {
+                    <ng-jvx-multiselect-chip
+                      [value]="option">{{option.text}}
+                    </ng-jvx-multiselect-chip>
+                  }
+                </div>
+              </ng-container>
+              <div ng-jvx-footer> <div style="height: 40px; display: flex; align-items: center; padding: .25rem;">footer</div></div>
             </ng-jvx-multiselect>
 
 
@@ -76,6 +83,7 @@
                             [ignorePagination]="true"
                             [url]="url"
                             [requestType]="'get'">
+
           <div placeholder>placeholder</div>
 <!--          <div *ngJvxGroupHeader="let group" style="padding: 5px 15px">-->
 <!--            This is the {{group.group}} group-->
@@ -95,6 +103,7 @@
               <div>valore: {{option.value}}</div>
             </div>
           </div>
+          <div ng-jvx-footer [style.height]="'60px'">footer</div>
         </ng-jvx-multiselect>
 <!--        &lt;!&ndash;        <ng-jvx-multiselect matInput&ndash;&gt;-->
 <!--        &lt;!&ndash;                            [options]="options"&ndash;&gt;-->

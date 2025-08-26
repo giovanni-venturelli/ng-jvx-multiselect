@@ -1,26 +1,23 @@
-import {Component, EventEmitter, input, Input, Output, ViewEncapsulation} from '@angular/core';
-import {NgClass} from '@angular/common';
+import {Component, forwardRef, inject, input, output, ViewEncapsulation} from '@angular/core';
+import {NgJvxMultiselectComponent} from '../../ng-jvx-multiselect.component';
 
 @Component({
-  selector: 'lib-chip',
-  standalone: true,
-  imports: [
-    NgClass
-  ],
-  templateUrl: './chip.component.html',
-  styleUrl: './chip.component.scss',
-  encapsulation: ViewEncapsulation.None
+    selector: 'ng-jvx-multiselect-chip',
+    templateUrl: './chip.component.html',
+    styleUrl: './chip.component.scss',
+    encapsulation: ViewEncapsulation.None,
 })
-export class ChipComponent {
-  @Output() removed = new EventEmitter();
-
+export class NgJvxMultisectChipComponent {
+  removed = output<any>();
+  value = input<any>();
   disabled = input<boolean>(false);
+  container = inject(NgJvxMultiselectComponent, {optional: true});
 
   clickOnRemove(e: MouseEvent): void {
     e.stopPropagation();
     e.preventDefault();
-    if (!this.disabled()) {
-      this.removed.emit();
+    if (this.container && !this.container.disabled){
+      this.container.deselect(this.value());
     }
   }
 }

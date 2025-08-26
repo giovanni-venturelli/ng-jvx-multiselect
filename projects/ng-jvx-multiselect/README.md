@@ -3,23 +3,16 @@
 ng-jvx-multiselect is a select based on angular. It handles both single and multiple selections and allows to
 retrieves the options via asynchronous calls.
 
+<h2 style="color:red">IMPORTANT</h2>
+ng-jvx-multiselect now follows the standalone components paradigm. 
+You must import NgJvxMultiselectComponent and any related directives directly within the consuming component.
+
 ## Install ng-jvx-multiselect
 
 ```
 npm install ng-jvx-multiselect --save
 ```
 
-In <b>app.module.ts</b>
-
-```typescript
-import {NgJvxMultiselectModule} from 'ng-jvx-multiselect';
-
-@NgModule({
-  imports: [
-    NgJvxMultiselectModule
-  ]
-})
-```
 
 In <b>styles.scss</b>
 
@@ -84,6 +77,7 @@ In <b>example.component.ts</b>
 | `options`        | `Array`                                                  | `[]`       | Array of option objects.                                                                                                                                                                               |
 | `requestHeaders` | `Object`                                                 | `{...}`    | The headers of the HTTP request.                                                                                                                                                                       |
 | `requestType`    | <code>'GET'&#124;'POST'</code>                           | `'GET'`    | The type of the HTTP request.                                                                                                                                                                          |
+| `postPayload`    | `Object`                                                 | {}         | Sets the payload for the post request.                                                                                                                                                                 |
 | `searchInput`    | `Boolean`                                                | `false`    | True to enable the search input for the options list.                                                                                                                                                  |
 | `searchMode`     | <code>'client'&#124;'server'</code>                      | `server`   | `'client'` if the search is only client side, `'server'` if it's server side.                                                                                                                          |
 | `searchLabel`    | `String`                                                 | `'search'` | The label of the search input.                                                                                                                                                                         |
@@ -339,3 +333,27 @@ This directive disables the selection of the host option. i.e.
     </span>
 </div>
 ```
+
+## NgJvxMultiselectChipComponent
+
+This component is used by `ng-jvx-multiselect` to render each selected item as a removable “chip” when `multi` is enabled. Chips provide a compact visual representation of the current selection and offer a quick way to remove individual items.
+
+It is created and managed internally by the multiselect; typical applications do not need to instantiate it directly.
+
+### Inputs
+
+*None*
+
+### Methods
+
+*None*
+
+### Events
+
+| Event Name | Detail | Description                                                                 |
+|------------|--------|-----------------------------------------------------------------------------|
+| `removed`  | `any`  | Fired when the user clicks the chip’s remove action. The detail is the option represented by the chip. |
+
+Notes:
+- When a chip emits `removed`, the multiselect removes the corresponding item from the selection.
+- The event is handled internally by the multiselect component; consumers usually interact with selection changes via the parent’s `valueChange` event.

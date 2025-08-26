@@ -6,18 +6,23 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
-import {NgJvxMultiselectModule} from 'ng-jvx-multiselect';
+import {
+  NgJvxDisabledOptionDirective,
+  NgJvxMultisectChipComponent,
+  NgJvxMultiselectComponent,
+  NgJvxOptionsTemplateDirective, NgJvxSelectionTemplateDirective
+} from 'ng-jvx-multiselect';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {CommonModule} from '@angular/common';
 
 @NgModule({ declarations: [
         AppComponent
     ],
-    bootstrap: [AppComponent], imports: [BrowserModule,
-        NgJvxMultiselectModule,
-        BrowserAnimationsModule,
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+    bootstrap: [AppComponent],
+  imports: [BrowserModule,
+    BrowserAnimationsModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule, NgJvxMultiselectComponent, NgJvxOptionsTemplateDirective, NgJvxDisabledOptionDirective, NgJvxMultisectChipComponent, NgJvxSelectionTemplateDirective], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {
 }

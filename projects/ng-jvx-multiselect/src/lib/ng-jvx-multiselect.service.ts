@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {setJvxCall} from './utils';
 
 @Injectable({
@@ -19,7 +19,7 @@ export class NgJvxMultiselectService {
             requestHeaders,
             search,
             searchProp = 'search',
-            data
+            data,
           }: {
     url: string, ignorePagination: boolean,
     currentPage: number,
@@ -38,19 +38,41 @@ export class NgJvxMultiselectService {
       params = params.set('page', currentPage.toString())
         .set('size', pageSize.toString());
     }
-    const options = {
-      mode: 'no-cors', // cors
-      headers: requestHeaders,
-      context: setJvxCall(),
-      // withCredentials: true,
-      // credentials: 'same-origin', // cache: 'default',
-      data,
-      params
-    };
     if (requestType === 'get') {
+      const options = {
+        mode: 'no-cors', // cors
+        headers: requestHeaders,
+        context: setJvxCall(),
+        // withCredentials: true,
+        // credentials: 'same-origin', // cache: 'default',
+        params
+      };
       return this.http.get(url, options);
     } else {
-      return this.http.post(url, options);
+      const options = {
+        mode: 'no-cors', // cors
+        headers: requestHeaders,
+        context: setJvxCall(),
+        // withCredentials: true,
+        // credentials: 'same-origin', // cache: 'default',
+      };
+      const postParams = {
+        [searchProp]: params.get('smartSearch'),
+        paging: ['page', 'size', 'sort', 'ignorePagination'].reduce((obj, key) => {
+          obj[key] = params.get(key);
+          if (key === 'sort' && !params.get(key)) {
+            obj[key] = '';
+          } else if (key === 'ignorePagination' && !params.get(key)) {
+            obj[key] = false;
+          }
+          return obj;
+        }, {})
+      };
+      const payload = {
+        ...postParams,
+        ...data
+      };
+      return this.http.post(url, payload, options);
     }
   }
 }

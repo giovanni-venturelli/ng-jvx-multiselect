@@ -138,13 +138,14 @@ ng-jvx-multiselect {
 }
 
 .menu-list-container {
+  flex: 1 1 0;
   max-height: 300px;
   display: flex;
   flex-direction: column;
 }
 
 .menu-footer {
-  max-height: 30px;
+  //max-height: 30px;
   overflow: hidden;
 }
 

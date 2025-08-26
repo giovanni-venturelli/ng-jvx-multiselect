@@ -1,18 +1,19 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {HttpHeaders} from '@angular/common/http';
 import {Observable, of, timer} from 'rxjs';
 import {UntypedFormBuilder, FormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {JVXMULTISELECT, NgJvxGroup, NgJvxGroupMapper, NgJvxOptionMapper} from 'ng-jvx-multiselect';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
-
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent implements OnInit {
   width = 0;
   title = 'demo-sandbox';
+  public postPayload = {name: 'nome', lastName: 'cognome'};
   public mapper = {
     mapOption(source: any): Observable<{ value: number, text: string }> {
       return of({
@@ -74,12 +75,8 @@ export class AppComponent implements OnInit {
       testInput: ['', Validators.required]
     });
 
-    this.form.controls.selectionValue.valueChanges.subscribe((val) => {
 
-      if (!!val.some(v => v.value === 5) && val.length > 1) {
-        this.form.controls.selectionValue.setValue([val.find(v => v.value === 5)]);
-      }
-    });
+
   }
 
   getUrl(): string {
@@ -113,9 +110,6 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     timer(500).subscribe(() => {
       this.width = 257;
-    });
-    timer(5000).subscribe(() => {
-      this.form.get('selectionValue').setValue([{value: 4, text: 'text 4'}]);
     });
   }
 
@@ -167,7 +161,9 @@ export class AppComponent implements OnInit {
   }
 
   onValueChange(e: any[]) {
+    console.log('=============================== VALUE CHANGE ===============================');
     console.log(e);
-    console.log(this.form.controls.selectionValue.getRawValue());
+    console.log('===========================================================================================================================');
+    // console.log(this.form.controls.selectionValue.getRawValue());
   }
 }
