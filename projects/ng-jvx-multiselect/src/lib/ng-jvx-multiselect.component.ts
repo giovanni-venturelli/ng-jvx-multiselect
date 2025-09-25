@@ -7,7 +7,7 @@ import {
   ContentChild,
   ElementRef,
   EventEmitter,
-  HostBinding,
+  HostBinding, inject,
   input,
   Input,
   OnDestroy,
@@ -80,8 +80,6 @@ import {NgJvxFocusDirective} from './directives/ng-jvx-focus.directive';
 })
 export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewInit,
   ControlValueAccessor {
-  static nextId = 0;
-  @HostBinding() id = `jvx-multiselect-${NgJvxMultiselectComponent.nextId++}`;
 
   @HostBinding('class.has-errors')
   get invalid(): boolean {
@@ -92,20 +90,6 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   get shouldLabelFloat(): boolean {
     return this.focused || !this.empty || this.value.length > 0 || !!this.isPlaceholderActive;
   }
-
-  jvxMultiselect = viewChild.required<ElementRef>('jvxMultiselect');
-  @ViewChild('valueContainer', {static: true}) valueContainer: ElementRef;
-  selectionContainer = viewChild.required<ElementRef>('selectionContainer');
-  menuFooter = viewChild<ElementRef>('menuFooter');
-  // @ViewChild('selection', {static: true}) selection: MatSelectionList;
-  @ViewChild(MenuTriggerDirective, {static: true}) trigger: MenuTriggerDirective;
-  @ViewChild('scrollbar', {static: false}) scrollbar: NgScrollbar;
-  multiContainer = viewChild.required<ElementRef>('multiContainer');
-  @ViewChild('placeholderContainer', {static: false}) placeholderContainer: ElementRef;
-  @ViewChildren(NgJvxOptionComponent) optionComp: QueryList<NgJvxOptionComponent>;
-  @ContentChild(NgJvxOptionsTemplateDirective) optionsTemplate: NgJvxOptionsTemplateDirective | null = null;
-  @ContentChild(NgJvxSelectionTemplateDirective) selectionTemplate: NgJvxSelectionTemplateDirective | null = null;
-  @ContentChild(NgJvxGroupHeaderDirective) groupHeaderTemplate: NgJvxGroupHeaderDirective | null = null;
   // @ContentChild(NgJvxOptionComponent) optionComp: NgJvxOptionComponent;
   // @ContentChild(TemplateRef) optionsTemplate: TemplateRef<any> | null = null;
   @Input() set options(v: any[]) {
@@ -120,6 +104,133 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   get options(): any[] {
     return this._options;
   }
+
+  @Input() set value(value: any[]) {
+    if (!this.areArraysEqual(value, this.pValue)) {
+      this.pValue = value ?? [];
+      this.showList = !this.showList;
+      if (value) {
+        this.form.get('selectionValue').setValue(this.pValue.map(v => v[this.itemValue]));
+      } else {
+        this.form.get('selectionValue').setValue(value);
+      }
+      this.changeDetectorRef.detectChanges();
+      this.showList = !this.showList;
+      this.stateChanges.next();
+    }
+  }
+
+  get value(): any[] {
+    return this.pValue;
+  }
+
+  @Input()
+  get required(): boolean {
+    return this._required;
+  }
+
+  set required(req) {
+    this._required = coerceBooleanProperty(req);
+    this.stateChanges.next();
+  }
+
+  @Input()
+  get disabled(): boolean {
+    return this._disabled();
+  }
+
+  set disabled(value: boolean) {
+    this._disabled.set(coerceBooleanProperty(value));
+    this._disabled() ? this.parts.disable() : this.parts.enable();
+    this.stateChanges.next();
+  }
+
+  @Input()
+  get pageSize(): number {
+    return this.intPageSize;
+  }
+
+  set pageSize(val: number) {
+    if (val < 15) {
+      this.intPageSize = 15;
+    } else {
+      this.intPageSize = val;
+    }
+  }
+
+  get errorState(): boolean {
+    if (this.ngControl != null) {
+      return this.ngControl.invalid && this.ngControl.touched;
+    } else {
+      return false;
+    }
+  }
+
+
+  constructor(private formBuilder: UntypedFormBuilder, private service: NgJvxMultiselectService,
+              private elementRef: ElementRef,
+              private changeDetectorRef: ChangeDetectorRef,
+              @Optional() @Self() public ngControl: NgControl, fb: UntypedFormBuilder) {
+
+    if (this.ngControl != null) {
+      // Setting the value accessor directly (instead of using
+      // the providers) to avoid running into a circular import.
+      this.ngControl.valueAccessor = this;
+    }
+    this.isPlaceholderActiveSubject.pipe(takeUntil(this.unsubscribe), debounceTime(0)).subscribe((v) => {
+      this.isPlaceholderActive = v;
+      this.stateChanges.next();
+    });
+    this.parts = fb.group({
+      area: '',
+      exchange: '',
+      subscriber: '',
+    });
+    this.form = this.formBuilder.group({
+      selectionValue: new UntypedFormControl(this.selectionValue)
+    });
+  }
+
+  // ngOnChanges(changes: SimpleChanges): void {
+  //   if (changes.options) {
+  //     // this.setSelectableOptions(this.options).subscribe(noop);
+  //     this.selectableOptions = [...this.options];
+  //   }
+  // }
+
+
+  get selectionValue(): any[] {
+    return this.value.map((v) => {
+      return v[this.itemValue];
+    });
+  }
+
+  get empty(): boolean {
+    const n = this.parts.value;
+    return !n.area && !n.exchange && !n.subscriber && !this.isPlaceholderActive;
+  }
+
+  private get stateChange$(): Observable<any> {
+    return this.stateChanges.asObservable();
+  }
+  static nextId = 0;
+  @HostBinding() id = `jvx-multiselect-${NgJvxMultiselectComponent.nextId++}`;
+
+  jvxMultiselect = viewChild.required<ElementRef>('jvxMultiselect');
+  @ViewChild('valueContainer', {static: true}) valueContainer: ElementRef;
+  selectionContainer = viewChild.required<ElementRef>('selectionContainer');
+  menuFooter = viewChild<ElementRef>('menuFooter');
+  // @ViewChild('selection', {static: true}) selection: MatSelectionList;
+  @ViewChild(MenuTriggerDirective, {static: true}) trigger: MenuTriggerDirective;
+  @ViewChild('scrollbar', {static: false}) scrollbar: NgScrollbar;
+  multiContainer = viewChild.required<ElementRef>('multiContainer');
+  @ViewChild('placeholderContainer', {static: false}) placeholderContainer: ElementRef;
+  sentinelElement = viewChild.required<ElementRef>('sentinelElement');
+  optionContainer = viewChild.required<ElementRef>('optionContainer');
+  @ViewChildren(NgJvxOptionComponent) optionComp: QueryList<NgJvxOptionComponent>;
+  @ContentChild(NgJvxOptionsTemplateDirective) optionsTemplate: NgJvxOptionsTemplateDirective | null = null;
+  @ContentChild(NgJvxSelectionTemplateDirective) selectionTemplate: NgJvxSelectionTemplateDirective | null = null;
+  @ContentChild(NgJvxGroupHeaderDirective) groupHeaderTemplate: NgJvxGroupHeaderDirective | null = null;
 
   @Input() multi = false;
   @Input() url = '';
@@ -155,76 +266,16 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   };
   @Input() groupBy: NgJvxGroupMapper<any> | string | null;
 
-  @Input() set value(value: any[]) {
-    if (!this.areArraysEqual(value, this.pValue)) {
-      this.pValue = value ?? [];
-      this.showList = !this.showList;
-      if (value) {
-        this.form.get('selectionValue').setValue(this.pValue.map(v => v[this.itemValue]));
-      } else {
-        this.form.get('selectionValue').setValue(value);
-      }
-      this.changeDetectorRef.detectChanges();
-      this.showList = !this.showList;
-      this.stateChanges.next();
-    }
-  }
-
-  get value(): any[] {
-    return this.pValue;
-  }
-
   @Input() requestHeaders: HttpHeaders = new HttpHeaders();
-
-  @Input()
-  get required(): boolean {
-    return this._required;
-  }
-
-  set required(req) {
-    this._required = coerceBooleanProperty(req);
-    this.stateChanges.next();
-  }
 
   postPayload = input<object>();
   // tslint:disable-next-line:variable-name
   private _required = false;
   private _jvxWidth = signal(0);
 
-  @Input()
-  get disabled(): boolean {
-    return this._disabled();
-  }
-
-  set disabled(value: boolean) {
-    this._disabled.set(coerceBooleanProperty(value));
-    this._disabled() ? this.parts.disable() : this.parts.enable();
-    this.stateChanges.next();
-  }
-
-  @Input()
-  get pageSize(): number {
-    return this.intPageSize;
-  }
-
-  set pageSize(val: number) {
-    if (val < 15) {
-      this.intPageSize = 15;
-    } else {
-      this.intPageSize = val;
-    }
-  }
-
   // tslint:disable-next-line:variable-name
   private _disabled = signal(false);
-
-  get errorState(): boolean {
-    if (this.ngControl != null) {
-      return this.ngControl.invalid && this.ngControl.touched;
-    } else {
-      return false;
-    }
-  }
+  private observer: IntersectionObserver;
 
   @Output() valueChange: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() jvxMultiselectOpen: EventEmitter<void> = new EventEmitter<void>();
@@ -283,32 +334,13 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   private unsubscribe = new Subject<void>();
   private unsubscribe$ = this.unsubscribe.asObservable();
   private intPageSize = 15;
+
+  // Metodo richiesto da ControlValueAccessor
+  public setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
+
   public onTouched = () => {
-  };
-
-
-  constructor(private formBuilder: UntypedFormBuilder, private service: NgJvxMultiselectService,
-              private elementRef: ElementRef,
-              private changeDetectorRef: ChangeDetectorRef,
-              @Optional() @Self() public ngControl: NgControl, fb: UntypedFormBuilder) {
-
-    if (this.ngControl != null) {
-      // Setting the value accessor directly (instead of using
-      // the providers) to avoid running into a circular import.
-      this.ngControl.valueAccessor = this;
-    }
-    this.isPlaceholderActiveSubject.pipe(takeUntil(this.unsubscribe), debounceTime(0)).subscribe((v) => {
-      this.isPlaceholderActive = v;
-      this.stateChanges.next();
-    });
-    this.parts = fb.group({
-      area: '',
-      exchange: '',
-      subscriber: '',
-    });
-    this.form = this.formBuilder.group({
-      selectionValue: new UntypedFormControl(this.selectionValue)
-    });
   }
 
   // ngDoCheck(): void {
@@ -435,25 +467,6 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     timer(300).pipe(tap(() => {
       this.changeDetectorRef.markForCheck();
     })).subscribe(noop);
-  }
-
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   if (changes.options) {
-  //     // this.setSelectableOptions(this.options).subscribe(noop);
-  //     this.selectableOptions = [...this.options];
-  //   }
-  // }
-
-
-  get selectionValue(): any[] {
-    return this.value.map((v) => {
-      return v[this.itemValue];
-    });
-  }
-
-  get empty(): boolean {
-    const n = this.parts.value;
-    return !n.area && !n.exchange && !n.subscriber && !this.isPlaceholderActive;
   }
 
   onCLickOnMenu(e: MouseEvent): void {
@@ -639,8 +652,12 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   onScrolled(e: any): void {
-    if (e.target.scrollTop + 260 + ((this.searchInput ? 0 : 1) * 40) - this.menuFooter().nativeElement.offsetHeight === this.selectionContainer().nativeElement.offsetHeight
-      && !this.isLoading()) {
+    const sentinelElementPosition = this.sentinelElement().nativeElement.getBoundingClientRect().height
+      + this.sentinelElement().nativeElement.getBoundingClientRect().top;
+    const containerPosition = this.optionContainer().nativeElement.getBoundingClientRect().height
+      + this.optionContainer().nativeElement.getBoundingClientRect().top;
+
+    if ((sentinelElementPosition - 10) <= containerPosition  && !this.isLoading()) {
       this.scrollEnd.emit();
       if (this.url && this.url.length > 0 && !this.ignorePagination && this.shouldLoadMore) {
         this.getList().subscribe(noop);
@@ -648,9 +665,19 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
+
   onMenuOpened(): void {
     this.jvxMultiselectOpened.emit();
+
   }
+
+  private onSentinelVisible(): void {
+    this.scrollEnd.emit();
+    // if (this.url && this.url.length > 0 && !this.ignorePagination && this.shouldLoadMore && !this.isLoading()) {
+    //   this.getList().subscribe(noop);
+    // }
+  }
+
 
   onMenuClosed(): void {
     if ((!this.url || this.url.length === 0) && this.searchMode === 'client') {
@@ -691,10 +718,6 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     // if ((event.target as Element).tagName.toLowerCase() !== 'input') {
     //   this.elementRef.nativeElement.querySelector('input').focus();
     // }
-  }
-
-  private get stateChange$(): Observable<any> {
-    return this.stateChanges.asObservable();
   }
 
   updateOrderedOptions(options): Observable<any> {

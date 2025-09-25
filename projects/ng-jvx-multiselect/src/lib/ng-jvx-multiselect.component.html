@@ -19,7 +19,7 @@
            [ngStyle]="{'overflow-y': 'hidden', 'width': listContainerSize().width, 'min-width.px': 112, 'max-height': '300px', 'height': listContainerSize().height}">
       <div class="menu-list-container"
            [style.flex]="'1 1 0'"
-           #menuLIstContainer
+           #menuListContainer
            >
         <div class="search-input-container" *ngIf="!!searchInput" (click)="onSearchInputClick($event)">
           <input type="text" [placeholder]="searchLabel" [ngModel]="searchValue" [ngModelOptions]="{standalone: true}"
@@ -27,7 +27,8 @@
                  (input)="onSearchValueChange($event)"/>
         </div>
         <div
-          [ngStyle]="{height: searchInput && selectionContainer.clientHeight > 220 || selectionContainer.clientHeight > 300? 300 - (searchInput? 40 : 0) - menuFooter.offsetHeight + 'px': 'auto'}">
+          #optionContainer
+          [ngStyle]="{height: searchInput && selectionContainer.clientHeight > 220 || selectionContainer.clientHeight > 300? 300 - (searchInput? 40 : 0) - menuFooter.children[0].clientHeight + 'px': 'auto'}">
           <ng-scrollbar style="width: 100%"
                         smoothScroll
                         [visibility]="'hover'"
@@ -67,6 +68,7 @@
                     </div>
                   </ng-jvx-option>
                 </ng-container>
+                <div #sentinelElement [style]="'pointer-events: none; position: absolute; height: 20px; top:'+ (selectionContainer.clientHeight - 20) + 'px' ">zum zum</div>
               </div>
             </div>
           </ng-scrollbar>

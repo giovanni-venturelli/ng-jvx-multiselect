@@ -80,9 +80,9 @@
                             [mapper]="mapper"
                             [multi]="true"
                             [closeButton]="true"
-                            [ignorePagination]="true"
+                            [ignorePagination]="false"
                             [url]="url"
-                            [requestType]="'get'">
+                            [requestType]="'post'">
 
           <div placeholder>placeholder</div>
 <!--          <div *ngJvxGroupHeader="let group" style="padding: 5px 15px">-->
@@ -103,7 +103,7 @@
               <div>valore: {{option.value}}</div>
             </div>
           </div>
-          <div ng-jvx-footer [style.height]="'60px'">footer</div>
+          <div ng-jvx-footer [style.height]="'60px'">footer aaa</div>
         </ng-jvx-multiselect>
 <!--        &lt;!&ndash;        <ng-jvx-multiselect matInput&ndash;&gt;-->
 <!--        &lt;!&ndash;                            [options]="options"&ndash;&gt;-->

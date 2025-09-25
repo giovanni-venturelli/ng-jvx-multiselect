@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
   ];
   public loaded = true;
   public form: UntypedFormGroup;
-  public url = 'https://localhost:3000/jvx-multiselect-test';
+  public url = 'https://localhost:3000/jvx-multiselect-test/post-test';
   public groupMapper: NgJvxGroupMapper<any> = {
     mapGroup(option: any): Observable<NgJvxGroup<any>> {
       return of({group: option.nested.group, option});
