@@ -103,7 +103,7 @@
                       [ngTemplateOutletContext]="{$implicit: val}"></ng-container>
       </div>
     </div>
-    @if (clearable && value.length > 0) {
+    @if (clearable && value.length > 0 && !disabled) {
       <div class="ng-jvx-multiselect__remove-button" (click)="clear($event)">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256">
           <path
