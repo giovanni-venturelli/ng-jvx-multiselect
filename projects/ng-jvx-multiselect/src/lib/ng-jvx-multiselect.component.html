@@ -28,7 +28,7 @@
         </div>
         <div
           #optionContainer
-          [ngStyle]="{height: searchInput && selectionContainer.clientHeight > 220 || selectionContainer.clientHeight > 300? 300 - (searchInput? 40 : 0) - menuFooter.children[0].clientHeight + 'px': 'auto'}">
+          [ngStyle]="{height: searchInput && selectionContainer.clientHeight > 220 || selectionContainer.clientHeight > 300? 300 - (searchInput? 40 : 0) - (menuFooter.children[0]?.clientHeight??0) + 'px': 'auto'}">
           <ng-scrollbar style="width: 100%"
                         smoothScroll
                         [visibility]="'hover'"
@@ -68,7 +68,7 @@
                     </div>
                   </ng-jvx-option>
                 </ng-container>
-                <div #sentinelElement [style]="'pointer-events: none; position: absolute; height: 20px; top:'+ (selectionContainer.clientHeight - 20) + 'px' ">zum zum</div>
+                <div #sentinelElement [style]="'pointer-events: none; position: absolute; height: 0; width: 0; top:'+ (selectionContainer.clientHeight - 5 ) + 'px' "></div>
               </div>
             </div>
           </ng-scrollbar>
