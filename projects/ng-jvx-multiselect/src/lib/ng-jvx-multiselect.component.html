@@ -5,7 +5,7 @@
        #trigger
        (onMenuClose)="onMenuClose()" (menuClosed)="onMenuClosed()"
   >
-    <lib-panel #menuRef [class]="['jvx-multiselect-panel', panelClass].join(' ')" [multi]="multi" [formGroup]="form"
+    <lib-panel #menuRef [class]="['jvx-multiselect-panel'].join(' ')" [panelClass]="panelClass" [multi]="multi" [formGroup]="form"
                [yPosition]="yPosition()">
       @if (closeButton) {
         <div class="closeMenuButton">
@@ -83,7 +83,7 @@
   </div>
   <!-- END MENU -->
   <!-- START INPUT -->
-  <div [ngClass]="{'ng-jvx-multiselect-value-container': true, 'is-open': isOpen(), panelClass: !!panelClass && panelClass.length > 0 }"
+  <div [ngClass]="{'ng-jvx-multiselect-value-container': true, 'is-open': isOpen()}"
        (click)="clickOnMenuTrigger($event)"
        #valueContainer>
     @if (value.length === 0) {

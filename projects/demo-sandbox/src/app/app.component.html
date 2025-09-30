@@ -50,6 +50,7 @@
             <ng-jvx-multiselect style="width: 100%"
                                 formControlName="selectionValue"
                                 (valueChange)="onValueChange($event)"
+                                [panelClass]="'test-panel'"
                                 [options]="options"
                                 [searchInput]="true"
                                 [multi]="true"
@@ -81,6 +82,7 @@
                             [multi]="true"
                             [closeButton]="true"
                             [ignorePagination]="false"
+                            [panelClass]="'test-panel'"
                             [url]="url"
                             [requestType]="'post'">
 
