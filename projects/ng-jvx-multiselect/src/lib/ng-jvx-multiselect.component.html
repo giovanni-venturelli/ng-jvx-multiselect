@@ -83,7 +83,7 @@
   </div>
   <!-- END MENU -->
   <!-- START INPUT -->
-  <div [ngClass]="{'ng-jvx-multiselect-value-container': true, 'is-open': isOpen()}"
+  <div [ngClass]="{'ng-jvx-multiselect-value-container': true, 'is-open': isOpen(), panelClass: !!panelClass && panelClass.length > 0 }"
        (click)="clickOnMenuTrigger($event)"
        #valueContainer>
     @if (value.length === 0) {
