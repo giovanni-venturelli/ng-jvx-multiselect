@@ -652,15 +652,17 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   onScrolled(e: any): void {
-    const sentinelElementPosition = this.sentinelElement().nativeElement.getBoundingClientRect().height
-      + this.sentinelElement().nativeElement.getBoundingClientRect().top;
-    const containerPosition = this.optionContainer().nativeElement.getBoundingClientRect().height
-      + this.optionContainer().nativeElement.getBoundingClientRect().top;
+    if(this.isOpen()) {
+      const sentinelElementPosition = this.sentinelElement().nativeElement.getBoundingClientRect().height
+        + this.sentinelElement().nativeElement.getBoundingClientRect().top;
+      const containerPosition = this.optionContainer().nativeElement.getBoundingClientRect().height
+        + this.optionContainer().nativeElement.getBoundingClientRect().top;
 
-    if ((sentinelElementPosition - 10) <= containerPosition  && !this.isLoading()) {
-      this.scrollEnd.emit();
-      if (this.url && this.url.length > 0 && !this.ignorePagination && this.shouldLoadMore) {
-        this.getList().subscribe(noop);
+      if ((sentinelElementPosition - 10) <= containerPosition && !this.isLoading()) {
+        this.scrollEnd.emit();
+        if (this.url && this.url.length > 0 && !this.ignorePagination && this.shouldLoadMore) {
+          this.getList().subscribe(noop);
+        }
       }
     }
   }

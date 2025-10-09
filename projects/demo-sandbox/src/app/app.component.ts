@@ -14,6 +14,7 @@ export class AppComponent implements OnInit {
   width = 0;
   title = 'demo-sandbox';
   public postPayload = {name: 'nome', lastName: 'cognome'};
+  public showSecondJvx = signal(false);
   public mapper = {
     mapOption(source: any): Observable<{ value: number, text: string }> {
       return of({
@@ -37,12 +38,16 @@ export class AppComponent implements OnInit {
     }
   };
 
-  public options = [
+  public jvxOptions = signal([
     {value: 1, text: 'text 1'},
     {value: 2, text: 'text 2'},
     {value: 3, text: 'text 3'},
     {value: 4, text: 'text 4'},
-    {value: 5, text: 'text 5'}];
+    {value: 5, text: 'text 5'},
+    {value: 6, text: 'text 6'},
+    {value: 7, text: 'text 7'},
+    {value: 8, text: 'text 8'},
+    {value: 9, text: 'text 9'}]);
   public optionsEM = [
     {value: 'TN010', text: 'DIP'},
     {value: 'TN020', text: 'INT'},
@@ -165,5 +170,6 @@ export class AppComponent implements OnInit {
     console.log(e);
     console.log('===========================================================================================================================');
     // console.log(this.form.controls.selectionValue.getRawValue());
+    this.showSecondJvx.set(true);
   }
 }

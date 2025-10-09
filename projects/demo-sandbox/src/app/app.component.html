@@ -1,155 +1,96 @@
-
 <div class="content" role="main">
-  <!--  <div style="width: 250px; margin-top: 400px">-->
-  <!--    <ng-jvx-multiselect *ngIf="loaded" [multi]="false"-->
-  <!--                        [options]="[{value: 1, text: 'op1'}, {value: 2, text: 'op2'}, {value: 3, text: 'op3'}]">-->
-  <!--      <div placeholder>placeholder</div>-->
-  <!--      &lt;!&ndash;    <div *ngJvxOptionsTemplate="let option">&ndash;&gt;-->
-  <!--      &lt;!&ndash;      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>&ndash;&gt;-->
-  <!--      &lt;!&ndash;    </div>&ndash;&gt;-->
-  <!--    </ng-jvx-multiselect>-->
-  <!--  </div>-->
-  <!--  <div>-->
-  <!--    <mat-selection-list #selection [multiple]="false" [ngModel]="selectionValue">-->
-  <!--      <mat-list-option-->
-  <!--        *ngFor="let option of [{value: 1, text: 'opzione 1'}, {value: 2, text: 'opzione 2'}, {value: 3, text: 'opzione 3'}]"-->
-  <!--        [value]="option.value">-->
-  <!--        {{-->
-  <!--        option.text-->
-  <!--        }}-->
-  <!--      </mat-list-option>-->
-  <!--    </mat-selection-list>-->
-  <!--  </div>-->
-  <!--  <div class="mat-select-test">-->
-  <!--    <mat-form-field appearance="legacy">-->
-  <!--      <mat-label>Select</mat-label>-->
-  <!--      <mat-select>-->
-  <!--        <mat-option *ngFor="let option of [{value: 1, text: 'opzione 1'}, {value: 2, text: 'opzione 2'}, {value: 3, text: 'opzione 3'}]" [value]="option.value">{{option.text}}</mat-option>-->
-  <!--      </mat-select>-->
-  <!--    </mat-form-field>-->
-  <!--  </div>-->
   <div style=" width: 100%; height: 300px; overflow: auto">
-  <div [ngStyle]="{'width.px': width}">
-    <!--      <ng-jvx-multiselect-->
-    <!--                          style="width: 100%"-->
-    <!--                          [options]="[{value: 1, text: 'text 1'}, {value: 2, text: 'text 2'}, {value: 3, text: 'text 3'}, {value: 4, text: 'text 4'},{value: 5, text: 'text 5'},{value: 6, text: 'text 6'},{value: 7, text: 'text 7'},{value: 8, text: 'text 8'},{value: 9, text: 'text 9'},{value: 10, text: 'text 10'}]"-->
-    <!--                          [listProp]="'message'"-->
-    <!--                          [ignorePagination]="true"-->
-    <!--                          [clearable]="false"-->
-    <!--                          label=""-->
-    <!--                          [multi]="true"-->
-    <!--                          [closeOnClick]="true">-->
-    <!--        <div *ngJvxOptionsTemplate="let option" [ngJvxDisabledOption]="option.value === 3">-->
-    <!--            <div>-->
-    <!--               aaa - {{option.text}}-->
-    <!--            </div>-->
-
-    <!--        </div>-->
-    <!--      </ng-jvx-multiselect>-->
-    <form [formGroup]="form" [ngStyle]="{'width.px': width}">
-            <ng-jvx-multiselect style="width: 100%"
-                                formControlName="selectionValue"
-                                (valueChange)="onValueChange($event)"
-                                [panelClass]="'test-panel'"
-                                [options]="options"
-                                [searchInput]="true"
-                                [multi]="true"
-                                [searchMode]="'client'"
-                                [postPayload]="postPayload"
-                                >
-              <ng-container *ngJvxSelectionTemplate="let options">
-                <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
-                  @for (option of options; track option.value+ '-'+option.text) {
-                    <ng-jvx-multiselect-chip
-                      [value]="option">{{option.text}}
-                    </ng-jvx-multiselect-chip>
-                  }
-                </div>
-              </ng-container>
-              <div ng-jvx-footer> <div style="height: 40px; display: flex; align-items: center; padding: .25rem;">footer</div></div>
-            </ng-jvx-multiselect>
-
-
-
-<!--      <mat-form-field style="width: 500px;">-->
-<!--        <input formControlName="testInput" matInput/>-->
-<!--      </mat-form-field>-->
-      <div style="width: 500px;">
-        <label>questa è la label</label>
-        <ng-jvx-multiselect
-                            [clearable]="true"
-                            [mapper]="mapper"
-                            [multi]="true"
-                            [closeButton]="true"
-                            [ignorePagination]="false"
+    <div [ngStyle]="{'width.px': width}">
+      <form [formGroup]="form" [ngStyle]="{'width.px': width}">
+        <ng-jvx-multiselect style="width: 100%"
+                            formControlName="selectionValue"
                             [panelClass]="'test-panel'"
-                            [url]="url"
-                            [requestType]="'post'">
-
-          <div placeholder>placeholder</div>
-<!--          <div *ngJvxGroupHeader="let group" style="padding: 5px 15px">-->
-<!--            This is the {{group.group}} group-->
-<!--          </div>-->
-<!--                        <div *ngJvxSelectionTemplate="let option">-->
-<!--                          <div style="font-style: italic">{{option.value}}</div>-->
-<!--                        </div>-->
-          <div *ngJvxOptionsTemplate="let option"
-               [ngJvxDisabledOption]="option.text.includes('0')">
-            <div style="padding: 5px 0">
-              <div>testo: {{option.text}}</div>
-              <div>valore: {{option.value}}</div>
-              <div>valore: {{option.value}}</div>
-              <div>valore: {{option.value}}</div>
-              <div>valore: {{option.value}}</div>
-              <div>valore: {{option.value}}</div>
-              <div>valore: {{option.value}}</div>
+                            [options]="jvxOptions()"
+                            [searchInput]="true"
+                            [multi]="true"
+                            [searchMode]="'client'"
+                            [postPayload]="postPayload"
+        >
+          <ng-container *ngJvxSelectionTemplate="let options">
+            <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
+              @for (option of options; track option.value + '-' + option.text) {
+                <ng-jvx-multiselect-chip
+                  [value]="option">
+                  {{ option.text }}
+                </ng-jvx-multiselect-chip>
+              }
             </div>
+          </ng-container>
+          <div ng-jvx-footer>
+            <div style="height: 40px; display: flex; align-items: center; padding: .25rem;">footer</div>
           </div>
-          <div ng-jvx-footer [style.height]="'60px'">footer aaa</div>
         </ng-jvx-multiselect>
-<!--        &lt;!&ndash;        <ng-jvx-multiselect matInput&ndash;&gt;-->
-<!--        &lt;!&ndash;                            [options]="options"&ndash;&gt;-->
-<!--        &lt;!&ndash;                            [searchMode]="'client'"&ndash;&gt;-->
-<!--        &lt;!&ndash;                            [searchInput]="true"&ndash;&gt;-->
-<!--        &lt;!&ndash;                            [formControlName]="'selectionValue'">&ndash;&gt;-->
-<!--        &lt;!&ndash;          <div placeholder>placeholder</div>&ndash;&gt;-->
-<!--        &lt;!&ndash;          <div *ngJvxGroupHeader="let group" style="padding: 5px 15px">&ndash;&gt;-->
-<!--        &lt;!&ndash;            This is the {{group.group}} group&ndash;&gt;-->
-<!--        &lt;!&ndash;          </div>&ndash;&gt;-->
-<!--        &lt;!&ndash;          &lt;!&ndash;              <div *ngJvxSelectionTemplate="let option">&ndash;&gt;&ndash;&gt;-->
-<!--        &lt;!&ndash;          &lt;!&ndash;                <div style="font-style: italic">{{option.value}}</div>&ndash;&gt;&ndash;&gt;-->
-<!--        &lt;!&ndash;          &lt;!&ndash;              </div>&ndash;&gt;&ndash;&gt;-->
-<!--        &lt;!&ndash;          <div *ngJvxOptionsTemplate="let option"&ndash;&gt;-->
-<!--        &lt;!&ndash;               [ngJvxDisabledOption]="option.text.includes('0')">&ndash;&gt;-->
-<!--        &lt;!&ndash;            testo: {{option.text}}&ndash;&gt;-->
-<!--        &lt;!&ndash;          </div>&ndash;&gt;-->
-<!--        &lt;!&ndash;        </ng-jvx-multiselect>&ndash;&gt;-->
-      </div>
 
 
-    </form>
-<!--    <button mat-button [color]="'primary'" (click)="checkValidity()">check</button>-->
-    <!--    <ng-jvx-multiselect [searchMode]="true" url="https://localhost:3000/jvx-multiselect-test" [requestHeaders]="requestHeaders" [multi]="true" [mapper]="mapper" [value]="[{value: 1, text: 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit'}]">-->
-    <!--      <div placeholder>placeholder</div>-->
-    <!--  &lt;!&ndash;    <div *ngJvxOptionsTemplate="let option">&ndash;&gt;-->
-    <!--  &lt;!&ndash;      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>&ndash;&gt;-->
-    <!--  &lt;!&ndash;    </div>&ndash;&gt;-->
-    <!--    </ng-jvx-multiselect>-->
+        <div style="width: 500px;">
+          <label>questa è la label</label>
+          <ng-jvx-multiselect
+            (valueChange)="onValueChange($event)"
+            [clearable]="true"
+            [mapper]="mapper"
+            [multi]="false"
+            [closeButton]="true"
+            [ignorePagination]="false"
+            [panelClass]="'test-panel'"
+            [url]="url"
+            [requestType]="'post'">
+
+            <div placeholder>placeholder</div>
+            <div *ngJvxOptionsTemplate="let option"
+                 [ngJvxDisabledOption]="option.text.includes('0')">
+              <div style="padding: 5px 0">
+                <div>testo: {{ option.text }}</div>
+                <div>valore: {{ option.value }}</div>
+                <div>valore: {{ option.value }}</div>
+                <div>valore: {{ option.value }}</div>
+                <div>valore: {{ option.value }}</div>
+                <div>valore: {{ option.value }}</div>
+                <div>valore: {{ option.value }}</div>
+              </div>
+            </div>
+            <div ng-jvx-footer [style.height]="'60px'">footer aaa</div>
+          </ng-jvx-multiselect>
+        </div>
+
+        @if (showSecondJvx()) {
+          <div style="width: 500px;">
+            <label>questa è la label</label>
+            <ng-jvx-multiselect
+              [clearable]="true"
+              [mapper]="mapper"
+              [multi]="false"
+              [closeButton]="true"
+              [ignorePagination]="false"
+              [panelClass]="'test-panel'"
+              [url]="url"
+              [requestType]="'post'">
+
+              <div placeholder>placeholder</div>
+              <div *ngJvxOptionsTemplate="let option"
+                   [ngJvxDisabledOption]="option.text.includes('0')">
+                <div style="padding: 5px 0">
+                  <div>testo: {{ option.text }}</div>
+                  <div>valore: {{ option.value }}</div>
+                  <div>valore: {{ option.value }}</div>
+                  <div>valore: {{ option.value }}</div>
+                  <div>valore: {{ option.value }}</div>
+                  <div>valore: {{ option.value }}</div>
+                  <div>valore: {{ option.value }}</div>
+                </div>
+              </div>
+              <div ng-jvx-footer [style.height]="'60px'">footer aaa</div>
+            </ng-jvx-multiselect>
+          </div>
+        }
+
+      </form>
+    </div>
   </div>
-  </div>
-<!--  <div style="width: 250px;">-->
-
-<!--    &lt;!&ndash;    <ng-jvx-multiselect [searchMode]="true" url="https://jsonplaceholder.typicode.com/posts" [requestHeaders]="requestHeaders" [multi]="true" [mapper]="mapper" [value]="[{value: 1, text: 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit'}]">&ndash;&gt;-->
-<!--    &lt;!&ndash;      <div placeholder>placeholder</div>&ndash;&gt;-->
-<!--    &lt;!&ndash;  &lt;!&ndash;    <div *ngJvxOptionsTemplate="let option">&ndash;&gt;&ndash;&gt;-->
-<!--    &lt;!&ndash;  &lt;!&ndash;      <div style="font-style: italic">{{option.value}} - {{option.text}}</div>&ndash;&gt;&ndash;&gt;-->
-<!--    &lt;!&ndash;  &lt;!&ndash;    </div>&ndash;&gt;&ndash;&gt;-->
-<!--    &lt;!&ndash;    </ng-jvx-multiselect>&ndash;&gt;-->
-<!--  </div>-->
-<!--  <button mat-button (click)="changeOption(1)">opzione 1</button>-->
-<!--  <button mat-button (click)="changeOption(2)">opzione 2</button>-->
-<!--  <button mat-button (click)="changeOption(3)">opzione 3</button>-->
-<!--  <button mat-button (click)="reload()">reload</button>-->
 </div>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
