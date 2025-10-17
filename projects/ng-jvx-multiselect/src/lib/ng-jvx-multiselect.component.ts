@@ -571,7 +571,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   clickOnMenuTrigger(e: MouseEvent): void {
-    if (!this.disabledSignal && !this.isLoading()) {
+    if (!this.disabledSignal() && !this.isLoading()) {
       this.showList = false;
       this.shouldLoadMore = true;
       timer(0).subscribe(() => {
