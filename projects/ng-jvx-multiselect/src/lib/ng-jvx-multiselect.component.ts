@@ -7,7 +7,7 @@ import {
   ContentChild,
   ElementRef,
   EventEmitter,
-  HostBinding, inject,
+  HostBinding,
   input,
   Input,
   OnDestroy,
@@ -90,6 +90,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   get shouldLabelFloat(): boolean {
     return this.focused || !this.empty || this.value.length > 0 || !!this.isPlaceholderActive;
   }
+
   // @ContentChild(NgJvxOptionComponent) optionComp: NgJvxOptionComponent;
   // @ContentChild(TemplateRef) optionsTemplate: TemplateRef<any> | null = null;
   @Input() set options(v: any[]) {
@@ -136,13 +137,11 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   @Input()
   get disabled(): boolean {
-    return this._disabled();
+    return this.disabledSignal();
   }
 
   set disabled(value: boolean) {
-    this._disabled.set(coerceBooleanProperty(value));
-    this._disabled() ? this.parts.disable() : this.parts.enable();
-    this.stateChanges.next();
+    this._setDisabled(value);
   }
 
   @Input()
@@ -213,6 +212,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   private get stateChange$(): Observable<any> {
     return this.stateChanges.asObservable();
   }
+
   static nextId = 0;
   @HostBinding() id = `jvx-multiselect-${NgJvxMultiselectComponent.nextId++}`;
 
@@ -274,7 +274,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   private _jvxWidth = signal(0);
 
   // tslint:disable-next-line:variable-name
-  private _disabled = signal(false);
+  protected disabledSignal = signal(false);
   private observer: IntersectionObserver;
 
   @Output() valueChange: EventEmitter<any[]> = new EventEmitter<any[]>();
@@ -337,11 +337,11 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   // Metodo richiesto da ControlValueAccessor
   public setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    this._setDisabled(isDisabled);
   }
 
   public onTouched = () => {
-  }
+  };
 
   // ngDoCheck(): void {
   //   this.isPlaceholderActiveSubject.next(this.placeholderContainer?.nativeElement?.hasChildNodes());
@@ -571,7 +571,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   clickOnMenuTrigger(e: MouseEvent): void {
-    if (!this.disabled && !this.isLoading()) {
+    if (!this.disabledSignal && !this.isLoading()) {
       this.showList = false;
       this.shouldLoadMore = true;
       timer(0).subscribe(() => {
@@ -607,6 +607,18 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     }).pipe(
       map((val) => {
         return val ?? [];
+      }),
+      tap((v) => {
+        // if (!this.ignorePagination) {
+        //   debugger;
+        //   if(v[this.listProp]) {
+        //     this.shouldLoadMore = this.currentPage * v[this.listProp].length <
+        //       (v[this.totalRowsProp] ?? v[this.listProp].length);
+        //   }
+        //   else {
+        //     this.shouldLoadMore = v.length > 0;
+        //   }
+        // }
       }),
       switchMap((val) => this.multiMapper.mapOptions(val)), switchMap((val) => {
         let result = [];
@@ -652,7 +664,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   onScrolled(e: any): void {
-    if(this.isOpen()) {
+    if (this.isOpen()) {
       const sentinelElementPosition = this.sentinelElement().nativeElement.getBoundingClientRect().height
         + this.sentinelElement().nativeElement.getBoundingClientRect().top;
       const containerPosition = this.optionContainer().nativeElement.getBoundingClientRect().height
@@ -784,5 +796,11 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     this.propagateChange(this.value);
     this.valueChange.emit(this.value);
     this.changeDetectorRef.markForCheck();
+  }
+
+  private _setDisabled(value: boolean): void {
+    this.disabledSignal.set(coerceBooleanProperty(value));
+    this.disabledSignal() ? this.parts.disable() : this.parts.enable();
+    this.stateChanges.next();
   }
 }

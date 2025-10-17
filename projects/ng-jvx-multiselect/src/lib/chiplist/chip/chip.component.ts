@@ -16,7 +16,7 @@ export class NgJvxMultisectChipComponent {
   clickOnRemove(e: MouseEvent): void {
     e.stopPropagation();
     e.preventDefault();
-    if (this.container && !this.container.disabled){
+    if (this.container && !this.container.disabledSignal){
       this.container.deselect(this.value());
     }
   }

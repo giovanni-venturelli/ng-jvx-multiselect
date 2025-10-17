@@ -1,5 +1,5 @@
 
-<div class="ng-jvx-multiselect" [class.disabled]="disabled" [class.has-errors]="hasErrors" #jvxMultiselect>
+<div class="ng-jvx-multiselect" [class.disabled]="disabledSignal()" [class.has-errors]="hasErrors" #jvxMultiselect>
   <!-- START MENU -->
   <div [libMenuTriggerFor]="menuRef" (onMenuOpen)="onMenuOpen()" (menuOpened)="onMenuOpened()"
        #trigger
@@ -103,7 +103,7 @@
                       [ngTemplateOutletContext]="{$implicit: val}"></ng-container>
       </div>
     </div>
-    @if (clearable && value.length > 0 && !disabled) {
+    @if (clearable && value.length > 0 && !disabledSignal()) {
       <div class="ng-jvx-multiselect__remove-button" (click)="clear($event)">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256">
           <path
@@ -147,7 +147,7 @@
 <ng-template #defaultMultiSelectionTemplate let-value>
   <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
     @for (val of value; track val[itemValue]) {
-      <ng-jvx-multiselect-chip [value]="val" class="ng-jvx-multiselect-chip" [disabled]="this.disabled" >
+      <ng-jvx-multiselect-chip [value]="val" class="ng-jvx-multiselect-chip" [disabled]="disabledSignal()" >
         {{ val[itemText] }}
       </ng-jvx-multiselect-chip>
     }
