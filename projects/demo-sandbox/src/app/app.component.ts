@@ -5,10 +5,10 @@ import {UntypedFormBuilder, FormControl, UntypedFormGroup, Validators} from '@an
 import {JVXMULTISELECT, NgJvxGroup, NgJvxGroupMapper, NgJvxOptionMapper} from 'ng-jvx-multiselect';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    standalone: false
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  standalone: false
 })
 export class AppComponent implements OnInit {
   width = 0;
@@ -80,8 +80,6 @@ export class AppComponent implements OnInit {
       testInput: ['', Validators.required]
     });
 
-
-
   }
 
   getUrl(): string {
@@ -129,6 +127,7 @@ export class AppComponent implements OnInit {
     this.selectedValueEM = processedEvent;
     console.log(this.selectedValueEM, 'FINAL SELECT');
   }
+
   private processAllSelection(newSelection: { value: string, text: string }[]): { value: string, text: string }[] {
     const areSelectionsEqual =
       newSelection.length === this.selectedValueEM.length &&

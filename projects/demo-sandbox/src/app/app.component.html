@@ -5,6 +5,7 @@
         <ng-jvx-multiselect style="width: 100%"
                             formControlName="selectionValue"
                             [panelClass]="'test-panel'"
+                            [disabled]="true"
                             [options]="jvxOptions()"
                             [searchInput]="true"
                             [multi]="true"
@@ -27,66 +28,66 @@
         </ng-jvx-multiselect>
 
 
-        <div style="width: 500px;">
-          <label>questa è la label</label>
-          <ng-jvx-multiselect
-            (valueChange)="onValueChange($event)"
-            [clearable]="true"
-            [mapper]="mapper"
-            [multi]="false"
-            [closeButton]="true"
-            [ignorePagination]="false"
-            [panelClass]="'test-panel'"
-            [url]="url"
-            [requestType]="'post'">
+<!--        <div style="width: 500px;">-->
+<!--          <label>questa è la label</label>-->
+<!--          <ng-jvx-multiselect-->
+<!--            (valueChange)="onValueChange($event)"-->
+<!--            [clearable]="true"-->
+<!--            [mapper]="mapper"-->
+<!--            [multi]="false"-->
+<!--            [closeButton]="true"-->
+<!--            [ignorePagination]="false"-->
+<!--            [panelClass]="'test-panel'"-->
+<!--            [url]="url"-->
+<!--            [requestType]="'post'">-->
 
-            <div placeholder>placeholder</div>
-            <div *ngJvxOptionsTemplate="let option"
-                 [ngJvxDisabledOption]="option.text.includes('0')">
-              <div style="padding: 5px 0">
-                <div>testo: {{ option.text }}</div>
-                <div>valore: {{ option.value }}</div>
-                <div>valore: {{ option.value }}</div>
-                <div>valore: {{ option.value }}</div>
-                <div>valore: {{ option.value }}</div>
-                <div>valore: {{ option.value }}</div>
-                <div>valore: {{ option.value }}</div>
-              </div>
-            </div>
-            <div ng-jvx-footer [style.height]="'60px'">footer aaa</div>
-          </ng-jvx-multiselect>
-        </div>
+<!--            <div placeholder>placeholder</div>-->
+<!--            <div *ngJvxOptionsTemplate="let option"-->
+<!--                 [ngJvxDisabledOption]="option.text.includes('0')">-->
+<!--              <div style="padding: 5px 0">-->
+<!--                <div>testo: {{ option.text }}</div>-->
+<!--                <div>valore: {{ option.value }}</div>-->
+<!--                <div>valore: {{ option.value }}</div>-->
+<!--                <div>valore: {{ option.value }}</div>-->
+<!--                <div>valore: {{ option.value }}</div>-->
+<!--                <div>valore: {{ option.value }}</div>-->
+<!--                <div>valore: {{ option.value }}</div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div ng-jvx-footer [style.height]="'60px'">footer aaa</div>-->
+<!--          </ng-jvx-multiselect>-->
+<!--        </div>-->
 
-        @if (showSecondJvx()) {
-          <div style="width: 500px;">
-            <label>questa è la label</label>
-            <ng-jvx-multiselect
-              [clearable]="true"
-              [mapper]="mapper"
-              [multi]="false"
-              [closeButton]="true"
-              [ignorePagination]="false"
-              [panelClass]="'test-panel'"
-              [url]="url"
-              [requestType]="'post'">
+<!--        @if (showSecondJvx()) {-->
+<!--          <div style="width: 500px;">-->
+<!--            <label>questa è la label</label>-->
+<!--            <ng-jvx-multiselect-->
+<!--              [clearable]="true"-->
+<!--              [mapper]="mapper"-->
+<!--              [multi]="false"-->
+<!--              [closeButton]="true"-->
+<!--              [ignorePagination]="false"-->
+<!--              [panelClass]="'test-panel'"-->
+<!--              [url]="url"-->
+<!--              [requestType]="'post'">-->
 
-              <div placeholder>placeholder</div>
-              <div *ngJvxOptionsTemplate="let option"
-                   [ngJvxDisabledOption]="option.text.includes('0')">
-                <div style="padding: 5px 0">
-                  <div>testo: {{ option.text }}</div>
-                  <div>valore: {{ option.value }}</div>
-                  <div>valore: {{ option.value }}</div>
-                  <div>valore: {{ option.value }}</div>
-                  <div>valore: {{ option.value }}</div>
-                  <div>valore: {{ option.value }}</div>
-                  <div>valore: {{ option.value }}</div>
-                </div>
-              </div>
-              <div ng-jvx-footer [style.height]="'60px'">footer aaa</div>
-            </ng-jvx-multiselect>
-          </div>
-        }
+<!--              <div placeholder>placeholder</div>-->
+<!--              <div *ngJvxOptionsTemplate="let option"-->
+<!--                   [ngJvxDisabledOption]="option.text.includes('0')">-->
+<!--                <div style="padding: 5px 0">-->
+<!--                  <div>testo: {{ option.text }}</div>-->
+<!--                  <div>valore: {{ option.value }}</div>-->
+<!--                  <div>valore: {{ option.value }}</div>-->
+<!--                  <div>valore: {{ option.value }}</div>-->
+<!--                  <div>valore: {{ option.value }}</div>-->
+<!--                  <div>valore: {{ option.value }}</div>-->
+<!--                  <div>valore: {{ option.value }}</div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div ng-jvx-footer [style.height]="'60px'">footer aaa</div>-->
+<!--            </ng-jvx-multiselect>-->
+<!--          </div>-->
+<!--        }-->
 
       </form>
     </div>
