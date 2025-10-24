@@ -555,6 +555,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   onMenuClose(): void {
     this.isOpen.set(false);
     this.jvxMultiselectClose.emit();
+    this.ngControl?.control.markAsTouched();
   }
 
   deselect(val: any): void {
