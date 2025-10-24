@@ -2,7 +2,7 @@ import {Component, OnInit, signal} from '@angular/core';
 import {HttpHeaders} from '@angular/common/http';
 import {Observable, of, timer} from 'rxjs';
 import {UntypedFormBuilder, FormControl, UntypedFormGroup, Validators} from '@angular/forms';
-import {JVXMULTISELECT, NgJvxGroup, NgJvxGroupMapper, NgJvxOptionMapper} from 'ng-jvx-multiselect';
+import {JVXMULTISELECT, JvxMultiselectValidators, NgJvxGroup, NgJvxGroupMapper, NgJvxOptionMapper} from 'ng-jvx-multiselect';
 
 @Component({
   selector: 'app-root',
@@ -76,10 +76,13 @@ export class AppComponent implements OnInit {
 
   constructor(private formBuilder: UntypedFormBuilder) {
     this.form = this.formBuilder.group({
-      selectionValue: [this.selectedValue],
+      selectionValue: [this.selectedValue, JvxMultiselectValidators.minLength(2)],
       testInput: ['', Validators.required]
     });
 
+    this.form.valueChanges.subscribe((v) => {
+      console.log(this.form);
+    });
   }
 
   getUrl(): string {

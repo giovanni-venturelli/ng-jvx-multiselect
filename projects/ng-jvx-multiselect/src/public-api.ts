@@ -14,4 +14,5 @@ export * from './lib/interfaces/ng-jvx-option-mapper';
 export * from './lib/interfaces/ng-jvx-search-mapper';
 export * from './lib/interfaces/ng-jvx-group-mapper';
 export * from './lib/chiplist/chip/chip.component';
+export * from './lib/validators';
 export * from './lib/utils';

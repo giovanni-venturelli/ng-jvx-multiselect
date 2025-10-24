@@ -105,6 +105,91 @@ In <b>example.component.ts</b>
 | `close`       | *None*  | Fired when the the menu starts closing.                                                             |
 | `closed`      | *None*  | Fired when the the menu is closed.                                                                  |
 
+### Validators
+
+The library exposes a small set of Angular validators tailored for ng-jvx-multiselect controls. These validators assume the control's value is an array of selected items (even in single-select mode the value is represented as an array).
+
+Import
+
+```ts
+import { JvxMultiselectValidators } from 'ng-jvx-multiselect';
+```
+
+Available validators
+
+- required(control: AbstractControl): ValidationErrors | null
+  - Error key: selectionRequired
+  - Fails when the selection is empty or not provided.
+- minLength(min: number): ValidatorFn
+  - Error key: minSelectionLength
+  - Fails when the number of selected items is less than min.
+- maxLength(max: number): ValidatorFn
+  - Error key: maxSelectionLength
+  - Fails when the number of selected items exceeds max.
+
+Reactive forms example
+
+```ts
+import { Component } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { JvxMultiselectValidators } from 'ng-jvx-multiselect';
+
+@Component({
+  selector: 'app-example',
+  templateUrl: './example.component.html'
+})
+export class ExampleComponent {
+  options = [
+    { value: 1, text: 'One' },
+    { value: 2, text: 'Two' },
+    { value: 3, text: 'Three' },
+    { value: 4, text: 'Four' }
+  ];
+
+  form = this.fb.group({
+    tags: this.fb.control([], {
+      validators: [
+        JvxMultiselectValidators.required,
+        JvxMultiselectValidators.minLength(2),
+        JvxMultiselectValidators.maxLength(5)
+      ]
+    })
+  });
+
+  constructor(private fb: FormBuilder) {}
+}
+```
+
+```angular20html
+
+<form [formGroup]="form">
+  <ng-jvx-multiselect
+    [multi]="true"
+    [options]="options"
+    [formControl]="form.controls.tags">
+  </ng-jvx-multiselect>
+  @if(form.controls.tags.touched){
+  <div>
+    @if(form.controls.tags.hasError('selectionRequired'){
+      <small>
+        At least one selection is required.
+      </small>
+    }
+    @if(form.controls.tags.hasError('minSelectionLength')){
+      <small>
+        Please select at least 2 items.
+      </small>
+    }
+    @if(form.controls.tags.hasError('maxSelectionLength')){
+      <small>
+        You can select up to 5 items.
+      </small>
+    }
+  </div>
+  }
+</form>
+```
+
 ### Groups
 
 It is possible to collect the options in groups. To do so the user can set the property `groupBy` with the name of the property they want to group the options by.
