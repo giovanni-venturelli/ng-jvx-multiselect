@@ -118,7 +118,7 @@ import { JvxMultiselectValidators } from 'ng-jvx-multiselect';
 Available validators
 
 - required(control: AbstractControl): ValidationErrors | null
-  - Error key: selectionRequired
+  - Error key: required
   - Fails when the selection is empty or not provided.
 - minLength(min: number): ValidatorFn
   - Error key: minSelectionLength
@@ -170,7 +170,7 @@ export class ExampleComponent {
   </ng-jvx-multiselect>
   @if(form.controls.tags.touched){
   <div>
-    @if(form.controls.tags.hasError('selectionRequired'){
+    @if(form.controls.tags.hasError('required'){
       <small>
         At least one selection is required.
       </small>

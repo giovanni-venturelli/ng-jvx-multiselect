@@ -6,7 +6,7 @@ export const required = (control: AbstractControl): ValidationErrors | null => {
     return null;
   }
 
-  return {selectionRequired: true};
+  return {required: true};
 };
 
 export const minLength = (min: number): ValidatorFn => {
