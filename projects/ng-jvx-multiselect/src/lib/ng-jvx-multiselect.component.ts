@@ -6,7 +6,7 @@ import {
   computed,
   ContentChild,
   ElementRef,
-  EventEmitter, forwardRef,
+  EventEmitter,
   HostBinding,
   input,
   Input,
@@ -26,7 +26,7 @@ import {
 import {NgJvxOptionsTemplateDirective} from './directives/ng-jvx-options-template.directive';
 import {
   ControlValueAccessor,
-  FormsModule, NG_VALUE_ACCESSOR,
+  FormsModule,
   NgControl,
   ReactiveFormsModule,
   UntypedFormBuilder,
@@ -58,6 +58,13 @@ import {NgJvxFocusDirective} from './directives/ng-jvx-focus.directive';
   styleUrls: ['./ng-jvx-multiselect.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  providers: [
+    // {
+    //   provide: MatFormFieldControl,
+    //   useExisting: forwardRef(() => NgJvxMultiselectComponent),
+    //   multi: true,
+    // }
+  ],
   imports: [
     CommonModule,
     NgJvxMultisectChipComponent,
@@ -69,14 +76,7 @@ import {NgJvxFocusDirective} from './directives/ng-jvx-focus.directive';
     NgJvxFocusDirective,
     FormsModule
   ],
-  standalone: true,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => NgJvxMultiselectComponent),
-      multi: true,
-    },
-  ]
+  standalone: true
 })
 export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewInit,
   ControlValueAccessor {
