@@ -248,7 +248,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @Input() totalRowsProp = '';
   @Input() panelClass = '';
   @Input() searchProp = 'search';
-  @Input() closeButton = false;
+  @Input() closeButton = true;
   @Input() mapper: NgJvxOptionMapper<any> = {
     mapOption(source: any): Observable<any> {
       return of(source);
@@ -334,7 +334,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   private unsubscribe = new Subject<void>();
   private unsubscribe$ = this.unsubscribe.asObservable();
   private intPageSize = 15;
-
+  protected closing = signal<boolean>(false);
   // Metodo richiesto da ControlValueAccessor
   public setDisabledState(isDisabled: boolean): void {
     this._setDisabled(isDisabled);
@@ -703,6 +703,8 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     }
     this.jvxMultiselectClosed.emit();
     this.changeDetectorRef.markForCheck();
+
+    this.closing.set(false);
   }
 
   onSearchInputClick(e: MouseEvent): void {
@@ -762,6 +764,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public closeMenu(): void {
+    this.closing.set(true);
     this.trigger.closeMenu();
   }
 
@@ -804,4 +807,6 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
     this.disabledSignal() ? this.parts.disable() : this.parts.enable();
     this.stateChanges.next();
   }
+
+  protected readonly close = close;
 }

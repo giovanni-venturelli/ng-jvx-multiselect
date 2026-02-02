@@ -143,10 +143,11 @@ ng-jvx-multiselect {
   display: flex;
   flex-direction: column;
 
-  .search-input-container{
+  .search-input-container {
     width: 100%;
     padding: 0.3rem;
     box-sizing: border-box;
+
     input {
       outline: none;
       border: none;
@@ -172,12 +173,13 @@ ng-jvx-multiselect {
     cursor: pointer;
     color: #fff;
     z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     svg {
       fill: var(--jvx-multiselect-on-primary);
       font-size: 15px;
-      height: 100%;
-      width: 100%;
     }
   }
 }
