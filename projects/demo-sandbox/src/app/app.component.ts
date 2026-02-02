@@ -174,4 +174,8 @@ export class AppComponent implements OnInit {
     // console.log(this.form.controls.selectionValue.getRawValue());
     this.showSecondJvx.set(true);
   }
+
+  reset(): void{
+    this.form.reset({selectionValue: []});
+  }
 }
