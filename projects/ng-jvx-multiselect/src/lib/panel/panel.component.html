@@ -9,7 +9,7 @@
              }
              ]"
              [cdkConnectedOverlayOrigin]="trigger"
-             [cdkConnectedOverlayPanelClass]="'ng-jvx-multiselect-panel'"
+             [cdkConnectedOverlayPanelClass]="['ng-jvx-multiselect-panel', panelClass]"
              [cdkConnectedOverlayDisposeOnNavigation]="true"
              [cdkConnectedOverlayHasBackdrop]="true"
              [cdkConnectedOverlayDisableClose]="false"
@@ -19,6 +19,7 @@
     <div class="ng-jvx-panel" [class]="yPosition()+'-panel'" [class.opening]="isOpen()" [class.closing]="!isOpen()"
          (click)="clickOnMenu()">
       <ng-content></ng-content>
+
     </div>
   </div>
 </ng-template>

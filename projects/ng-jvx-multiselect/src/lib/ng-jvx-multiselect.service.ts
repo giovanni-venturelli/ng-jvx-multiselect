@@ -60,18 +60,27 @@ export class NgJvxMultiselectService {
         // withCredentials: true,
         // credentials: 'same-origin', // cache: 'default',
       };
-      const postParams = {
-        [searchProp]: params.get('smartSearch'),
-        paging: [paginationProp.page, paginationProp.pageSize, 'sort', 'ignorePagination'].reduce((obj, key) => {
-          obj[key] = params.get(key);
-          if (key === 'sort' && !params.get(key)) {
-            obj[key] = '';
-          } else if (key === 'ignorePagination' && !params.get(key)) {
-            obj[key] = false;
-          }
-          return obj;
-        }, {})
-      };
+      const postParams: any = {};
+
+      // Aggiungi search solo se presente
+      if (search && search.length > 0) {
+        postParams[searchProp] = search;
+      }
+
+      // Gestisci paginazione come nella GET
+      if (!ignorePagination) {
+        postParams.paging = {
+          sort: '',
+          ignorePagination: false
+        };
+        postParams.paging[paginationProp.page] = currentPage.toString();
+        postParams.paging[paginationProp.pageSize] = pageSize.toString();
+      } else {
+        postParams.paging = {
+          sort: '',
+          ignorePagination: true
+        };
+      }
       const payload = {
         ...postParams,
         ...data

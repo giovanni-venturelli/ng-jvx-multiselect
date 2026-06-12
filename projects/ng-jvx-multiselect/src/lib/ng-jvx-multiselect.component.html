@@ -1,14 +1,14 @@
 
-<div class="ng-jvx-multiselect" [class.disabled]="disabled" [class.has-errors]="hasErrors" #jvxMultiselect>
+<div class="ng-jvx-multiselect" [class.disabled]="disabledSignal()" [class.has-errors]="hasErrors" #jvxMultiselect>
   <!-- START MENU -->
   <div [libMenuTriggerFor]="menuRef" (onMenuOpen)="onMenuOpen()" (menuOpened)="onMenuOpened()"
        #trigger
        (onMenuClose)="onMenuClose()" (menuClosed)="onMenuClosed()"
   >
-    <lib-panel #menuRef [class]="['jvx-multiselect-panel', panelClass].join(' ')" [multi]="multi" [formGroup]="form"
+    <lib-panel #menuRef [class]="['jvx-multiselect-panel'].join(' ')" [panelClass]="panelClass" [multi]="multi" [formGroup]="form"
                [yPosition]="yPosition()">
-      @if (closeButton) {
-        <div class="closeMenuButton">
+      @if (multi && closeButton && !closing() && isOpen()) {
+        <div class="closeMenuButton" (click)="closeMenu()">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
             <path
               d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path>
@@ -19,7 +19,7 @@
            [ngStyle]="{'overflow-y': 'hidden', 'width': listContainerSize().width, 'min-width.px': 112, 'max-height': '300px', 'height': listContainerSize().height}">
       <div class="menu-list-container"
            [style.flex]="'1 1 0'"
-           #menuLIstContainer
+           #menuListContainer
            >
         <div class="search-input-container" *ngIf="!!searchInput" (click)="onSearchInputClick($event)">
           <input type="text" [placeholder]="searchLabel" [ngModel]="searchValue" [ngModelOptions]="{standalone: true}"
@@ -27,7 +27,8 @@
                  (input)="onSearchValueChange($event)"/>
         </div>
         <div
-          [ngStyle]="{height: searchInput && selectionContainer.clientHeight > 220 || selectionContainer.clientHeight > 300? 300 - (searchInput? 40 : 0) - menuFooter.offsetHeight + 'px': 'auto'}">
+          #optionContainer
+          [ngStyle]="{height: searchInput && selectionContainer.clientHeight > 220 || selectionContainer.clientHeight > 300? 300 - (searchInput? 40 : 0) - (menuFooter.children[0]?.clientHeight??0) + 'px': 'auto'}">
           <ng-scrollbar style="width: 100%"
                         smoothScroll
                         [visibility]="'hover'"
@@ -67,6 +68,7 @@
                     </div>
                   </ng-jvx-option>
                 </ng-container>
+                <div #sentinelElement [style]="'pointer-events: none; position: absolute; height: 0; width: 0; top:'+ (selectionContainer.clientHeight - 5 ) + 'px' "></div>
               </div>
             </div>
           </ng-scrollbar>
@@ -101,7 +103,7 @@
                       [ngTemplateOutletContext]="{$implicit: val}"></ng-container>
       </div>
     </div>
-    @if (clearable && value.length > 0) {
+    @if (clearable && value.length > 0 && !disabledSignal()) {
       <div class="ng-jvx-multiselect__remove-button" (click)="clear($event)">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256">
           <path
@@ -145,7 +147,7 @@
 <ng-template #defaultMultiSelectionTemplate let-value>
   <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
     @for (val of value; track val[itemValue]) {
-      <ng-jvx-multiselect-chip [value]="val" class="ng-jvx-multiselect-chip" [disabled]="this.disabled" >
+      <ng-jvx-multiselect-chip [value]="val" class="ng-jvx-multiselect-chip" [disabled]="disabledSignal()" >
         {{ val[itemText] }}
       </ng-jvx-multiselect-chip>
     }

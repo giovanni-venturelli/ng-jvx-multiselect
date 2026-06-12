@@ -2,18 +2,19 @@ import {Component, OnInit, signal} from '@angular/core';
 import {HttpHeaders} from '@angular/common/http';
 import {Observable, of, timer} from 'rxjs';
 import {UntypedFormBuilder, FormControl, UntypedFormGroup, Validators} from '@angular/forms';
-import {JVXMULTISELECT, NgJvxGroup, NgJvxGroupMapper, NgJvxOptionMapper} from 'ng-jvx-multiselect';
+import {JVXMULTISELECT, JvxMultiselectValidators, NgJvxGroup, NgJvxGroupMapper, NgJvxOptionMapper} from 'ng-jvx-multiselect';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    standalone: false
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  standalone: false
 })
 export class AppComponent implements OnInit {
   width = 0;
   title = 'demo-sandbox';
   public postPayload = {name: 'nome', lastName: 'cognome'};
+  public showSecondJvx = signal(false);
   public mapper = {
     mapOption(source: any): Observable<{ value: number, text: string }> {
       return of({
@@ -30,19 +31,23 @@ export class AppComponent implements OnInit {
   ];
   public loaded = true;
   public form: UntypedFormGroup;
-  public url = 'https://localhost:3000/jvx-multiselect-test';
+  public url = 'https://localhost:3000/jvx-multiselect-test/post-test';
   public groupMapper: NgJvxGroupMapper<any> = {
     mapGroup(option: any): Observable<NgJvxGroup<any>> {
       return of({group: option.nested.group, option});
     }
   };
 
-  public options = [
+  public jvxOptions = signal([
     {value: 1, text: 'text 1'},
     {value: 2, text: 'text 2'},
     {value: 3, text: 'text 3'},
     {value: 4, text: 'text 4'},
-    {value: 5, text: 'text 5'}];
+    {value: 5, text: 'text 5'},
+    {value: 6, text: 'text 6'},
+    {value: 7, text: 'text 7'},
+    {value: 8, text: 'text 8'},
+    {value: 9, text: 'text 9'}]);
   public optionsEM = [
     {value: 'TN010', text: 'DIP'},
     {value: 'TN020', text: 'INT'},
@@ -71,12 +76,13 @@ export class AppComponent implements OnInit {
 
   constructor(private formBuilder: UntypedFormBuilder) {
     this.form = this.formBuilder.group({
-      selectionValue: [this.selectedValue],
+      selectionValue: [this.selectedValue, JvxMultiselectValidators.minLength(2)],
       testInput: ['', Validators.required]
     });
 
-
-
+    this.form.valueChanges.subscribe((v) => {
+      console.log(this.form);
+    });
   }
 
   getUrl(): string {
@@ -124,6 +130,7 @@ export class AppComponent implements OnInit {
     this.selectedValueEM = processedEvent;
     console.log(this.selectedValueEM, 'FINAL SELECT');
   }
+
   private processAllSelection(newSelection: { value: string, text: string }[]): { value: string, text: string }[] {
     const areSelectionsEqual =
       newSelection.length === this.selectedValueEM.length &&
@@ -165,5 +172,10 @@ export class AppComponent implements OnInit {
     console.log(e);
     console.log('===========================================================================================================================');
     // console.log(this.form.controls.selectionValue.getRawValue());
+    this.showSecondJvx.set(true);
+  }
+
+  reset(): void{
+    this.form.reset({selectionValue: []});
   }
 }

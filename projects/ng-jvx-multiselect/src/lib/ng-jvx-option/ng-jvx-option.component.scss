@@ -14,19 +14,29 @@ ng-jvx-option {
     cursor: pointer;
     position: relative;
 
-    &.ng-jvx-single-selected-option {
-
+    .list-option-background {
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: -1;
+      opacity: 0.45;
+      height: 100%;
+      width: 100%;
+      background-opacity: .3;
+    }
+    &:hover{
       .list-option-background {
-        position: absolute;
-        left: 0;
-        top: 0;
-        z-index: -1;
-        opacity: 0.45;
-        height: 100%;
-        width: 100%;
         background-color: #{$primary};
-        background-opacity: .3;
+        opacity: 0.2;
+
       }
     }
+    &.ng-jvx-single-selected-option {
+      .list-option-background {
+        background-color: #{$primary};
+        opacity: 0.45;
+      }
+    }
+
   }
 }

@@ -99,6 +99,7 @@ export class PanelComponent implements OnDestroy {
   // @ Inputs
   // -----------------------------------------------------------------------------------------------------
   @Input() trigger!: ElementRef<any>;
+  @Input() panelClass: string;
   yPosition: InputSignal<'above' | 'below'> = input('above');
   multi = input.required<boolean>();
   // -----------------------------------------------------------------------------------------------------
