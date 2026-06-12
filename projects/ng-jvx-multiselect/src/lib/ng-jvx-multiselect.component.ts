@@ -134,7 +134,6 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   @Input() searchInput = false;
   @Input() searchLabel = 'search';
   @Input() listProp = '';
-  @Input() totalRowsProp = '';
   @Input() panelClass = '';
   @Input() searchProp = 'search';
   @Input() closeButton = false;
@@ -187,6 +186,13 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   postPayload = input<object>();
+  paginationProp = input<{ page: string, pageSize: string }>({page: 'page', pageSize: 'size'});
+  paginationResponse = input<{ currentPage: string, totalPages: string, totalRows: string }>({
+    currentPage: 'pageNo',
+    totalPages: 'pageCount',
+    totalRows: 'totalRecordCount'
+  });
+  paginationResponseProp = input<string>('pagingInfo');
   // tslint:disable-next-line:variable-name
   private _required = false;
   private _jvxWidth = signal(0);
@@ -248,6 +254,10 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   public stateChanges = new Subject<void>();
   public currentPage = 0;
+  private _totalRows = signal(0);
+  private _totalPages = signal(0);
+  public totalRows = computed(() => this._totalRows());
+  public totalPages = computed(() => this._totalPages());
 
   public listContainerSize = computed(() => {
     if (this.isOpen() && this.menuFooter() && this.menuFooter().nativeElement) {
@@ -590,7 +600,9 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       requestHeaders: this.requestHeaders,
       search: this.searchValue,
       searchProp: this.searchProp,
-      pageSize: this.intPageSize
+      pageSize: this.intPageSize,
+      paginationProp: this.paginationProp(),
+      paginationResponse: this.paginationResponse(),
     }).pipe(
       map((val) => {
         return val ?? [];
@@ -600,6 +612,13 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
         if (!val) {
           result = [];
         } else if (this.listProp.length > 0) {
+          const paginationResponse = val[this.paginationResponseProp()];
+          if (paginationResponse) {
+            const totalRows = paginationResponse[this.paginationResponse().totalRows] ?? this._totalRows;
+            this._totalRows.set(totalRows);
+            const totalPages = paginationResponse[this.paginationResponse().totalPages] ?? this._totalPages;
+            this._totalPages.set(totalPages);
+          }
           result = [...(val[this.listProp] ?? [])];
         } else {
           result = [...val];

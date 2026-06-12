@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, input} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {setJvxCall} from './utils';
@@ -20,6 +20,7 @@ export class NgJvxMultiselectService {
             search,
             searchProp = 'search',
             data,
+            paginationProp
           }: {
     url: string, ignorePagination: boolean,
     currentPage: number,
@@ -28,15 +29,18 @@ export class NgJvxMultiselectService {
     requestHeaders: any,
     search?: string,
     searchProp?: string,
-    data: any
+    data: any,
+
+    paginationProp: { page: string, pageSize: string },
+    paginationResponse: { currentPage: string, totalRows: string }
   }): Observable<any> {
     let params = new HttpParams();
     if (search && search.length > 0) {
       params = params.set(searchProp, search);
     }
     if (!ignorePagination) {
-      params = params.set('page', currentPage.toString())
-        .set('size', pageSize.toString());
+      params = params.set(paginationProp.page, currentPage.toString())
+        .set(paginationProp.pageSize, pageSize.toString());
     }
     if (requestType === 'get') {
       const options = {
@@ -58,7 +62,7 @@ export class NgJvxMultiselectService {
       };
       const postParams = {
         [searchProp]: params.get('smartSearch'),
-        paging: ['page', 'size', 'sort', 'ignorePagination'].reduce((obj, key) => {
+        paging: [paginationProp.page, paginationProp.pageSize, 'sort', 'ignorePagination'].reduce((obj, key) => {
           obj[key] = params.get(key);
           if (key === 'sort' && !params.get(key)) {
             obj[key] = '';
