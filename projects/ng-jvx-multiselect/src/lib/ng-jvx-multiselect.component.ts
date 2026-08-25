@@ -108,7 +108,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
 
   @Input() set value(value: any[]) {
     if (!this.areArraysEqual(value, this.pValue)) {
-      this.pValue = value ?? [];
+      this.pValue = value ? [...value] : [];
       this.showList = !this.showList;
       if (value) {
         this.form.get('selectionValue').setValue(this.pValue.map(v => v[this.itemValue]));
@@ -569,8 +569,7 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   deselect(val: any): void {
-    // this.value = [...this.value.filter(v => v[this.itemValue] !== val[this.itemValue])];
-    this.value.splice(this.value.findIndex(v => v[this.itemValue] === val[this.itemValue]), 1);
+    this.pValue = this.pValue.filter(v => v[this.itemValue] !== val[this.itemValue]);
     this.form.get('selectionValue').setValue(this.value.map(m => m[this.itemValue]));
     this.valueChange.emit(this.value);
     this.propagateChange(this.value);
@@ -804,9 +803,9 @@ export class NgJvxMultiselectComponent implements OnInit, OnDestroy, AfterViewIn
       this.form.get('selectionValue').reset([]);
       this.value = [];
     }
-    this.value.push(option);
+    this.pValue = [...this.pValue, option];
 
-    this.value.sort((a, b) => {
+    this.pValue.sort((a, b) => {
       return typeof a[this.itemValue] === 'string' ?
         a[this.itemValue].localeCompare(b[this.itemValue]) : a[this.itemValue] - b[this.itemValue];
     });
