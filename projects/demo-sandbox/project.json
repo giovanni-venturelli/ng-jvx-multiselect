@@ -101,7 +101,12 @@
         "styles": [
           "projects/demo-sandbox/src/styles.scss"
         ],
-        "scripts": []
+        "scripts": [],
+        "stylePreprocessorOptions": {
+          "includePaths": [
+            "projects/ng-jvx-multiselect"
+          ]
+        }
       }
     },
     "lint": {
