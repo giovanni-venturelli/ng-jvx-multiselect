@@ -1,181 +1,135 @@
-import {Component, OnInit, signal} from '@angular/core';
-import {HttpHeaders} from '@angular/common/http';
-import {Observable, of, timer} from 'rxjs';
-import {UntypedFormBuilder, FormControl, UntypedFormGroup, Validators} from '@angular/forms';
-import {JVXMULTISELECT, JvxMultiselectValidators, NgJvxGroup, NgJvxGroupMapper, NgJvxOptionMapper} from 'ng-jvx-multiselect';
+import {Component, DOCUMENT, inject} from '@angular/core';
+import {LogPanelComponent} from './shared/log-panel.component';
+import {Lang, LANG, LANGS, setLang, t} from './shared/i18n';
+import {BasicExampleComponent} from './examples/basic-example.component';
+import {MultiExampleComponent} from './examples/multi-example.component';
+import {CustomKeysExampleComponent} from './examples/custom-keys-example.component';
+import {ClientSearchExampleComponent} from './examples/client-search-example.component';
+import {TemplatesExampleComponent} from './examples/templates-example.component';
+import {GroupsExampleComponent} from './examples/groups-example.component';
+import {RemoteGetExampleComponent} from './examples/remote-get-example.component';
+import {RemotePostExampleComponent} from './examples/remote-post-example.component';
+import {RemoteMappingExampleComponent} from './examples/remote-mapping-example.component';
+import {RemoteListExampleComponent} from './examples/remote-list-example.component';
+import {FormsExampleComponent} from './examples/forms-example.component';
+import {EventsExampleComponent} from './examples/events-example.component';
+import {ThemingExampleComponent} from './examples/theming-example.component';
+
+interface NavGroup {
+  title: string;
+  links: { anchor: string, label: string }[];
+}
 
 @Component({
   selector: 'app-root',
+  imports: [
+    LogPanelComponent,
+    BasicExampleComponent,
+    MultiExampleComponent,
+    CustomKeysExampleComponent,
+    ClientSearchExampleComponent,
+    TemplatesExampleComponent,
+    GroupsExampleComponent,
+    RemoteGetExampleComponent,
+    RemotePostExampleComponent,
+    RemoteMappingExampleComponent,
+    RemoteListExampleComponent,
+    FormsExampleComponent,
+    EventsExampleComponent,
+    ThemingExampleComponent
+  ],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  standalone: false
+  styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
-  width = 0;
-  title = 'demo-sandbox';
-  public postPayload = {name: 'nome', lastName: 'cognome'};
-  public showSecondJvx = signal(false);
-  public mapper = {
-    mapOption(source: any): Observable<{ value: number, text: string }> {
-      return of({
-        value: source.value,
-        text: source.text
-      });
+export class AppComponent {
+  readonly lang = LANG;
+  readonly langs = LANGS;
+
+  readonly txt = t({
+    en: {
+      intro: `An Angular select for single and multiple selection, with static options or options loaded from a
+        backend. Each section shows a live example and the code behind it. The remote examples use the mock server
+        started by <code>npm start</code> (<code>projects/mock-server</code>).`,
+      examples: 'Examples',
+      language: 'Language'
+    },
+    it: {
+      intro: `Una select Angular per selezione singola e multipla, con opzioni statiche o caricate dal backend.
+        Ogni sezione mostra un esempio dal vivo e il codice per ottenerlo. Gli esempi remoti usano il mock server
+        avviato da <code>npm start</code> (<code>projects/mock-server</code>).`,
+      examples: 'Esempi',
+      language: 'Lingua'
     }
-  } as NgJvxOptionMapper<{ value: number, text: string }>;
-  public selectedValue = [
-    {text: 'value 1', value: 1}
-  ];
-  public selectedValueEM = [
-    {value: 'All', text: 'All'}
-  ];
-  public loaded = true;
-  public form: UntypedFormGroup;
-  public url = 'https://localhost:3000/jvx-multiselect-test/post-test';
-  public groupMapper: NgJvxGroupMapper<any> = {
-    mapGroup(option: any): Observable<NgJvxGroup<any>> {
-      return of({group: option.nested.group, option});
-    }
-  };
+  });
 
-  public jvxOptions = signal([
-    {value: 1, text: 'text 1'},
-    {value: 2, text: 'text 2'},
-    {value: 3, text: 'text 3'},
-    {value: 4, text: 'text 4'},
-    {value: 5, text: 'text 5'},
-    {value: 6, text: 'text 6'},
-    {value: 7, text: 'text 7'},
-    {value: 8, text: 'text 8'},
-    {value: 9, text: 'text 9'}]);
-  public optionsEM = [
-    {value: 'TN010', text: 'DIP'},
-    {value: 'TN020', text: 'INT'},
-    {value: 'TN030', text: 'VIS'},
-    {value: 'TN040', text: 'BAR'},
-    {value: 'All', text: 'All'}];
-  // public options = [
-  //   {group: 'a', nested: {group: 'nested a'}, text: 'value 0', value: 0},
-  //   {group: 'a', nested: {group: 'nested a'}, text: 'value 1', value: 1},
-  //   {group: 'a', nested: {group: 'nested a'}, text: 'value 2', value: 2},
-  //   {group: 'a', nested: {group: 'nested a'}, text: 'value 3', value: 3},
-  //   {group: 'a', nested: {group: 'nested a'}, text: 'value 4', value: 4},
-  //   {group: 'a', nested: {group: 'nested a'}, text: 'value 5', value: 5},
-  //   {group: 'a', nested: {group: 'nested a'}, text: 'value 6', value: 6},
-  //   {group: 'a', nested: {group: 'nested a'}, text: 'value 7', value: 7},
-  //   {group: 'a', nested: {group: 'nested a'}, text: 'value 8', value: 8},
-  //   {group: 'a', nested: {group: 'nested a'}, text: 'value 9', value: 9},
-  //   {group: 'b', nested: {group: 'nested b'}, text: 'value 10', value: 10},
-  //   {group: 'b', nested: {group: 'nested b'}, text: 'value 11', value: 11},
-  //   {group: 'b', nested: {group: 'nested b'}, text: 'value 12', value: 12},
-  //   {group: 'b', nested: {group: 'nested b'}, text: 'value 13', value: 13},
-  //   {group: 'b', nested: {group: 'nested b'}, text: 'value 14', value: 14},
-  //   {group: 'b', nested: {group: 'nested b'}, text: 'value 15', value: 15},
-  //   {group: 'b', nested: {group: 'nested b'}, text: 'value 16', value: 16}
-  // ];
+  readonly nav: NavGroup[] = t({
+    en: [
+      {
+        title: 'Static options',
+        links: [
+          {anchor: 'single', label: 'Single selection'},
+          {anchor: 'multi', label: 'Multiple selection'},
+          {anchor: 'custom-keys', label: 'Custom keys'},
+          {anchor: 'client-search', label: 'Client-side search'},
+          {anchor: 'templates', label: 'Custom templates'},
+          {anchor: 'groups', label: 'Groups'}
+        ]
+      },
+      {
+        title: 'Options from a backend',
+        links: [
+          {anchor: 'remote-get', label: 'GET, pagination, search'},
+          {anchor: 'remote-post', label: 'POST, headers, interceptor'},
+          {anchor: 'remote-mapping', label: 'Custom API format'},
+          {anchor: 'remote-list', label: 'Non-paginated list'}
+        ]
+      },
+      {
+        title: 'Integration',
+        links: [
+          {anchor: 'forms', label: 'Forms and validators'},
+          {anchor: 'events', label: 'Events and methods'},
+          {anchor: 'theming', label: 'Theme and panelClass'}
+        ]
+      }
+    ],
+    it: [
+      {
+        title: 'Opzioni statiche',
+        links: [
+          {anchor: 'single', label: 'Selezione singola'},
+          {anchor: 'multi', label: 'Selezione multipla'},
+          {anchor: 'custom-keys', label: 'Chiavi personalizzate'},
+          {anchor: 'client-search', label: 'Ricerca lato client'},
+          {anchor: 'templates', label: 'Template personalizzati'},
+          {anchor: 'groups', label: 'Gruppi'}
+        ]
+      },
+      {
+        title: 'Opzioni da backend',
+        links: [
+          {anchor: 'remote-get', label: 'GET, paginazione, ricerca'},
+          {anchor: 'remote-post', label: 'POST, header, interceptor'},
+          {anchor: 'remote-mapping', label: 'API con formato custom'},
+          {anchor: 'remote-list', label: 'Lista non paginata'}
+        ]
+      },
+      {
+        title: 'Integrazione',
+        links: [
+          {anchor: 'forms', label: 'Form e validatori'},
+          {anchor: 'events', label: 'Eventi e metodi'},
+          {anchor: 'theming', label: 'Tema e panelClass'}
+        ]
+      }
+    ]
+  });
 
-  constructor(private formBuilder: UntypedFormBuilder) {
-    this.form = this.formBuilder.group({
-      selectionValue: [this.selectedValue, JvxMultiselectValidators.minLength(2)],
-      testInput: ['', Validators.required]
-    });
-
-    this.form.valueChanges.subscribe((v) => {
-      console.log(this.form);
-    });
+  constructor() {
+    inject(DOCUMENT).documentElement.lang = LANG;
   }
 
-  getUrl(): string {
-    return 'http://vm-web2016/Visitatori.Next.Api/api/utenti';
-  }
-
-  changeOption(num: number): void {
-    this.selectedValue = [{value: num, text: 'opzione ' + num}];
-  }
-
-  reload(): void {
-    this.loaded = false;
-    setTimeout(() => {
-      this.loaded = true;
-    }, 0);
-
-  }
-
-  // get selectionValue(): any[] {
-  //   // return [this.selectedValue[0]?.value];
-  // }
-  // set selectionValue(val: any[]) {
-  // }
-  checkValidity(): void {
-    this.form.markAllAsTouched();
-    this.form.controls.selectionValue.updateValueAndValidity();
-    this.form.controls.testInput.updateValueAndValidity();
-    this.form.markAllAsTouched();
-  }
-
-  ngOnInit(): void {
-    timer(500).subscribe(() => {
-      this.width = 257;
-    });
-  }
-
-  // tslint:disable-next-line:typedef
-  public jvxValueChange($event: any[]) {
-    console.log($event, 'NewSelect');
-    if ($event.length === 0) {
-      return;
-    }
-    // Prima di fare il confronto, verifichiamo se c'è "All" e in caso filtriamo l'array
-    const processedEvent = this.processAllSelection($event);
-    this.selectedValueEM = processedEvent;
-    console.log(this.selectedValueEM, 'FINAL SELECT');
-  }
-
-  private processAllSelection(newSelection: { value: string, text: string }[]): { value: string, text: string }[] {
-    const areSelectionsEqual =
-      newSelection.length === this.selectedValueEM.length &&
-      newSelection.every(newItem =>
-        this.selectedValueEM.some(selectedItem =>
-          selectedItem.value === newItem.value
-        )
-      );
-
-    if (areSelectionsEqual) {
-      return this.selectedValueEM;
-    }
-    // Verifica se "All" è presente nella nuova selezione
-    const hasAllInNewSelection = newSelection.some(item => item.value === 'All');
-
-    // Verifica se "All" era già selezionato precedentemente
-    const hadAllPreviously = this.selectedValueEM.some(item => item.value === 'All');
-
-    let result: { value: string, text: string }[];
-
-    // Se la nuova selezione contiene "All" e prima non c'era allora lo aggiungo
-    if (hasAllInNewSelection && !hadAllPreviously) {
-      result = newSelection.filter(item => item.value === 'All');
-    }
-    // Se la nuova selezione contiene "All" e altre selezioni e All era già presente allora lo tolgo
-    else if (hasAllInNewSelection && hadAllPreviously) {
-      result = newSelection.filter(item => item.value !== 'All');
-    }
-    // Se la nuova selezione non contiene "All"
-    else {
-      result = newSelection;
-    }
-
-    return result;
-  }
-
-  onValueChange(e: any[]) {
-    console.log('=============================== VALUE CHANGE ===============================');
-    console.log(e);
-    console.log('===========================================================================================================================');
-    // console.log(this.form.controls.selectionValue.getRawValue());
-    this.showSecondJvx.set(true);
-  }
-
-  reset(): void{
-    this.form.reset({selectionValue: []});
+  changeLang(lang: Lang): void {
+    setLang(lang);
   }
 }

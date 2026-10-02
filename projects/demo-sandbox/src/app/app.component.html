@@ -1,105 +1,49 @@
-<div class="content" role="main">
-  <div style=" width: 100%; height: 300px; overflow: auto">
-    <div [ngStyle]="{'width.px': width}">
-      <form [formGroup]="form" [ngStyle]="{'width.px': width}">
-        <ng-jvx-multiselect style="width: 100%"
-                            formControlName="selectionValue"
-                            [panelClass]="'test-panel'"
-                            [disabled]="true"
-                            [options]="jvxOptions()"
-                            [searchInput]="true"
-                            [multi]="true"
-                            [searchMode]="'client'"
-                            [postPayload]="postPayload"
-        >
-          <ng-container *ngJvxSelectionTemplate="let options">
-            <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
-              @for (option of options; track option.value + '-' + option.text) {
-                <ng-jvx-multiselect-chip
-                  [value]="option">
-                  {{ option.text }}
-                </ng-jvx-multiselect-chip>
-              }
-            </div>
-          </ng-container>
-          <div ng-jvx-footer>
-            <div style="height: 40px; display: flex; align-items: center; padding: .25rem;">footer</div>
-          </div>
-        </ng-jvx-multiselect>
+<div class="layout">
+  <nav class="sidebar" [attr.aria-label]="txt.examples">
+    <a class="brand" href="#top">
+      <strong>ng-jvx-multiselect</strong>
+      <span>demo</span>
+    </a>
 
-
-<!--        <div style="width: 500px;">-->
-<!--          <label>questa è la label</label>-->
-<!--          <ng-jvx-multiselect-->
-<!--            (valueChange)="onValueChange($event)"-->
-<!--            [clearable]="true"-->
-<!--            [mapper]="mapper"-->
-<!--            [multi]="false"-->
-<!--            [closeButton]="true"-->
-<!--            [ignorePagination]="false"-->
-<!--            [panelClass]="'test-panel'"-->
-<!--            [url]="url"-->
-<!--            [requestType]="'post'">-->
-
-<!--            <div placeholder>placeholder</div>-->
-<!--            <div *ngJvxOptionsTemplate="let option"-->
-<!--                 [ngJvxDisabledOption]="option.text.includes('0')">-->
-<!--              <div style="padding: 5px 0">-->
-<!--                <div>testo: {{ option.text }}</div>-->
-<!--                <div>valore: {{ option.value }}</div>-->
-<!--                <div>valore: {{ option.value }}</div>-->
-<!--                <div>valore: {{ option.value }}</div>-->
-<!--                <div>valore: {{ option.value }}</div>-->
-<!--                <div>valore: {{ option.value }}</div>-->
-<!--                <div>valore: {{ option.value }}</div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div ng-jvx-footer [style.height]="'60px'">footer aaa</div>-->
-<!--          </ng-jvx-multiselect>-->
-<!--        </div>-->
-
-<!--        @if (showSecondJvx()) {-->
-<!--          <div style="width: 500px;">-->
-<!--            <label>questa è la label</label>-->
-<!--            <ng-jvx-multiselect-->
-<!--              [clearable]="true"-->
-<!--              [mapper]="mapper"-->
-<!--              [multi]="false"-->
-<!--              [closeButton]="true"-->
-<!--              [ignorePagination]="false"-->
-<!--              [panelClass]="'test-panel'"-->
-<!--              [url]="url"-->
-<!--              [requestType]="'post'">-->
-
-<!--              <div placeholder>placeholder</div>-->
-<!--              <div *ngJvxOptionsTemplate="let option"-->
-<!--                   [ngJvxDisabledOption]="option.text.includes('0')">-->
-<!--                <div style="padding: 5px 0">-->
-<!--                  <div>testo: {{ option.text }}</div>-->
-<!--                  <div>valore: {{ option.value }}</div>-->
-<!--                  <div>valore: {{ option.value }}</div>-->
-<!--                  <div>valore: {{ option.value }}</div>-->
-<!--                  <div>valore: {{ option.value }}</div>-->
-<!--                  <div>valore: {{ option.value }}</div>-->
-<!--                  <div>valore: {{ option.value }}</div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div ng-jvx-footer [style.height]="'60px'">footer aaa</div>-->
-<!--            </ng-jvx-multiselect>-->
-<!--          </div>-->
-<!--        }-->
-
-      </form>
-      <button (click)="reset()">reset selection</button>
+    <div class="lang-switch" role="group" [attr.aria-label]="txt.language">
+      @for (l of langs; track l.code) {
+        <button type="button" [class.active]="l.code === lang" [attr.aria-pressed]="l.code === lang"
+                [attr.lang]="l.code" (click)="changeLang(l.code)">{{ l.label }}</button>
+      }
     </div>
-  </div>
+
+    @for (group of nav; track group.title) {
+      <div class="nav-group">
+        <h3>{{ group.title }}</h3>
+        <ul>
+          @for (link of group.links; track link.anchor) {
+            <li><a [href]="'#' + link.anchor">{{ link.label }}</a></li>
+          }
+        </ul>
+      </div>
+    }
+  </nav>
+
+  <main id="top">
+    <header class="intro">
+      <h1>ng-jvx-multiselect</h1>
+      <p [innerHTML]="txt.intro"></p>
+    </header>
+
+    <app-basic-example/>
+    <app-multi-example/>
+    <app-custom-keys-example/>
+    <app-client-search-example/>
+    <app-templates-example/>
+    <app-groups-example/>
+    <app-remote-get-example/>
+    <app-remote-post-example/>
+    <app-remote-mapping-example/>
+    <app-remote-list-example/>
+    <app-forms-example/>
+    <app-events-example/>
+    <app-theming-example/>
+  </main>
 </div>
 
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content above * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * End of Placeholder * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
+<app-log-panel/>

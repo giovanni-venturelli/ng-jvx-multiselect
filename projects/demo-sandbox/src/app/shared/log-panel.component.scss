@@ -1,0 +1,139 @@
+.log-panel {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  width: min(440px, calc(100vw - 2rem));
+  max-height: 45vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--demo-surface);
+  border: 1px solid var(--demo-border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .15);
+  z-index: 900;
+  font-size: .8rem;
+
+  &.collapsed {
+    max-height: none;
+  }
+
+  header {
+    padding: .5rem .75rem;
+    border-bottom: 1px solid var(--demo-border);
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .title {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+    font-weight: 600;
+    font-size: .9rem;
+
+    .count {
+      background: var(--demo-chip);
+      border-radius: 999px;
+      padding: 0 .45rem;
+      font-weight: 400;
+      font-size: .75rem;
+    }
+
+    .chevron {
+      margin-left: auto;
+    }
+  }
+
+  .filters {
+    display: flex;
+    gap: .25rem;
+    margin-top: .5rem;
+
+    button {
+      border: 1px solid var(--demo-border);
+      background: transparent;
+      border-radius: 6px;
+      padding: .1rem .5rem;
+
+      &.active {
+        background: var(--demo-accent);
+        border-color: var(--demo-accent);
+        color: #fff;
+      }
+
+      &:last-child {
+        margin-left: auto;
+      }
+    }
+  }
+
+  .entries {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+
+    li {
+      padding: .35rem .75rem;
+      border-bottom: 1px solid var(--demo-border);
+      border-left: 3px solid transparent;
+
+      &.event {
+        border-left-color: var(--demo-accent);
+      }
+
+      &.http {
+        border-left-color: #d97706;
+      }
+
+      &.empty {
+        color: var(--demo-muted);
+        padding: 1rem .75rem;
+      }
+    }
+
+    .line {
+      display: flex;
+      gap: .5rem;
+      align-items: baseline;
+    }
+
+    time {
+      color: var(--demo-muted);
+      font-variant-numeric: tabular-nums;
+      flex: none;
+    }
+
+    .source {
+      font-weight: 600;
+      flex: none;
+    }
+
+    .message {
+      overflow-wrap: anywhere;
+    }
+
+    summary {
+      cursor: pointer;
+      color: var(--demo-muted);
+    }
+
+    pre {
+      margin: .25rem 0 0;
+      max-height: 180px;
+      overflow: auto;
+      background: var(--demo-code-bg);
+      color: var(--demo-code-fg);
+      padding: .5rem;
+      border-radius: 6px;
+    }
+  }
+}

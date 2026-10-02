@@ -1,23 +1,159 @@
 /* You can add global styles to this file, and also import other style files */
 @use 'index' as ng-jvx-multiselect;
 
-html{
-  height: 100%;
-  body {
-    height: 100%;
-  }
-}
-
-// Plus imports for other components in your app.
-
-
+// Tema della libreria
 :root {
-  --jvx-multiselect-primary: #008000;
-  --jvx-multiselect-accent: #0000FF;
-  --jvx-multiselect-warn: #FF0000;
+  --jvx-multiselect-primary: #2563eb;
+  --jvx-multiselect-accent: #0ea5e9;
+  --jvx-multiselect-warn: #dc2626;
   --jvx-multiselect-on-primary: #ffffff;
   --jvx-multiselect-on-accent: currentcolor;
   --jvx-multiselect-on-warn: currentcolor;
-  --jvx-multiselect-panel-bg: #FFFFFF
+  --jvx-multiselect-panel-bg: #ffffff;
 }
 
+// Tema della demo
+:root {
+  --demo-bg: #f6f7f9;
+  --demo-surface: #ffffff;
+  --demo-border: #e3e6eb;
+  --demo-text: #1f2937;
+  --demo-muted: #6b7280;
+  --demo-accent: #2563eb;
+  --demo-chip: #eef1f5;
+  --demo-code-bg: #0f172a;
+  --demo-code-fg: #e2e8f0;
+}
+
+html {
+  height: 100%;
+
+  body {
+    height: 100%;
+    margin: 0;
+    background: var(--demo-bg);
+    color: var(--demo-text);
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-size: 15px;
+  }
+}
+
+code {
+  font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+  font-size: .9em;
+}
+
+// Mattoncini di layout condivisi dagli esempi
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem 1.5rem;
+  align-items: start;
+}
+
+.demo-field {
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  min-width: 0;
+
+  > label {
+    font-size: .85rem;
+    font-weight: 600;
+  }
+
+  ng-jvx-multiselect {
+    width: 100%;
+  }
+
+  .errors {
+    display: flex;
+    flex-direction: column;
+    color: var(--jvx-multiselect-warn);
+  }
+}
+
+.demo-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem 1rem;
+  font-size: .9rem;
+
+  label {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+  }
+
+  button {
+    font: inherit;
+    padding: .3rem .7rem;
+    border-radius: 6px;
+    border: 1px solid var(--demo-border);
+    background: var(--demo-surface);
+    color: inherit;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--demo-chip);
+    }
+
+    &[type='submit'] {
+      background: var(--demo-accent);
+      border-color: var(--demo-accent);
+      color: #fff;
+    }
+  }
+
+  input[type='text'], select {
+    font: inherit;
+    padding: .25rem .4rem;
+    border: 1px solid var(--demo-border);
+    border-radius: 6px;
+  }
+}
+
+.demo-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.demo-output, .demo-output-inline {
+  margin: 1rem 0 0;
+  padding: .6rem .8rem;
+  background: var(--demo-chip);
+  border-radius: 8px;
+  font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+  font-size: .8rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.demo-output-inline {
+  margin: 0;
+  display: grid;
+  gap: .2rem;
+  white-space: normal;
+}
+
+// Temi dell'esempio "Tema e panelClass": il campo usa le variabili del contenitore,
+// il pannello (renderizzato nell'overlay) quelle della panelClass.
+.theme-violet, .theme-violet-panel {
+  --jvx-multiselect-primary: #7c3aed;
+  --jvx-multiselect-accent: #a855f7;
+}
+
+.theme-violet-panel {
+  --jvx-multiselect-panel-bg: #f5f3ff;
+}
+
+.theme-amber, .theme-amber-panel {
+  --jvx-multiselect-primary: #d97706;
+  --jvx-multiselect-accent: #f59e0b;
+  --jvx-multiselect-on-primary: #1f2937;
+}
+
+.theme-amber-panel {
+  --jvx-multiselect-panel-bg: #fffbeb;
+}
