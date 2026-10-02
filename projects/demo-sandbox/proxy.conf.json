@@ -1,0 +1,8 @@
+{
+  "/jvx-multiselect-test": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "info"
+  }
+}

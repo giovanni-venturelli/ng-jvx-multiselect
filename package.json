@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "nx serve demo-sandbox --port 4300 --ssl true",
+    "start": "concurrently -k -n server,demo -c magenta,cyan \"npm:start:server\" \"npm:start:demo\"",
+    "start:server": "node --watch projects/mock-server/server.js",
+    "start:demo": "nx serve demo-sandbox --port 4300 --ssl true",
     "build": "nx build ng-jvx-multiselect --watch",
     "build-prod": "nx build ng-jvx-multiselect --configuration production",
     "publish": "npm run build-prod && npm publish ./dist/ng-jvx-multiselect",
@@ -41,6 +43,7 @@
     "@types/jasmine": "~5.1.9",
     "@types/node": "^24.3.0",
     "codelyzer": "^6.0.2",
+    "concurrently": "^10.0.5",
     "jasmine-core": "5.9.0",
     "karma": "~6.4.4",
     "karma-chrome-launcher": "~3.2.0",

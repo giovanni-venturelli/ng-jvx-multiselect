@@ -72,7 +72,8 @@
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
       "options": {
-        "buildTarget": "demo-sandbox:build"
+        "buildTarget": "demo-sandbox:build",
+        "proxyConfig": "projects/demo-sandbox/proxy.conf.json"
       },
       "configurations": {
         "production": {
