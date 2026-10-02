@@ -1,7 +1,8 @@
-import {Observable, Subject} from 'rxjs';
+import {Observable} from 'rxjs';
 
 /**
- * Maps the option returned by the async call in an object of type T. When object is mapped the resulting object is returned in an observable
+ * Filters the available options for a client-side search.
+ * Receives the search text and the options, returns the options to show.
  */
 export interface NgJvxSearchMapper<T> {
   mapSearch(source: any, options: T[]): Observable<T[]>;

@@ -1,25 +1,21 @@
-import {AfterContentInit, Directive, ElementRef, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {timer} from 'rxjs';
+import {afterNextRender, Directive, effect, ElementRef, inject, Injector, input} from '@angular/core';
 
+/** Focuses the host element whenever the bound value becomes `true`. Internal. */
 @Directive({
   // tslint:disable-next-line:directive-selector
   selector: '[ngJvxFocus]'
 })
-export class NgJvxFocusDirective implements OnInit, OnChanges {
-  @Input() ngJvxFocus: boolean;
+export class NgJvxFocusDirective {
+  readonly ngJvxFocus = input(false);
+  private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly injector = inject(Injector);
 
-  constructor(private el: ElementRef) {
-  }
-
-  ngOnInit(): void {
-    if (this.ngJvxFocus) {
-      this.el.nativeElement.focus();
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.hasOwnProperty('ngJvxFocus') && changes.ngJvxFocus.currentValue === true) {
-      this.el.nativeElement.focus();
-    }
+  constructor() {
+    effect(() => {
+      if (this.ngJvxFocus()) {
+        // After rendering: the host may live in an overlay that is attached in the same change detection.
+        afterNextRender(() => this.el.nativeElement.focus({preventScroll: true}), {injector: this.injector});
+      }
+    });
   }
 }

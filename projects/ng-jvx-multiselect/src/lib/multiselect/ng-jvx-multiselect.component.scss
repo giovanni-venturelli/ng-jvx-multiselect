@@ -1,0 +1,237 @@
+// Styles of ng-jvx-multiselect. Encapsulation is disabled, so every selector is scoped
+// under the component tag or under the panel overlay classes.
+
+ng-jvx-multiselect {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  .ng-jvx-multiselect {
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    &.disabled {
+      pointer-events: none;
+
+      .ng-jvx-multiselect-arrow svg {
+        opacity: .3;
+      }
+    }
+
+    &.has-errors {
+      color: var(--jvx-multiselect-warn);
+
+      .ng-jvx-multiselect-value.multi-value-container {
+        width: 100%;
+      }
+    }
+  }
+
+  .ng-jvx-multiselect-value-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    cursor: pointer;
+    outline: none;
+
+    &:focus-visible {
+      outline: 2px solid var(--jvx-multiselect-accent);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+
+    &.is-open .ng-jvx-multiselect-arrow svg {
+      transform: rotate(180deg);
+    }
+  }
+
+  .ng-jvx-multiselect__placeholder {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .ng-jvx-multiselect-value {
+    display: flex;
+    align-items: center;
+    flex: 1 1 100%;
+    min-width: 0;
+    max-width: calc(100% - 28px);
+  }
+
+  .ng-jvx-single-value {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .ng-jvx-multiselect-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .3rem;
+  }
+
+  .ng-jvx-multiselect__remove-button {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .ng-jvx-multiselect-arrow {
+    display: flex;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    padding-right: 4px;
+
+    svg {
+      transition: transform .3s ease-in-out;
+    }
+  }
+
+  .lds-ring {
+    position: relative;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+
+    div {
+      position: absolute;
+      display: block;
+      box-sizing: border-box;
+      width: 16px;
+      height: 16px;
+      margin: 4px;
+      border: 2px solid;
+      border-color: var(--jvx-multiselect-accent) transparent transparent transparent;
+      border-radius: 50%;
+      animation: ng-jvx-ring 1.2s cubic-bezier(.5, 0, .5, 1) infinite;
+
+      &:nth-child(1) {
+        animation-delay: -.45s;
+      }
+
+      &:nth-child(2) {
+        animation-delay: -.3s;
+      }
+
+      &:nth-child(3) {
+        animation-delay: -.15s;
+      }
+    }
+  }
+}
+
+@keyframes ng-jvx-ring {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Panel content (rendered in the overlay)
+
+.ng-jvx-multiselect-panel {
+  .menu-list-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .search-input-container {
+    flex: none;
+    box-sizing: border-box;
+    width: 100%;
+    padding: .3rem;
+
+    input {
+      box-sizing: border-box;
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      font: inherit;
+      color: inherit;
+    }
+  }
+
+  .ng-jvx-options-scroller {
+    flex: 0 1 auto;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, .2) transparent;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 3px;
+      background-color: rgba(0, 0, 0, .2);
+    }
+  }
+
+  .ng-jvx-option-list {
+    position: relative;
+    padding: 0;
+  }
+
+  .ng-jvx-option-wrapper {
+    min-height: 48px;
+  }
+
+  .ng-jvx-default-option {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    min-height: 48px;
+    padding-inline: .3rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .ng-jvx-group-header {
+    padding-inline: 15px;
+  }
+
+  .menu-footer {
+    flex: none;
+    overflow: hidden;
+  }
+
+  .closeMenuButton {
+    position: absolute;
+    top: -11px;
+    right: 11px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: none;
+    border-radius: 100%;
+    background-color: var(--jvx-multiselect-primary);
+    cursor: pointer;
+
+    svg {
+      fill: var(--jvx-multiselect-on-primary);
+    }
+  }
+}

@@ -1,25 +1,22 @@
- {
+{
   "name": "ng-jvx-multiselect",
   "version": "20.0.22",
-  "license" : "MIT",
-  "description": "ng-jvx-multiselect is a select for angular projects. It handles both single and multiple selections and allows to retrieves the options via asynchronous calls.",
+  "license": "MIT",
+  "description": "ng-jvx-multiselect is an Angular select for single and multiple selection, with static options or options loaded from a backend.",
   "exports": {
     ".": {
       "sass": "./_index.scss"
     }
   },
   "peerDependencies": {
+    "@angular/cdk": "^20.0.0",
     "@angular/common": "^20.0.0",
     "@angular/core": "^20.0.0",
-    "ngx-scrollbar": "^13.0.3",
-    "@angular/cdk": "^20.0.0",
-    "form-data": "^3.0.4"
+    "@angular/forms": "^20.0.0",
+    "rxjs": "^7.4.0"
   },
   "dependencies": {
     "tslib": "^2.0.0"
-  },
-  "umdModuleIds": {
-    "ngx-scrollbar": "ngx-scrollbar"
   },
   "repository": {
     "type": "git",
@@ -27,8 +24,13 @@
   },
   "keywords": [
     "multiselect",
+    "select",
     "angular",
-    "material",
-    "async"
+    "async",
+    "autocomplete"
+  ],
+  "sideEffects": [
+    "*.scss",
+    "*.css"
   ]
 }

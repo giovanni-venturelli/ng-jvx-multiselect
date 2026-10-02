@@ -1,13 +1,50 @@
 @use '@angular/cdk/overlay-prebuilt';
 
-.ng-jvx-panel{
+@keyframes ng-jvx-panel-enter {
+  from {
+    opacity: 0;
+    transform: scaleY(.8);
+  }
+}
+
+@keyframes ng-jvx-panel-leave {
+  to {
+    opacity: 0;
+    transform: scaleY(.8);
+  }
+}
+
+.ng-jvx-panel {
   display: flex;
   flex-direction: column;
-  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, .2), 0px 2px 2px 0px rgba(0, 0, 0, .14), 0px 1px 5px 0px rgba(0, 0, 0, .12);
+  // the overlay pane is a row flex container: fill it, the width comes from the overlay
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  max-height: 300px;
+  border-radius: .3rem;
   background: var(--jvx-multiselect-panel-bg);
-  border-radius: 0.3rem;
-  //overflow: hidden;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
+  transform-origin: top;
+  animation: ng-jvx-panel-enter 80ms ease-in-out;
+
+  &.above-panel {
+    transform-origin: bottom;
+  }
+
+  &.closing {
+    animation: ng-jvx-panel-leave 80ms ease-in-out forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+
+    &.closing {
+      animation: none;
+    }
+  }
 }
-.ng-jvx-panel-overlay{
-  background-opacity: 0;
+
+.ng-jvx-panel-overlay {
+  background: transparent;
 }

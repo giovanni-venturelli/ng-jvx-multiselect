@@ -1,0 +1,45 @@
+ng-jvx-multiselect-chip {
+  display: inline-flex;
+  max-width: 100%;
+
+  > div {
+    display: flex;
+    align-items: center;
+    max-width: 100%;
+    height: 1.8rem;
+    padding: 0 .2rem;
+    border-radius: 1rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    background-color: var(--jvx-multiselect-primary);
+    color: var(--jvx-multiselect-on-primary);
+
+    .chip-text {
+      flex: 1 1 auto;
+      min-width: 0;
+      padding-inline: .5rem;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .remove-button {
+      display: inline-flex;
+      padding: 0;
+      border: none;
+      background: none;
+      color: var(--jvx-multiselect-on-primary);
+      cursor: pointer;
+    }
+
+    &.disabled {
+      background-color: #c2c3c4;
+      color: currentColor;
+      padding-inline-end: .5rem;
+
+      .chip-text {
+        pointer-events: none;
+      }
+    }
+  }
+}

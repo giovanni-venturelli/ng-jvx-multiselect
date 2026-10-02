@@ -1,1 +1,3 @@
-@forward './src/lib/ng-jvx-multiselect.component';
+// Sass entry point of ng-jvx-multiselect (`@use 'ng-jvx-multiselect'`).
+// The component styles are also bundled with the components themselves.
+@forward './src/lib/multiselect/ng-jvx-multiselect.component';

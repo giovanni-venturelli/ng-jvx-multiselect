@@ -1,0 +1,43 @@
+ng-jvx-option {
+  display: block;
+
+  .ng-jvx-option {
+    position: relative;
+    min-height: 48px;
+    padding: 0;
+    cursor: pointer;
+    isolation: isolate;
+
+    .option-content {
+      min-height: 48px;
+    }
+
+    .list-option-background {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      opacity: 0;
+      pointer-events: none;
+      background-color: var(--jvx-multiselect-primary);
+    }
+
+    &:hover .list-option-background {
+      opacity: .2;
+    }
+
+    &.ng-jvx-single-selected-option .list-option-background {
+      opacity: .45;
+    }
+  }
+
+  &.ng-jvx-option-disabled .ng-jvx-option {
+    cursor: not-allowed;
+    opacity: .5;
+  }
+}
+
+// Options disabled through [ngJvxDisabledOption]
+.ng-jvx-disabled-option {
+  opacity: .5;
+  cursor: not-allowed;
+}

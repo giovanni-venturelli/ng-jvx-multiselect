@@ -1,33 +1,25 @@
 import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
 
-export const required = (control: AbstractControl): ValidationErrors | null => {
-  const value: any[] = control.value;
-  if (!!value && value.length > 0) {
-    return null;
-  }
+/*
+ * Validators for ng-jvx-multiselect controls. The value of the control is always an array of options,
+ * in single selection too, so the validators count the selected items.
+ */
 
-  return {required: true};
+const selectionLength = (control: AbstractControl): number => {
+  const value = control.value;
+  return Array.isArray(value) ? value.length : 0;
 };
 
-export const minLength = (min: number): ValidatorFn => {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const value: any[] = control.value;
-    if (!!value && value.length >= min) {
-      return null;
-    }
+/** Fails with `{required: true}` when nothing is selected. */
+export const required = (control: AbstractControl): ValidationErrors | null =>
+  selectionLength(control) > 0 ? null : {required: true};
 
-    return {minSelectionLength: true};
-  };
-};
+/** Fails with `{minSelectionLength: true}` when fewer than `min` items are selected. */
+export const minLength = (min: number): ValidatorFn =>
+  (control: AbstractControl): ValidationErrors | null =>
+    selectionLength(control) >= min ? null : {minSelectionLength: true};
 
-export const maxLength = (max: number): ValidatorFn => {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const value: any[] = control.value;
-    if (!!value && value.length <= max) {
-      return null;
-    }
-
-    return {maxSelectionLength: true};
-  };
-};
-
+/** Fails with `{maxSelectionLength: true}` when more than `max` items are selected. */
+export const maxLength = (max: number): ValidatorFn =>
+  (control: AbstractControl): ValidationErrors | null =>
+    Array.isArray(control.value) && control.value.length <= max ? null : {maxSelectionLength: true};

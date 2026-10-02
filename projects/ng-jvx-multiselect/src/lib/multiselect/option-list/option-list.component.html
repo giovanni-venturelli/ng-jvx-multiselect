@@ -1,0 +1,31 @@
+@if (grouped()) {
+  @for (group of groups(); track group.group) {
+    <ng-container [ngTemplateOutlet]="groupHeaderTemplate() ?? defaultGroupHeader"
+                  [ngTemplateOutletContext]="{$implicit: group}"></ng-container>
+    @for (option of group.options; track key(option)) {
+      <ng-container [ngTemplateOutlet]="row" [ngTemplateOutletContext]="{$implicit: option}"></ng-container>
+    }
+  }
+} @else {
+  @for (option of options(); track key(option)) {
+    <ng-container [ngTemplateOutlet]="row" [ngTemplateOutletContext]="{$implicit: option}"></ng-container>
+  }
+}
+
+<ng-template #row let-option>
+  <ng-jvx-option [value]="key(option)" [isSelected]="selectedKeys().has(key(option))"
+                 (clickOnOption)="optionClick.emit(option)">
+    <div class="ng-jvx-option-wrapper">
+      <ng-container [ngTemplateOutlet]="optionTemplate() ?? defaultOption"
+                    [ngTemplateOutletContext]="{$implicit: option}"></ng-container>
+    </div>
+  </ng-jvx-option>
+</ng-template>
+
+<ng-template #defaultOption let-option>
+  <div class="ng-jvx-default-option">{{ option[itemText()] }}</div>
+</ng-template>
+
+<ng-template #defaultGroupHeader let-group>
+  <div class="ng-jvx-group-header"><strong>{{ group.group }}</strong></div>
+</ng-template>

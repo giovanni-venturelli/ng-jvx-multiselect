@@ -1,159 +1,121 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
+  DestroyRef,
   ElementRef,
-  EventEmitter,
+  inject,
   input,
-  Input,
-  InputSignal,
-  OnDestroy,
-  Output,
+  NgZone,
+  output,
   signal,
-  TemplateRef,
-  ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import {CdkConnectedOverlay} from '@angular/cdk/overlay';
-import {fromEvent, Subject, timer} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-import {animate, query, style, transition, trigger} from '@angular/animations';
+import {CdkConnectedOverlay, ConnectedOverlayPositionChange, ConnectedPosition} from '@angular/cdk/overlay';
 
+export type JvxPanelPosition = 'above' | 'below';
+
+type PanelState = 'closed' | 'opening' | 'open' | 'closing';
+
+/** Duration of the enter/leave animation; keep in sync with panel.component.scss. */
+const ANIMATION_MS = 80;
+
+const POSITIONS: ConnectedPosition[] = [
+  {originX: 'start', originY: 'center', overlayX: 'start', overlayY: 'top'},
+  {originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom'}
+];
+
+/**
+ * Overlay panel of the multiselect. Internal: it only handles attaching/detaching the overlay with its
+ * animation and reports when the user asks to close it (backdrop click, Escape, window resize).
+ */
 @Component({
   selector: 'lib-panel',
-  imports: [
-    CdkConnectedOverlay
-  ],
+  imports: [CdkConnectedOverlay],
   templateUrl: './panel.component.html',
   styleUrl: './panel.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  animations: [
-    trigger('animation', [
-      transition(':enter', [
-        query('.ng-jvx-panel.below-panel', [
-          style({
-            opacity: 0,
-            transform: 'scaleY(0.8)',
-            transformOrigin: 'top',
-          }),
-          animate('0.08s ease-in-out', style({
-            opacity: 1,
-            transform: 'scaleY(1)',
-            transformOrigin: 'top',
-          }))], {optional: true}),
-        query('.ng-jvx-panel.above-panel', [
-          style({
-            opacity: 0,
-            transform: 'scaleY(0.8)',
-            transformOrigin: 'bottom',
-          }),
-          animate('0.08s ease-in-out', style({
-            opacity: 1,
-            transform: 'scaleY(1)',
-            transformOrigin: 'bottom',
-          }))], {optional: true})
-      ]),
-      transition(':leave', [
-        query('.ng-jvx-panel.below-panel', [
-          style({
-            opacity: 1,
-            transform: 'scaleY(1)',
-            transformOrigin: 'top'
-          }),
-          animate('.08s ease-in-out', style({
-            opacity: 0,
-            transform: 'scaleY(0.8)',
-            transformOrigin: 'top'
-          })),
-        ], {optional: true}),
-        query('.ng-jvx-panel.above-panel', [
-          style({
-            opacity: 1,
-            transform: 'scaleY(1)',
-            transformOrigin: 'bottom'
-          }),
-          animate('.08s ease-in-out', style({
-            opacity: 0,
-            transform: 'scaleY(0.8)',
-            transformOrigin: 'bottom'
-          })),
-        ], {optional: true})])
-    ]),
-  ]
+  encapsulation: ViewEncapsulation.None
 })
-export class PanelComponent implements OnDestroy {
-  // -----------------------------------------------------------------------------------------------------
-  // @ Accessors
-  // -----------------------------------------------------------------------------------------------------
+export class PanelComponent {
+  readonly origin = input.required<ElementRef<HTMLElement>>();
+  readonly panelClass = input<string | string[]>('');
+  readonly width = input<number>(0);
 
-  // -----------------------------------------------------------------------------------------------------
-  // @ Refs
-  // -----------------------------------------------------------------------------------------------------
-  @ViewChild('menuTemplate', {static: true})
-  menuTemplate!: TemplateRef<any>;
+  /** The panel finished its opening animation. */
+  readonly opened = output<void>();
+  /** The panel finished its closing animation and has been detached. */
+  readonly closed = output<void>();
+  /** The user asked to close the panel. */
+  readonly closeRequest = output<void>();
 
-  protected isOpen = signal(false);
-  private unsubscribe = new Subject<void>();
+  protected readonly positions = POSITIONS;
+  protected readonly panelClasses = computed(() => {
+    const extra = this.panelClass();
+    return ['ng-jvx-multiselect-panel', ...(Array.isArray(extra) ? extra : [extra])].filter(c => !!c);
+  });
+  protected readonly attached = signal(false);
+  protected readonly state = signal<PanelState>('closed');
+  protected readonly position = signal<JvxPanelPosition>('below');
 
-  // -----------------------------------------------------------------------------------------------------
-  // @ Inputs
-  // -----------------------------------------------------------------------------------------------------
-  @Input() trigger!: ElementRef<any>;
-  @Input() panelClass: string;
-  yPosition: InputSignal<'above' | 'below'> = input('above');
-  multi = input.required<boolean>();
-  // -----------------------------------------------------------------------------------------------------
-  // @ Outputs
-  // -----------------------------------------------------------------------------------------------------
-  @Output() onClose = new EventEmitter<void>();
-  @Output() onClosed = new EventEmitter<void>();
-  @Output() onOpened = new EventEmitter<void>();
-  // -----------------------------------------------------------------------------------------------------
-  // @ lifecycle Hooks
-  // -----------------------------------------------------------------------------------------------------
+  private readonly zone = inject(NgZone);
+  private timer: ReturnType<typeof setTimeout> | undefined;
+  private readonly onResize = () => this.zone.run(() => this.closeRequest.emit());
 
   constructor() {
-    fromEvent(window, 'resize')
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(() => {
-        this.close();
-      });
+    inject(DestroyRef).onDestroy(() => {
+      clearTimeout(this.timer);
+      window.removeEventListener('resize', this.onResize);
+    });
   }
-
-  ngOnDestroy(): void {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
-  }
-
-  // -----------------------------------------------------------------------------------------------------
-  // @ Public Methods
-  // -----------------------------------------------------------------------------------------------------
 
   open(): void {
-    this.isOpen.set(true);
-    timer(800).subscribe(() => {
-      this.onOpened.emit();
-    });
+    if (this.state() === 'open' || this.state() === 'opening') {
+      return;
+    }
+    this.attached.set(true);
+    this.transition('opening', 'open', () => this.opened.emit());
+    this.zone.runOutsideAngular(() => window.addEventListener('resize', this.onResize, {passive: true}));
   }
 
   close(): void {
-    this.isOpen.set(false);
-    this.onClose.emit();
-    timer(200).subscribe(() => {
-      this.onClosed.emit();
+    if (this.state() === 'closed' || this.state() === 'closing') {
+      return;
+    }
+    window.removeEventListener('resize', this.onResize);
+    this.transition('closing', 'closed', () => {
+      this.attached.set(false);
+      this.closed.emit();
     });
   }
 
-  // -----------------------------------------------------------------------------------------------------
-  // @ protected Methods
-  // -----------------------------------------------------------------------------------------------------
-  protected clickOnMenu(): void {
-    if (!this.multi()) {
-      this.close();
+  protected onPositionChange(change: ConnectedOverlayPositionChange): void {
+    const position = change.connectionPair.overlayY === 'bottom' ? 'above' : 'below';
+    if (position !== this.position()) {
+      this.zone.run(() => this.position.set(position));
     }
   }
 
-  // -----------------------------------------------------------------------------------------------------
-  // @ Private Methods
-  // -----------------------------------------------------------------------------------------------------
+  /** The overlay was detached from outside (e.g. on navigation): report it as a close request. */
+  protected onDetach(): void {
+    if (this.state() === 'open' || this.state() === 'opening') {
+      this.closeRequest.emit();
+    }
+  }
+
+  protected onKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.closeRequest.emit();
+    }
+  }
+
+  private transition(from: PanelState, to: PanelState, done: () => void): void {
+    clearTimeout(this.timer);
+    this.state.set(from);
+    this.timer = setTimeout(() => {
+      this.state.set(to);
+      done();
+    }, ANIMATION_MS);
+  }
 }

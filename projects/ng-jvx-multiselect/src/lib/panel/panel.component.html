@@ -1,25 +1,22 @@
-<ng-template #menuTemplate cdkConnectedOverlay
-             (backdropClick)="close()"
-             [cdkConnectedOverlayPositions]="[
-             {
-             originX: 'start',
-             originY: yPosition() === 'below'? 'center': 'top',
-             overlayX: 'start',
-             overlayY: yPosition() === 'below'? 'top': 'bottom'
-             }
-             ]"
-             [cdkConnectedOverlayOrigin]="trigger"
-             [cdkConnectedOverlayPanelClass]="['ng-jvx-multiselect-panel', panelClass]"
-             [cdkConnectedOverlayDisposeOnNavigation]="true"
+<ng-template cdkConnectedOverlay
+             [cdkConnectedOverlayOrigin]="origin()"
+             [cdkConnectedOverlayOpen]="attached()"
+             [cdkConnectedOverlayPositions]="positions"
+             [cdkConnectedOverlayWidth]="width() || ''"
+             [cdkConnectedOverlayMinWidth]="112"
+             [cdkConnectedOverlayPanelClass]="panelClasses()"
              [cdkConnectedOverlayHasBackdrop]="true"
-             [cdkConnectedOverlayDisableClose]="false"
              [cdkConnectedOverlayBackdropClass]="'ng-jvx-panel-overlay'"
-             [cdkConnectedOverlayOpen]="isOpen()">
-  <div [@animation]="isOpen()">
-    <div class="ng-jvx-panel" [class]="yPosition()+'-panel'" [class.opening]="isOpen()" [class.closing]="!isOpen()"
-         (click)="clickOnMenu()">
-      <ng-content></ng-content>
-
-    </div>
+             [cdkConnectedOverlayDisposeOnNavigation]="true"
+             (backdropClick)="closeRequest.emit()"
+             (detach)="onDetach()"
+             (overlayKeydown)="onKeydown($event)"
+             (positionChange)="onPositionChange($event)">
+  <div class="ng-jvx-panel"
+       [class.below-panel]="position() === 'below'"
+       [class.above-panel]="position() === 'above'"
+       [class.opening]="state() === 'opening' || state() === 'open'"
+       [class.closing]="state() === 'closing'">
+    <ng-content></ng-content>
   </div>
 </ng-template>

@@ -1,43 +1,28 @@
-import {Directive, ElementRef, HostListener, Input, OnDestroy, OnInit} from '@angular/core';
-import {fromEvent, Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {booleanAttribute, Directive, input} from '@angular/core';
 
+/**
+ * Makes the host option unselectable: clicks are swallowed and the option is dimmed.
+ *
+ * ```html
+ * <div *ngJvxOptionsTemplate="let option" [ngJvxDisabledOption]="!option.active">...</div>
+ * ```
+ */
 @Directive({
   // tslint:disable-next-line:directive-selector
-  selector: '[ngJvxDisabledOption]'
+  selector: '[ngJvxDisabledOption]',
+  host: {
+    '[class.ng-jvx-disabled-option]': 'ngJvxDisabledOption()',
+    '[attr.aria-disabled]': 'ngJvxDisabledOption() || null',
+    '(click)': 'onClick($event)'
+  }
 })
-export class NgJvxDisabledOptionDirective implements OnInit, OnDestroy {
-  private isDisabled = false;
-  private originalOpacity = 1;
+export class NgJvxDisabledOptionDirective {
+  readonly ngJvxDisabledOption = input(false, {transform: booleanAttribute});
 
-  private unsubs = new Subject<void>();
-  private restore = new Subject<void>();
-
-  @Input() set ngJvxDisabledOption(source: boolean) {
-    this.isDisabled = source;
-    if (this.isDisabled) {
-      this.el.nativeElement.style.opacity = this.originalOpacity ? this.originalOpacity / 2 : 0.5;
-      fromEvent(this.el.nativeElement, 'click').pipe(takeUntil(this.restore), takeUntil(this.unsubs)).subscribe((e: MouseEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-      });
-    } else {
-      this.el.nativeElement.style.opacity = this.originalOpacity;
-      this.restore.next();
+  protected onClick(event: MouseEvent): void {
+    if (this.ngJvxDisabledOption()) {
+      event.preventDefault();
+      event.stopPropagation();
     }
-  }
-
-  constructor(
-    private el: ElementRef) {
-    this.originalOpacity = el.nativeElement.style.opacity;
-
-  }
-
-  ngOnInit(): void {
-  }
-
-  ngOnDestroy(): void {
-    this.unsubs.next();
-    this.unsubs.complete();
   }
 }
