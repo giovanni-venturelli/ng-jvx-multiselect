@@ -1,29 +1,30 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {NgJvxMultiselectComponent} from 'ng-jvx-multiselect';
 import {DemoSectionComponent} from '../shared/demo-section.component';
 import {t} from '../shared/i18n';
 import {FRUITS, Fruit} from '../shared/sample-data';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-theming-example',
   imports: [NgJvxMultiselectComponent, DemoSectionComponent],
   template: `
     <app-demo-section anchor="theming" [title]="txt.title" [description]="txt.description" [features]="features" [code]="code">
       <div class="demo-grid">
         <div class="demo-field">
-          <label>{{ txt.defaultLabel }}</label>
+          <span class="demo-label">{{ txt.defaultLabel }}</span>
           <ng-jvx-multiselect [options]="fruits" [multi]="true" [value]="value">
             <span placeholder>{{ txt.defaultLabel }}</span>
           </ng-jvx-multiselect>
         </div>
         <div class="demo-field theme-violet">
-          <label>{{ txt.violetLabel }}</label>
+          <span class="demo-label">{{ txt.violetLabel }}</span>
           <ng-jvx-multiselect [options]="fruits" [multi]="true" [value]="value" panelClass="theme-violet-panel">
             <span placeholder>{{ txt.violetLabel }}</span>
           </ng-jvx-multiselect>
         </div>
         <div class="demo-field theme-amber">
-          <label>{{ txt.amberLabel }}</label>
+          <span class="demo-label">{{ txt.amberLabel }}</span>
           <ng-jvx-multiselect [options]="fruits" [multi]="true" [value]="value" panelClass="theme-amber-panel">
             <span placeholder>{{ txt.amberLabel }}</span>
           </ng-jvx-multiselect>

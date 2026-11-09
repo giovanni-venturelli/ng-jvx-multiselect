@@ -1,17 +1,21 @@
 {
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "name": "demo-sandbox",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
+  "sourceRoot": "projects/demo-sandbox/src",
+  "prefix": "app",
   "generators": {
     "@schematics/angular:component": {
       "style": "scss"
     }
   },
-  "sourceRoot": "projects/demo-sandbox/src",
-  "prefix": "app",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
+      "outputs": [
+        "{workspaceRoot}/dist/demo-sandbox"
+      ],
+      "defaultConfiguration": "",
       "options": {
         "stylePreprocessorOptions": {
           "includePaths": [
@@ -66,8 +70,7 @@
             }
           ]
         }
-      },
-      "defaultConfiguration": ""
+      }
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
@@ -79,6 +82,9 @@
         "production": {
           "buildTarget": "demo-sandbox:build:production"
         }
+      },
+      "readyWhen": {
+        "signal": true
       }
     },
     "extract-i18n": {
@@ -106,31 +112,6 @@
           "includePaths": [
             "projects/ng-jvx-multiselect"
           ]
-        }
-      }
-    },
-    "lint": {
-      "executor": "@angular-devkit/build-angular:tslint",
-      "options": {
-        "tsConfig": [
-          "projects/demo-sandbox/tsconfig.app.json",
-          "projects/demo-sandbox/tsconfig.spec.json",
-          "projects/demo-sandbox/e2e/tsconfig.json"
-        ],
-        "exclude": [
-          "**/node_modules/**"
-        ]
-      }
-    },
-    "e2e": {
-      "executor": "@angular-devkit/build-angular:protractor",
-      "options": {
-        "protractorConfig": "projects/demo-sandbox/e2e/protractor.conf.js",
-        "devServerTarget": "demo-sandbox:serve"
-      },
-      "configurations": {
-        "production": {
-          "devServerTarget": "demo-sandbox:serve:production"
         }
       }
     }

@@ -1,4 +1,4 @@
-import {Component, computed, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, signal} from '@angular/core';
 import {HttpHeaders} from '@angular/common/http';
 import {JsonPipe} from '@angular/common';
 import {FormsModule} from '@angular/forms';
@@ -8,6 +8,7 @@ import {t} from '../shared/i18n';
 import {API} from '../shared/sample-data';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-remote-post-example',
   imports: [NgJvxMultiselectComponent, DemoSectionComponent, FormsModule, JsonPipe],
   template: `
@@ -15,7 +16,7 @@ import {API} from '../shared/sample-data';
                       [code]="code">
       <div class="demo-grid">
         <div class="demo-field">
-          <label>POST {{ url }}</label>
+          <span class="demo-label">POST {{ url }}</span>
           <ng-jvx-multiselect [url]="url" requestType="post" listProp="data" [postPayload]="payload()"
                               [requestHeaders]="headers()" [searchInput]="true" searchMode="server" [multi]="true"
                               [searchLabel]="txt.search">

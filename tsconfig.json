@@ -2,25 +2,25 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "esModuleInterop": true,
     "declaration": false,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "paths": {
       "ng-jvx-multiselect": [
-        "projects/ng-jvx-multiselect/src"
+        "./projects/ng-jvx-multiselect/src"
       ]
     },
     "target": "ES2022",
-    "module": "es2020",
+    "module": "es2022",
     "lib": [
-      "es2018",
+      "es2022",
       "dom"
     ],
+    "strict": false,
     "useDefineForClassFields": false
   },
   "angularCompilerOptions": {

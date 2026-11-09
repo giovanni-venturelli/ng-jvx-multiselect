@@ -17,7 +17,6 @@ import {
  * `<ng-jvx-multiselect>` to declare static options in the template.
  */
 @Component({
-  // tslint:disable-next-line:component-selector
   selector: 'ng-jvx-option',
   templateUrl: './ng-jvx-option.component.html',
   styleUrl: './ng-jvx-option.component.scss',

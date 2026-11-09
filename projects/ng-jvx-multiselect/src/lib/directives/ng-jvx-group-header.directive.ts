@@ -14,7 +14,6 @@ export interface NgJvxGroupHeaderContext<T = any> {
  * ```
  */
 @Directive({
-  // tslint:disable-next-line:directive-selector
   selector: '[ngJvxGroupHeader]'
 })
 export class NgJvxGroupHeaderDirective<T = any> {

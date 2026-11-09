@@ -1,9 +1,10 @@
-import {Component, computed, inject, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
 import {DatePipe, JsonPipe} from '@angular/common';
 import {EventLogService, LogKind} from './event-log.service';
 import {t} from './i18n';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-log-panel',
   imports: [DatePipe, JsonPipe],
   template: `

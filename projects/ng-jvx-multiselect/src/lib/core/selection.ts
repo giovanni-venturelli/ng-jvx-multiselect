@@ -69,7 +69,11 @@ export function groupOptions<T>(options: readonly T[], groupBy: GroupBy<T>): Obs
     const groups = new Map<unknown, T[]>();
     for (const {group, option} of entries) {
       const bucket = groups.get(group);
-      bucket ? bucket.push(option) : groups.set(group, [option]);
+      if (bucket) {
+        bucket.push(option);
+      } else {
+        groups.set(group, [option]);
+      }
     }
     return Array.from(groups, ([group, grouped]) => ({group, options: grouped}));
   }));

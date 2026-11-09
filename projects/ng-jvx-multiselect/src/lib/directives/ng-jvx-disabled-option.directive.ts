@@ -8,7 +8,6 @@ import {booleanAttribute, Directive, input} from '@angular/core';
  * ```
  */
 @Directive({
-  // tslint:disable-next-line:directive-selector
   selector: '[ngJvxDisabledOption]',
   host: {
     '[class.ng-jvx-disabled-option]': 'ngJvxDisabledOption()',

@@ -16,7 +16,7 @@ export interface NgJvxListRequest {
   currentPage: number;
   pageSize: number;
   requestType: NgJvxRequestType;
-  requestHeaders: HttpHeaders | { [header: string]: string | string[] } | null | undefined;
+  requestHeaders: HttpHeaders | Record<string, string | string[]> | null | undefined;
   search?: string;
   searchProp?: string;
   /** Extra body properties of a POST request. */

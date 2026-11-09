@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {NgJvxMultiselectComponent, NgJvxSearchMapper} from 'ng-jvx-multiselect';
 import {DemoSectionComponent} from '../shared/demo-section.component';
@@ -8,6 +8,7 @@ import {COUNTRIES, Country, FRUITS, Fruit} from '../shared/sample-data';
 const normalize = (s: string): string => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-client-search-example',
   imports: [NgJvxMultiselectComponent, DemoSectionComponent],
   template: `
@@ -15,14 +16,14 @@ const normalize = (s: string): string => s.normalize('NFD').replace(/[̀-ͯ]/g, 
                       [code]="code">
       <div class="demo-grid">
         <div class="demo-field">
-          <label>{{ txt.defaultLabel }}</label>
+          <span class="demo-label">{{ txt.defaultLabel }}</span>
           <ng-jvx-multiselect [options]="fruits" [multi]="true" [searchInput]="true" searchMode="client"
                               [searchLabel]="txt.fruitSearch">
             <span placeholder>{{ txt.fruitPlaceholder }}</span>
           </ng-jvx-multiselect>
         </div>
         <div class="demo-field">
-          <label>{{ txt.mapperLabel }}</label>
+          <span class="demo-label">{{ txt.mapperLabel }}</span>
           <ng-jvx-multiselect [options]="countries" itemValue="code" itemText="name" [multi]="true"
                               [searchInput]="true" searchMode="client" [searchLabel]="txt.countrySearch"
                               [searchMapper]="countrySearch">

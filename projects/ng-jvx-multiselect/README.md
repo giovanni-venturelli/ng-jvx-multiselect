@@ -33,7 +33,7 @@ directly or loaded from a backend, with pagination, search, grouping and fully c
 - [Theming and styling](#theming-and-styling)
 - [Accessibility](#accessibility)
 - [API reference](#api-reference)
-- [Upgrading from earlier 20.0.x versions](#upgrading-from-earlier-200x-versions)
+- [Upgrading from earlier versions (20.x)](#upgrading-from-earlier-versions-20x)
 
 ## Installation
 
@@ -41,7 +41,7 @@ directly or loaded from a backend, with pagination, search, grouping and fully c
 npm install ng-jvx-multiselect --save
 ```
 
-**Requirements:** Angular 20 (`@angular/core`, `@angular/common`, `@angular/forms`, `@angular/cdk`) and `rxjs` 7.
+**Requirements:** Angular 22 (`@angular/core`, `@angular/common`, `@angular/forms`, `@angular/cdk`) and `rxjs` 7.
 If you load options from a backend, the application must also provide the `HttpClient`:
 
 ```ts
@@ -622,12 +622,12 @@ See [Events](#events).
 | `NgJvxPaginationProp`, `NgJvxPaginationResponse`            | Types of `paginationProp` and `paginationResponse`.                 |
 | `NgJvxRequestType`, `NgJvxSearchMode`, `NgJvxListRequest`   | Types of `requestType`, `searchMode` and of a service request.      |
 
-## Upgrading from earlier 20.0.x versions
+## Upgrading from earlier versions (20.x)
 
 The public API is unchanged, but a few behaviours have been fixed or improved:
 
 - `BrowserAnimationsModule` / `provideAnimations()` is no longer required, and `ngx-scrollbar` is no longer a
-  dependency. The list now uses native scrolling with a thin scrollbar.
+  peer dependency (the peer dependencies are now `@angular/core|common|forms|cdk` `^22.0.0` and `rxjs`). The list now uses native scrolling with a thin scrollbar.
 - With `searchMode="client"` and an `url`, the search filters the options already loaded instead of sending
   a new request.
 - In single selection, clicks on the panel footer no longer close the panel.

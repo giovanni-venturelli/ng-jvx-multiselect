@@ -27,18 +27,6 @@
         "tsConfig": "projects/ng-jvx-multiselect/tsconfig.spec.json",
         "karmaConfig": "projects/ng-jvx-multiselect/karma.conf.js"
       }
-    },
-    "lint": {
-      "executor": "@angular-devkit/build-angular:tslint",
-      "options": {
-        "tsConfig": [
-          "projects/ng-jvx-multiselect/tsconfig.lib.json",
-          "projects/ng-jvx-multiselect/tsconfig.spec.json"
-        ],
-        "exclude": [
-          "**/node_modules/**"
-        ]
-      }
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "ng-jvx-multiselect",
-  "version": "20.0.22",
+  "version": "22.0.0",
   "license": "MIT",
   "description": "ng-jvx-multiselect is an Angular select for single and multiple selection, with static options or options loaded from a backend.",
   "exports": {
@@ -9,10 +9,10 @@
     }
   },
   "peerDependencies": {
-    "@angular/cdk": "^20.0.0",
-    "@angular/common": "^20.0.0",
-    "@angular/core": "^20.0.0",
-    "@angular/forms": "^20.0.0",
+    "@angular/cdk": "^22.0.0",
+    "@angular/common": "^22.0.0",
+    "@angular/core": "^22.0.0",
+    "@angular/forms": "^22.0.0",
     "rxjs": "^7.4.0"
   },
   "dependencies": {

@@ -16,7 +16,6 @@ export interface NgJvxSelectionTemplateContext<T = any> {
  * ```
  */
 @Directive({
-  // tslint:disable-next-line:directive-selector
   selector: '[ngJvxSelectionTemplate]'
 })
 export class NgJvxSelectionTemplateDirective {

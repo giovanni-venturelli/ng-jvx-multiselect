@@ -71,7 +71,6 @@ interface LoadRequest {
  * `ControlValueAccessor`, so it works with reactive and template-driven forms.
  */
 @Component({
-  // tslint:disable-next-line:component-selector
   selector: 'ng-jvx-multiselect',
   templateUrl: './ng-jvx-multiselect.component.html',
   styleUrl: './ng-jvx-multiselect.component.scss',
@@ -458,7 +457,11 @@ export class NgJvxMultiselectComponent implements ControlValueAccessor, NgJvxMul
 
   /** Toggles an option; in single selection with `closeOnClick` it also closes the panel. */
   clickOnOption(option: any): void {
-    this.isOptionSelected(option) ? this.deselect(option) : this.select(option);
+    if (this.isOptionSelected(option)) {
+      this.deselect(option);
+    } else {
+      this.select(option);
+    }
     if (!this.multi && this.closeOnClick) {
       this.closeMenu();
     }
