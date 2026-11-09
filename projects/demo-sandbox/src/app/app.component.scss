@@ -51,6 +51,48 @@
     }
   }
 
+  .search {
+    position: relative;
+    margin-top: .75rem;
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      font: inherit;
+      font-size: .85rem;
+      padding: .4rem 1.8rem .4rem .6rem;
+      border: 1px solid var(--demo-border);
+      border-radius: 6px;
+      background: var(--demo-bg);
+      color: inherit;
+
+      &:focus-visible {
+        outline: 2px solid var(--demo-accent);
+        outline-offset: 1px;
+      }
+    }
+
+    .clear {
+      position: absolute;
+      top: 50%;
+      right: .3rem;
+      transform: translateY(-50%);
+      border: none;
+      background: transparent;
+      color: var(--demo-muted);
+      font-size: 1.1rem;
+      line-height: 1;
+      padding: .1rem .35rem;
+      cursor: pointer;
+    }
+  }
+
+  .no-results {
+    margin: 1rem 0 0;
+    font-size: .85rem;
+    color: var(--demo-muted);
+  }
+
   h3 {
     font-size: .7rem;
     text-transform: uppercase;

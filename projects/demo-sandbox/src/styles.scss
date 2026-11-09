@@ -57,7 +57,8 @@ code {
   gap: .35rem;
   min-width: 0;
 
-  > label {
+  > label,
+  > .demo-label {
     font-size: .85rem;
     font-weight: 600;
   }
@@ -156,4 +157,10 @@ code {
 
 .theme-amber-panel {
   --jvx-multiselect-panel-bg: #fffbeb;
+}
+
+// Parole trovate dalla ricerca della sidebar (CSS Custom Highlight API, vedi app/shared/search-highlight.ts)
+::highlight(demo-search) {
+  background-color: #fde047;
+  color: #1f2937;
 }

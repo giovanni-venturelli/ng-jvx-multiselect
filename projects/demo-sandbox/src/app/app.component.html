@@ -12,7 +12,15 @@
       }
     </div>
 
-    @for (group of nav; track group.title) {
+    <div class="search">
+      <input #searchInput type="search" [value]="query()" [placeholder]="txt.search" [attr.aria-label]="txt.search"
+             (input)="search(searchInput.value)" (keydown.enter)="goToFirstResult()">
+      @if (query()) {
+        <button type="button" class="clear" [attr.aria-label]="txt.clearSearch" (click)="search('')">&times;</button>
+      }
+    </div>
+
+    @for (group of filteredNav(); track group.title) {
       <div class="nav-group">
         <h3>{{ group.title }}</h3>
         <ul>
@@ -21,10 +29,12 @@
           }
         </ul>
       </div>
+    } @empty {
+      <p class="no-results" role="status">{{ txt.noResults }}</p>
     }
   </nav>
 
-  <main id="top">
+  <main #main id="top">
     <header class="intro">
       <h1>ng-jvx-multiselect</h1>
       <p [innerHTML]="txt.intro"></p>
