@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {NgJvxMultiselectComponent} from 'ng-jvx-multiselect';
 import {DemoSectionComponent} from '../shared/demo-section.component';
 import {EventLogService} from '../shared/event-log.service';
@@ -6,6 +6,7 @@ import {t} from '../shared/i18n';
 import {API, Option} from '../shared/sample-data';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-remote-get-example',
   imports: [NgJvxMultiselectComponent, DemoSectionComponent],
   template: `
@@ -13,7 +14,7 @@ import {API, Option} from '../shared/sample-data';
                       [code]="code">
       <div class="demo-grid">
         <div class="demo-field">
-          <label>GET {{ url }}</label>
+          <span class="demo-label">GET {{ url }}</span>
           <ng-jvx-multiselect #remote [url]="url" listProp="data" [pageSize]="20" [multi]="true"
                               [searchInput]="true" searchMode="server" [searchLabel]="txt.search"
                               [clearable]="true" [(value)]="selected"

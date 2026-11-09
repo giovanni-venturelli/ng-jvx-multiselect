@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {
   NgJvxDisabledOptionDirective,
   NgJvxMultisectChipComponent,
@@ -11,6 +11,7 @@ import {t} from '../shared/i18n';
 import {FRUITS, Fruit} from '../shared/sample-data';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-templates-example',
   imports: [
     NgJvxMultiselectComponent,
@@ -25,7 +26,7 @@ import {FRUITS, Fruit} from '../shared/sample-data';
                       [code]="code">
       <div class="demo-grid">
         <div class="demo-field">
-          <label>{{ txt.multiLabel }}</label>
+          <span class="demo-label">{{ txt.multiLabel }}</span>
           <ng-jvx-multiselect [options]="fruits" [multi]="true" [(value)]="selected" [clearable]="true">
             <span placeholder>{{ txt.multiPlaceholder }}</span>
 
@@ -55,7 +56,7 @@ import {FRUITS, Fruit} from '../shared/sample-data';
         </div>
 
         <div class="demo-field">
-          <label>{{ txt.singleLabel }}</label>
+          <span class="demo-label">{{ txt.singleLabel }}</span>
           <ng-jvx-multiselect [options]="fruits" [(value)]="single">
             <span placeholder>{{ txt.singlePlaceholder }}</span>
             <ng-container *ngJvxSelectionTemplate="let fruit">

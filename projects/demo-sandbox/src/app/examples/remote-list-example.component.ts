@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {JsonPipe} from '@angular/common';
 import {Observable, of} from 'rxjs';
 import {NgJvxMultiOptionMapper, NgJvxMultiselectComponent} from 'ng-jvx-multiselect';
@@ -9,13 +9,14 @@ import {API, Option} from '../shared/sample-data';
 const ALL: Option = {value: 0, text: t({en: 'All', it: 'Tutti'})};
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-remote-list-example',
   imports: [NgJvxMultiselectComponent, DemoSectionComponent, JsonPipe],
   template: `
     <app-demo-section anchor="remote-list" [title]="txt.title" [description]="txt.description" [features]="features"
                       [code]="code">
       <div class="demo-field">
-        <label>GET {{ url }}</label>
+        <span class="demo-label">GET {{ url }}</span>
         <ng-jvx-multiselect [url]="url" [ignorePagination]="true" [multiMapper]="withAll" [multi]="true"
                             [searchInput]="true" searchMode="server" [searchLabel]="txt.search"
                             [value]="selected" (valueChange)="onValueChange($event)">

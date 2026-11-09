@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {JsonPipe} from '@angular/common';
 import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {JvxMultiselectValidators, NgJvxMultiselectComponent} from 'ng-jvx-multiselect';
@@ -8,13 +8,14 @@ import {t} from '../shared/i18n';
 import {COUNTRIES, Country, FRUITS, Fruit} from '../shared/sample-data';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-forms-example',
   imports: [NgJvxMultiselectComponent, DemoSectionComponent, ReactiveFormsModule, FormsModule, JsonPipe],
   template: `
     <app-demo-section anchor="forms" [title]="txt.title" [description]="txt.description" [features]="features" [code]="code">
       <form [formGroup]="form" (ngSubmit)="submit()" class="demo-form">
         <div class="demo-field">
-          <label>{{ txt.fruitLabel }} *</label>
+          <span class="demo-label">{{ txt.fruitLabel }} *</span>
           <ng-jvx-multiselect formControlName="fruits" [options]="fruits" [multi]="true" [clearable]="true">
             <span placeholder>{{ txt.fruitPlaceholder }}</span>
           </ng-jvx-multiselect>
@@ -28,7 +29,7 @@ import {COUNTRIES, Country, FRUITS, Fruit} from '../shared/sample-data';
         </div>
 
         <div class="demo-field">
-          <label>{{ txt.countryLabel }} *</label>
+          <span class="demo-label">{{ txt.countryLabel }} *</span>
           <ng-jvx-multiselect formControlName="country" [options]="countries" itemValue="code" itemText="name"
                               [searchInput]="true" searchMode="client" [searchLabel]="txt.search">
             <span placeholder>{{ txt.countryPlaceholder }}</span>
@@ -51,7 +52,7 @@ value = {{ summary() | json }}</pre>
 
       <h3>{{ txt.templateDriven }}</h3>
       <div class="demo-field">
-        <label>{{ txt.favouritesLabel }}</label>
+        <span class="demo-label">{{ txt.favouritesLabel }}</span>
         <ng-jvx-multiselect [(ngModel)]="favourites" name="favourites" [options]="countries" itemValue="code"
                             itemText="name" [multi]="true">
           <span placeholder>{{ txt.favouritesLabel }}</span>
@@ -133,7 +134,11 @@ export class FormsExampleComponent {
   }
 
   toggleDisabled(): void {
-    this.form.disabled ? this.form.enable() : this.form.disable();
+    if (this.form.disabled) {
+      this.form.enable();
+    } else {
+      this.form.disable();
+    }
   }
 
   patch(): void {

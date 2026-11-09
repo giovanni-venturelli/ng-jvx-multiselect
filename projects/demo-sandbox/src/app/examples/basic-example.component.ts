@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
 import {JsonPipe} from '@angular/common';
 import {NgJvxMultiselectComponent} from 'ng-jvx-multiselect';
 import {DemoSectionComponent} from '../shared/demo-section.component';
@@ -6,13 +6,14 @@ import {t} from '../shared/i18n';
 import {Option, SIMPLE_OPTIONS} from '../shared/sample-data';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-basic-example',
   imports: [NgJvxMultiselectComponent, DemoSectionComponent, JsonPipe],
   template: `
     <app-demo-section anchor="single" [title]="txt.title" [description]="txt.description" [features]="features" [code]="code">
       <div class="demo-grid">
         <div class="demo-field">
-          <label>{{ txt.label }}</label>
+          <span class="demo-label">{{ txt.label }}</span>
           <ng-jvx-multiselect [options]="options" [(value)]="value" [disabled]="disabled()" [clearable]="clearable()">
             <span placeholder>{{ txt.placeholder }}</span>
           </ng-jvx-multiselect>

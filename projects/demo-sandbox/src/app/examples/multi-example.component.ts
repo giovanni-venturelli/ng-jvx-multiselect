@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
 import {JsonPipe} from '@angular/common';
 import {NgJvxMultiselectComponent} from 'ng-jvx-multiselect';
 import {DemoSectionComponent} from '../shared/demo-section.component';
@@ -6,13 +6,14 @@ import {t} from '../shared/i18n';
 import {FRUITS, Fruit} from '../shared/sample-data';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-multi-example',
   imports: [NgJvxMultiselectComponent, DemoSectionComponent, JsonPipe],
   template: `
     <app-demo-section anchor="multi" [title]="txt.title" [description]="txt.description" [features]="features" [code]="code">
       <div class="demo-grid">
         <div class="demo-field">
-          <label>{{ txt.multiLabel }}</label>
+          <span class="demo-label">{{ txt.multiLabel }}</span>
           <ng-jvx-multiselect [options]="fruits" [multi]="true" [(value)]="selected"
                               [clearable]="clearable()" [closeButton]="closeButton()">
             <span placeholder>{{ txt.multiPlaceholder }}</span>
@@ -23,7 +24,7 @@ import {FRUITS, Fruit} from '../shared/sample-data';
           <label><input type="checkbox" [checked]="closeButton()" (change)="closeButton.set(!closeButton())"> closeButton</label>
         </div>
         <div class="demo-field">
-          <label>{{ txt.singleLabel }} (closeOnClick = {{ closeOnClick() }})</label>
+          <span class="demo-label">{{ txt.singleLabel }} (closeOnClick = {{ closeOnClick() }})</span>
           <ng-jvx-multiselect [options]="fruits" [closeOnClick]="closeOnClick()" [(value)]="single">
             <span placeholder>{{ txt.singlePlaceholder }}</span>
           </ng-jvx-multiselect>

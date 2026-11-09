@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {JsonPipe} from '@angular/common';
 import {NgJvxMultiselectComponent} from 'ng-jvx-multiselect';
 import {DemoSectionComponent} from '../shared/demo-section.component';
@@ -6,12 +6,13 @@ import {t} from '../shared/i18n';
 import {COUNTRIES, Country} from '../shared/sample-data';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-custom-keys-example',
   imports: [NgJvxMultiselectComponent, DemoSectionComponent, JsonPipe],
   template: `
     <app-demo-section anchor="custom-keys" [title]="txt.title" [description]="txt.description" [features]="features" [code]="code">
       <div class="demo-field">
-        <label>{{ txt.label }}</label>
+        <span class="demo-label">{{ txt.label }}</span>
         <ng-jvx-multiselect [options]="countries" itemValue="code" itemText="name" [multi]="true" [(value)]="selected">
           <span placeholder>{{ txt.placeholder }}</span>
         </ng-jvx-multiselect>

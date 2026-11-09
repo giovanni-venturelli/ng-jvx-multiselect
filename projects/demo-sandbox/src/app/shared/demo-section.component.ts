@@ -1,4 +1,4 @@
-import {Component, input, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, input, signal} from '@angular/core';
 import {t} from './i18n';
 
 export interface CodeSnippet {
@@ -11,6 +11,7 @@ export interface CodeSnippet {
  * e il codice sorgente mostrato a schede.
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-demo-section',
   template: `
     <section class="demo-section" [id]="anchor()">

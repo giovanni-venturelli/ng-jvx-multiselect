@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {NgJvxMultiselectComponent} from 'ng-jvx-multiselect';
 import {DemoSectionComponent} from '../shared/demo-section.component';
@@ -7,13 +7,14 @@ import {t} from '../shared/i18n';
 import {LONG_LIST, Option} from '../shared/sample-data';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-events-example',
   imports: [NgJvxMultiselectComponent, DemoSectionComponent, DatePipe],
   template: `
     <app-demo-section anchor="events" [title]="txt.title" [description]="txt.description" [features]="features" [code]="code">
       <div class="demo-grid">
         <div class="demo-field">
-          <label>{{ txt.label }}</label>
+          <span class="demo-label">{{ txt.label }}</span>
           <ng-jvx-multiselect #ms [options]="items" [multi]="true" [closeButton]="false"
                               (jvxMultiselectOpen)="emit('jvxMultiselectOpen')"
                               (jvxMultiselectOpened)="emit('jvxMultiselectOpened')"

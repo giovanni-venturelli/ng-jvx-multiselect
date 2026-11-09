@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {NgJvxGroup, NgJvxGroupHeaderDirective, NgJvxGroupMapper, NgJvxMultiselectComponent} from 'ng-jvx-multiselect';
 import {DemoSectionComponent} from '../shared/demo-section.component';
@@ -6,19 +6,20 @@ import {t} from '../shared/i18n';
 import {COUNTRIES, Country, FRUITS} from '../shared/sample-data';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-groups-example',
   imports: [NgJvxMultiselectComponent, NgJvxGroupHeaderDirective, DemoSectionComponent],
   template: `
     <app-demo-section anchor="groups" [title]="txt.title" [description]="txt.description" [features]="features" [code]="code">
       <div class="demo-grid">
         <div class="demo-field">
-          <label>{{ txt.stringLabel }}</label>
+          <span class="demo-label">{{ txt.stringLabel }}</span>
           <ng-jvx-multiselect [options]="fruits" groupBy="category" [multi]="true">
             <span placeholder>{{ txt.stringPlaceholder }}</span>
           </ng-jvx-multiselect>
         </div>
         <div class="demo-field">
-          <label>{{ txt.mapperLabel }}</label>
+          <span class="demo-label">{{ txt.mapperLabel }}</span>
           <ng-jvx-multiselect [options]="countries" itemValue="code" itemText="name" [groupBy]="byContinent"
                               [multi]="true" [searchInput]="true" searchMode="client" [searchLabel]="txt.search">
             <span placeholder>{{ txt.mapperPlaceholder }}</span>

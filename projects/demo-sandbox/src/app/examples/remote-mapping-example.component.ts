@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {JsonPipe} from '@angular/common';
 import {Observable, of} from 'rxjs';
 import {
@@ -26,13 +26,14 @@ interface PersonOption {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-remote-mapping-example',
   imports: [NgJvxMultiselectComponent, NgJvxOptionsTemplateDirective, DemoSectionComponent, JsonPipe],
   template: `
     <app-demo-section anchor="remote-mapping" [title]="txt.title" [description]="txt.description" [features]="features"
                       [code]="code">
       <div class="demo-field">
-        <label>{{ txt.label }} (GET {{ url }})</label>
+        <span class="demo-label">{{ txt.label }} (GET {{ url }})</span>
         <ng-jvx-multiselect [url]="url" [mapper]="personMapper" [groupBy]="byDepartment" [multi]="true"
                             searchProp="q" [paginationProp]="paginationProp" listProp="results"
                             paginationResponseProp="meta" [paginationResponse]="paginationResponse"
