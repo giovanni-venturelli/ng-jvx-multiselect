@@ -19,3 +19,5 @@ Workspace of the [ng-jvx-multiselect](projects/ng-jvx-multiselect/README.md) Ang
 | `npm run build`        | Builds the library in watch mode.                                                |
 | `npm run build-prod`   | Production build of the library in `dist/ng-jvx-multiselect`.                    |
 | `npm run publish`      | Production build and `npm publish`.                                              |
+| `npm run e2e`          | Playwright e2e tests (`demo-sandbox-e2e`); they start the mock server and the demo. |
+| `npm run lint`         | ESLint on every project.                                                         |
