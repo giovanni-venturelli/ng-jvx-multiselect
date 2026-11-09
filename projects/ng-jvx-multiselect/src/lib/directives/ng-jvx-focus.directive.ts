@@ -2,7 +2,6 @@ import {afterNextRender, Directive, effect, ElementRef, inject, Injector, input}
 
 /** Focuses the host element whenever the bound value becomes `true`. Internal. */
 @Directive({
-  // tslint:disable-next-line:directive-selector
   selector: '[ngJvxFocus]'
 })
 export class NgJvxFocusDirective {

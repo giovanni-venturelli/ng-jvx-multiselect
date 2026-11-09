@@ -7,7 +7,6 @@ import {DestroyRef, Directive, ElementRef, inject, input, NgZone, output} from '
  * It emits once per arrival, and again when the content has grown (e.g. a new page was appended).
  */
 @Directive({
-  // tslint:disable-next-line:directive-selector
   selector: '[ngJvxScrollEnd]'
 })
 export class NgJvxScrollEndDirective {
