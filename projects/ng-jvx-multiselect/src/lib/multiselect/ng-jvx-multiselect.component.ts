@@ -419,6 +419,23 @@ export class NgJvxMultiselectComponent implements ControlValueAccessor, NgJvxMul
     }
   }
 
+  /**
+   * Reloads the remote options from the first page without closing the panel; the applied search is kept.
+   * Pass `url` when the source changes in the same tick: the bound `url` input is updated only by the next
+   * change detection, and the load reads it at once. With the panel closed and no load in flight it only
+   * stores the url, since the next opening loads the first page anyway.
+   */
+  reload(url?: string): void {
+    if (url !== undefined) {
+      this.url = url;
+    }
+    if (!this.url || (!this.isOpen() && !this.isLoading())) {
+      return;
+    }
+    this.scrollToTop();
+    this.loadRequests.next({reset: true, open: true});
+  }
+
   /** Closes the panel. */
   closeMenu(): void {
     if (!this.isOpen()) {

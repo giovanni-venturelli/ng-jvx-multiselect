@@ -319,6 +319,72 @@ describe('NgJvxMultiselectComponent', () => {
       closeWithBackdrop();
     }));
 
+    it('reloads from the first page with a new url without closing, keeping the applied search', fakeAsync(() => {
+      host.searchInput = true;
+      render();
+      open();
+      http.expectOne(r => r.url === '/api/options').flush(page(1, 15, 200));
+      render();
+      tick(ANIMATION);
+      render();
+      const input = overlay().querySelector('.search-input-container input') as HTMLInputElement;
+      input.value = '19';
+      input.dispatchEvent(new Event('input'));
+      tick(300);
+      render();
+      http.expectOne(r => r.url === '/api/options').flush(page(1, 15, 200));
+      render();
+      host.events = [];
+
+      host.select().reload('/api/other');
+      render();
+      const reload = http.expectOne(r => r.url === '/api/other');
+      expect(reload.request.params.get('page')).toBe('1');
+      expect(reload.request.params.get('search')).toBe('19');
+      reload.flush({data: [{value: 99, text: 'other 99'}], pagingInfo: {pageNo: 1, pageCount: 1, totalRecordCount: 1}});
+      render();
+
+      expect(optionTexts()).toEqual(['other 99']);
+      expect(host.select().isOpen()).toBeTrue();
+      expect(host.events).toEqual([]);
+      closeWithBackdrop();
+    }));
+
+    it('reloads with the new url while the first page is still loading, then opens', fakeAsync(() => {
+      render();
+      trigger().click();
+      render();
+      const stale = http.expectOne(r => r.url === '/api/options');
+
+      host.select().reload('/api/other');
+      render();
+      expect(stale.cancelled).toBeTrue();
+      http.expectOne(r => r.url === '/api/other').flush(page(1, 3, 3));
+      render();
+      tick(ANIMATION);
+      render();
+
+      expect(host.select().isOpen()).toBeTrue();
+      expect(options().length).toBe(3);
+      closeWithBackdrop();
+    }));
+
+    it('only stores the url when reloaded while closed, and uses it at the next opening', fakeAsync(() => {
+      render();
+      host.select().reload('/api/other');
+      render();
+      http.expectNone(() => true);
+
+      trigger().click();
+      render();
+      http.expectOne(r => r.url === '/api/other').flush(page(1, 3, 3));
+      render();
+      tick(ANIMATION);
+      render();
+      expect(options().length).toBe(3);
+      closeWithBackdrop();
+    }));
+
     it('emits loadError and stops loading when the request fails', fakeAsync(() => {
       render();
       trigger().click();
