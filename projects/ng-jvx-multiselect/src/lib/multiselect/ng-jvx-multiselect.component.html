@@ -5,7 +5,8 @@
              [width]="panelWidth()"
              (opened)="onPanelOpened()"
              (closed)="onPanelClosed()"
-             (closeRequest)="closeMenu()">
+             (closeRequest)="closeMenu()"
+             (keydown)="onPanelKeydown($event)">
     @if (panelRendered()) {
       @if (multi && closeButton && isOpen()) {
         <button type="button" class="closeMenuButton" aria-label="Close" (click)="closeMenu()">
