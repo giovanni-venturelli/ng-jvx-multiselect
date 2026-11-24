@@ -1,6 +1,6 @@
 import {Component, viewChild} from '@angular/core';
 import {ComponentFixture, discardPeriodicTasks, fakeAsync, flush, TestBed, tick} from '@angular/core/testing';
-import {FormControl, ReactiveFormsModule} from '@angular/forms';
+import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {provideHttpClient} from '@angular/common/http';
 import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
 import {NgJvxMultiselectComponent} from './ng-jvx-multiselect.component';
@@ -29,6 +29,7 @@ const ANIMATION = 100;
     <ng-jvx-multiselect [formControl]="control"
                         [options]="options"
                         [multi]="multi"
+                        [required]="required"
                         [url]="url"
                         listProp="data"
                         [searchInput]="searchInput"
@@ -51,6 +52,7 @@ class HostComponent {
   control = new FormControl<Opt[]>([]);
   options: Opt[] = OPTIONS;
   multi = false;
+  required = false;
   url = '';
   searchInput = false;
   searchMode: NgJvxSearchMode = null;
@@ -140,6 +142,70 @@ describe('NgJvxMultiselectComponent', () => {
       expect(options().length).toBe(0);
       expect(trigger().textContent).toContain('Lemon');
     }));
+
+    describe('click on the already selected option', () => {
+      const selectLemon = () => {
+        host.control.setValue([OPTIONS[1]]);
+        render();
+        open();
+        host.changes.length = 0;
+      };
+
+      it('deselects in single selection when not required', fakeAsync(() => {
+        selectLemon();
+        clickOption('Lemon');
+        tick(ANIMATION);
+        render();
+        expect(host.control.value).toEqual([]);
+        expect(host.changes).toEqual([[]]);
+      }));
+
+      it('keeps the selection and emits nothing in single selection when required', fakeAsync(() => {
+        host.required = true;
+        render();
+        selectLemon();
+        clickOption('Lemon');
+        tick(ANIMATION);
+        render();
+        expect(host.control.value).toEqual([OPTIONS[1]]);
+        expect(host.changes.length).toBe(0);
+        expect(options().length).toBe(0);
+      }));
+
+      it('keeps the selection when the control has Validators.required', fakeAsync(() => {
+        host.control.addValidators(Validators.required);
+        render();
+        selectLemon();
+        clickOption('Lemon');
+        tick(ANIMATION);
+        render();
+        expect(host.control.value).toEqual([OPTIONS[1]]);
+        expect(host.changes.length).toBe(0);
+      }));
+
+      it('still toggles in multiple selection even when required', fakeAsync(() => {
+        host.multi = true;
+        host.required = true;
+        render();
+        selectLemon();
+        clickOption('Lemon');
+        expect(host.control.value).toEqual([]);
+        expect(host.changes).toEqual([[]]);
+        closeWithBackdrop();
+      }));
+
+      it('clear() still empties a required single selection', fakeAsync(() => {
+        host.required = true;
+        render();
+        host.control.setValue([OPTIONS[1]]);
+        render();
+        host.changes.length = 0;
+        host.select().clear();
+        render();
+        expect(host.control.value).toEqual([]);
+        expect(host.changes).toEqual([[]]);
+      }));
+    });
 
     it('keeps the panel open with closeOnClick = false', fakeAsync(() => {
       host.closeOnClick = false;
