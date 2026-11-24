@@ -30,6 +30,11 @@ ng-jvx-option {
     }
   }
 
+  // Option highlighted with the keyboard: same look as hover, below the selected one.
+  &.ng-jvx-option-active .ng-jvx-option:not(.ng-jvx-single-selected-option) .list-option-background {
+    opacity: .2;
+  }
+
   &.ng-jvx-option-disabled .ng-jvx-option {
     cursor: not-allowed;
     opacity: .5;

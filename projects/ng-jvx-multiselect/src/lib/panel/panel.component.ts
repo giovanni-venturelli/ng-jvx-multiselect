@@ -48,6 +48,8 @@ export class PanelComponent {
   readonly closed = output<void>();
   /** The user asked to close the panel. */
   readonly closeRequest = output<void>();
+  /** A key other than Escape was pressed while the panel is open. */
+  readonly keydown = output<KeyboardEvent>();
 
   protected readonly positions = POSITIONS;
   protected readonly panelClasses = computed(() => {
@@ -107,6 +109,8 @@ export class PanelComponent {
     if (event.key === 'Escape') {
       event.preventDefault();
       this.closeRequest.emit();
+    } else {
+      this.keydown.emit(event);
     }
   }
 

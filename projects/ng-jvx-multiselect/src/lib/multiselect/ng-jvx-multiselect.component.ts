@@ -186,6 +186,8 @@ export class NgJvxMultiselectComponent implements ControlValueAccessor, NgJvxMul
   private readonly panel = viewChild.required(PanelComponent);
   private readonly jvxMultiselect = viewChild.required<ElementRef<HTMLElement>>('jvxMultiselect');
   private readonly optionScroller = viewChild<ElementRef<HTMLElement>>('optionScroller');
+  /** Option highlighted by the keyboard while the panel is open. */
+  private activeOption: HTMLElement | null = null;
 
   // -----------------------------------------------------------------------------------------------------
   // @ Inputs
@@ -509,10 +511,29 @@ export class NgJvxMultiselectComponent implements ControlValueAccessor, NgJvxMul
   }
 
   protected onTriggerKeydown(event: KeyboardEvent): void {
-    if (event.key === 'Enter' || event.key === ' ' || event.key === 'ArrowDown') {
+    // While the panel is open the keys are handled by `onPanelKeydown`.
+    if (!this.isOpen() && (event.key === 'Enter' || event.key === ' ' || event.key === 'ArrowDown')) {
       event.preventDefault();
       this.openMenu();
     }
+  }
+
+  /** Keyboard navigation of the open panel: arrows move the highlighted option, Enter selects it. */
+  protected onPanelKeydown(event: KeyboardEvent): void {
+    switch (event.key) {
+      case 'ArrowDown':
+        this.moveActiveOption(1);
+        break;
+      case 'ArrowUp':
+        this.moveActiveOption(-1);
+        break;
+      case 'Enter':
+        this.selectActiveOption();
+        break;
+      default:
+        return;
+    }
+    event.preventDefault();
   }
 
   onSearchValueChange(event: Event): void {
@@ -551,6 +572,7 @@ export class NgJvxMultiselectComponent implements ControlValueAccessor, NgJvxMul
 
   protected onPanelClosed(): void {
     this.closing.set(false);
+    this.activeOption = null;
     this.resetSearch();
     this.jvxMultiselectClosed.emit();
   }
@@ -586,6 +608,34 @@ export class NgJvxMultiselectComponent implements ControlValueAccessor, NgJvxMul
       this.filterRequests.next();
     } else if (this.url) {
       this.loadRequests.next({reset: true, open: false});
+    }
+  }
+
+  /** Options the keyboard can move to: rendered, enabled and not disabled through `ngJvxDisabledOption`. */
+  private navigableOptions(): HTMLElement[] {
+    const scroller = this.optionScroller()?.nativeElement;
+    const selector = 'ng-jvx-option:not(.ng-jvx-option-disabled):not(:has(.ng-jvx-disabled-option))';
+    return Array.from(scroller?.querySelectorAll<HTMLElement>(selector) ?? []);
+  }
+
+  private moveActiveOption(step: 1 | -1): void {
+    const options = this.navigableOptions();
+    if (options.length === 0) {
+      return;
+    }
+    const current = this.activeOption ? options.indexOf(this.activeOption) : -1;
+    const next = current === -1
+      ? (step === 1 ? 0 : options.length - 1)
+      : (current + step + options.length) % options.length;
+    this.activeOption?.classList.remove('ng-jvx-option-active');
+    this.activeOption = options[next];
+    this.activeOption.classList.add('ng-jvx-option-active');
+    this.activeOption.scrollIntoView({block: 'nearest'});
+  }
+
+  private selectActiveOption(): void {
+    if (this.activeOption?.isConnected) {
+      this.activeOption.querySelector<HTMLElement>('.ng-jvx-option')?.click();
     }
   }
 

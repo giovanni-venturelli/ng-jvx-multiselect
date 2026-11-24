@@ -287,6 +287,75 @@ describe('NgJvxMultiselectComponent', () => {
       expect(options().length).toBe(3);
       closeWithBackdrop();
     }));
+    describe('keyboard navigation', () => {
+      const press = (key: string) => {
+        overlay().querySelector('.ng-jvx-panel')!.dispatchEvent(new KeyboardEvent('keydown', {key, bubbles: true}));
+        render();
+      };
+      const activeTexts = (): string[] =>
+        options().filter(o => o.classList.contains('ng-jvx-option-active')).map(o => o.textContent!.trim());
+
+      it('moves the highlight with the arrows and selects with Enter', fakeAsync(() => {
+        render();
+        open();
+        press('ArrowDown');
+        expect(activeTexts()).toEqual(['Orange']);
+        press('ArrowDown');
+        expect(activeTexts()).toEqual(['Lemon']);
+        press('ArrowUp');
+        expect(activeTexts()).toEqual(['Orange']);
+        press('ArrowDown');
+        press('Enter');
+        tick(ANIMATION);
+        render();
+
+        expect(host.control.value).toEqual([OPTIONS[1]]);
+        expect(options().length).toBe(0);
+      }));
+
+      it('starts from the last option with ArrowUp and wraps around', fakeAsync(() => {
+        render();
+        open();
+        press('ArrowUp');
+        expect(activeTexts()).toEqual(['Apple']);
+        press('ArrowDown');
+        expect(activeTexts()).toEqual(['Orange']);
+        closeWithBackdrop();
+      }));
+
+      it('does not select anything with Enter when no option is highlighted', fakeAsync(() => {
+        render();
+        open();
+        press('Enter');
+        expect(host.changes).toEqual([]);
+        expect(options().length).toBe(3);
+        closeWithBackdrop();
+      }));
+
+      it('keeps the panel open and toggles the highlighted option in multiple selection', fakeAsync(() => {
+        host.multi = true;
+        render();
+        open();
+        press('ArrowDown');
+        press('Enter');
+        press('ArrowDown');
+        press('Enter');
+        expect(host.control.value).toEqual([OPTIONS[0], OPTIONS[1]]);
+        press('Enter');
+        expect(host.control.value).toEqual([OPTIONS[0]]);
+        expect(options().length).toBe(3);
+        closeWithBackdrop();
+      }));
+
+      it('does not reopen the panel when Enter is pressed on the trigger while open', fakeAsync(() => {
+        render();
+        open();
+        trigger().dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true}));
+        render();
+        expect(host.events).toEqual(['open', 'opened']);
+        closeWithBackdrop();
+      }));
+    });
   });
 
   describe('forms integration', () => {
