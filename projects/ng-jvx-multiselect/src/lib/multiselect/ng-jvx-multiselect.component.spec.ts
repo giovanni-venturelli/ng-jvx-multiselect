@@ -1,6 +1,6 @@
 import {Component, viewChild} from '@angular/core';
 import {ComponentFixture, discardPeriodicTasks, fakeAsync, flush, TestBed, tick} from '@angular/core/testing';
-import {FormControl, ReactiveFormsModule} from '@angular/forms';
+import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {provideHttpClient} from '@angular/common/http';
 import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
 import {NgJvxMultiselectComponent} from './ng-jvx-multiselect.component';
@@ -29,6 +29,7 @@ const ANIMATION = 100;
     <ng-jvx-multiselect [formControl]="control"
                         [options]="options"
                         [multi]="multi"
+                        [required]="required"
                         [url]="url"
                         listProp="data"
                         [searchInput]="searchInput"
@@ -51,6 +52,7 @@ class HostComponent {
   control = new FormControl<Opt[]>([]);
   options: Opt[] = OPTIONS;
   multi = false;
+  required = false;
   url = '';
   searchInput = false;
   searchMode: NgJvxSearchMode = null;
@@ -140,6 +142,70 @@ describe('NgJvxMultiselectComponent', () => {
       expect(options().length).toBe(0);
       expect(trigger().textContent).toContain('Lemon');
     }));
+
+    describe('click on the already selected option', () => {
+      const selectLemon = () => {
+        host.control.setValue([OPTIONS[1]]);
+        render();
+        open();
+        host.changes.length = 0;
+      };
+
+      it('deselects in single selection when not required', fakeAsync(() => {
+        selectLemon();
+        clickOption('Lemon');
+        tick(ANIMATION);
+        render();
+        expect(host.control.value).toEqual([]);
+        expect(host.changes).toEqual([[]]);
+      }));
+
+      it('keeps the selection and emits nothing in single selection when required', fakeAsync(() => {
+        host.required = true;
+        render();
+        selectLemon();
+        clickOption('Lemon');
+        tick(ANIMATION);
+        render();
+        expect(host.control.value).toEqual([OPTIONS[1]]);
+        expect(host.changes.length).toBe(0);
+        expect(options().length).toBe(0);
+      }));
+
+      it('keeps the selection when the control has Validators.required', fakeAsync(() => {
+        host.control.addValidators(Validators.required);
+        render();
+        selectLemon();
+        clickOption('Lemon');
+        tick(ANIMATION);
+        render();
+        expect(host.control.value).toEqual([OPTIONS[1]]);
+        expect(host.changes.length).toBe(0);
+      }));
+
+      it('still toggles in multiple selection even when required', fakeAsync(() => {
+        host.multi = true;
+        host.required = true;
+        render();
+        selectLemon();
+        clickOption('Lemon');
+        expect(host.control.value).toEqual([]);
+        expect(host.changes).toEqual([[]]);
+        closeWithBackdrop();
+      }));
+
+      it('clear() still empties a required single selection', fakeAsync(() => {
+        host.required = true;
+        render();
+        host.control.setValue([OPTIONS[1]]);
+        render();
+        host.changes.length = 0;
+        host.select().clear();
+        render();
+        expect(host.control.value).toEqual([]);
+        expect(host.changes).toEqual([[]]);
+      }));
+    });
 
     it('keeps the panel open with closeOnClick = false', fakeAsync(() => {
       host.closeOnClick = false;
@@ -316,6 +382,72 @@ describe('NgJvxMultiselectComponent', () => {
       search.flush({data: [{value: 19, text: 'value 19'}], pagingInfo: {pageNo: 1, pageCount: 1, totalRecordCount: 1}});
       render();
       expect(optionTexts()).toEqual(['value 19']);
+      closeWithBackdrop();
+    }));
+
+    it('reloads from the first page with a new url without closing, keeping the applied search', fakeAsync(() => {
+      host.searchInput = true;
+      render();
+      open();
+      http.expectOne(r => r.url === '/api/options').flush(page(1, 15, 200));
+      render();
+      tick(ANIMATION);
+      render();
+      const input = overlay().querySelector('.search-input-container input') as HTMLInputElement;
+      input.value = '19';
+      input.dispatchEvent(new Event('input'));
+      tick(300);
+      render();
+      http.expectOne(r => r.url === '/api/options').flush(page(1, 15, 200));
+      render();
+      host.events = [];
+
+      host.select().reload('/api/other');
+      render();
+      const reload = http.expectOne(r => r.url === '/api/other');
+      expect(reload.request.params.get('page')).toBe('1');
+      expect(reload.request.params.get('search')).toBe('19');
+      reload.flush({data: [{value: 99, text: 'other 99'}], pagingInfo: {pageNo: 1, pageCount: 1, totalRecordCount: 1}});
+      render();
+
+      expect(optionTexts()).toEqual(['other 99']);
+      expect(host.select().isOpen()).toBeTrue();
+      expect(host.events).toEqual([]);
+      closeWithBackdrop();
+    }));
+
+    it('reloads with the new url while the first page is still loading, then opens', fakeAsync(() => {
+      render();
+      trigger().click();
+      render();
+      const stale = http.expectOne(r => r.url === '/api/options');
+
+      host.select().reload('/api/other');
+      render();
+      expect(stale.cancelled).toBeTrue();
+      http.expectOne(r => r.url === '/api/other').flush(page(1, 3, 3));
+      render();
+      tick(ANIMATION);
+      render();
+
+      expect(host.select().isOpen()).toBeTrue();
+      expect(options().length).toBe(3);
+      closeWithBackdrop();
+    }));
+
+    it('only stores the url when reloaded while closed, and uses it at the next opening', fakeAsync(() => {
+      render();
+      host.select().reload('/api/other');
+      render();
+      http.expectNone(() => true);
+
+      trigger().click();
+      render();
+      http.expectOne(r => r.url === '/api/other').flush(page(1, 3, 3));
+      render();
+      tick(ANIMATION);
+      render();
+      expect(options().length).toBe(3);
       closeWithBackdrop();
     }));
 

@@ -20,7 +20,7 @@ import {
 } from '@angular/core';
 import {NgTemplateOutlet} from '@angular/common';
 import {takeUntilDestroyed, toObservable, toSignal} from '@angular/core/rxjs-interop';
-import {ControlValueAccessor, NgControl} from '@angular/forms';
+import {ControlValueAccessor, NgControl, Validators} from '@angular/forms';
 import {HttpHeaders} from '@angular/common/http';
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {EMPTY, forkJoin, merge, Observable, of, Subject} from 'rxjs';
@@ -419,6 +419,23 @@ export class NgJvxMultiselectComponent implements ControlValueAccessor, NgJvxMul
     }
   }
 
+  /**
+   * Reloads the remote options from the first page without closing the panel; the applied search is kept.
+   * Pass `url` when the source changes in the same tick: the bound `url` input is updated only by the next
+   * change detection, and the load reads it at once. With the panel closed and no load in flight it only
+   * stores the url, since the next opening loads the first page anyway.
+   */
+  reload(url?: string): void {
+    if (url !== undefined) {
+      this.url = url;
+    }
+    if (!this.url || (!this.isOpen() && !this.isLoading())) {
+      return;
+    }
+    this.scrollToTop();
+    this.loadRequests.next({reset: true, open: true});
+  }
+
   /** Closes the panel. */
   closeMenu(): void {
     if (!this.isOpen()) {
@@ -451,14 +468,29 @@ export class NgJvxMultiselectComponent implements ControlValueAccessor, NgJvxMul
     this.commit([]);
   }
 
+  /** True when the `required` input is set or the bound control carries `Validators.required`. */
+  private isRequired(): boolean {
+    return this._required || !!this.ngControl?.control?.hasValidator(Validators.required);
+  }
+
   isOptionSelected(option: any): boolean {
     return this.selectedKeys().has(keyOf(option, this.itemValue));
   }
 
-  /** Toggles an option; in single selection with `closeOnClick` it also closes the panel. */
+  /**
+   * Handles a click on an option.
+   * - Multiple selection: toggles the option.
+   * - Single selection: selects the option; clicking the already selected one deselects it (emits `[]`),
+   *   unless the field is required (`required` input or a `Validators.required` on the bound control), in
+   *   which case the selection is left untouched and nothing is emitted.
+   * In single selection with `closeOnClick` the panel is closed in every case.
+   * `clear()` is not affected: it always empties the selection.
+   */
   clickOnOption(option: any): void {
     if (this.isOptionSelected(option)) {
-      this.deselect(option);
+      if (this.multi || !this.isRequired()) {
+        this.deselect(option);
+      }
     } else {
       this.select(option);
     }
